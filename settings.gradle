@@ -1,0 +1,2 @@
+rootProject.name='DoodleRocket'
+include ':app'

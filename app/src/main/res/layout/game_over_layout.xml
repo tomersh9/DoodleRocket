@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_green">
+
+    <TextView
+        android:id="@+id/gameover_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="Game Over"
+        android:textColor="@color/black"
+        android:textSize="60sp" />
+
+    <Button
+        android:id="@+id/reset_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gameover_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@color/red"
+        android:padding="10dp"
+        android:text="Restart"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/score_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reset_btn"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="Score"
+        android:textColor="@color/scorecolor"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
