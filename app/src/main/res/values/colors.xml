@@ -5,10 +5,18 @@
     <color name="colorAccent">#03DAC5</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="transparent">#20DFDFDF</color>
     <color name="red">#FF0000</color>
+    <color name="crimson">#9E0000</color>
     <color name="blue">#0000FF</color>
     <color name="green">#00FF00</color>
     <color name="yellow">#FFEB3B</color>
+    <color name="deep_yellow">#A39200</color>
     <color name="black">#000000</color>
+    <color name="gray_trans">#B9191919</color>
     <color name="scorecolor">#FF9800</color>
+    <color name="orange">#603900</color>
+    <color name="purple">#C800FF</color>
+    <color name="deep_purple">#3D004E</color>
+    <color name="pink">#FF00FB</color>
 </resources>
