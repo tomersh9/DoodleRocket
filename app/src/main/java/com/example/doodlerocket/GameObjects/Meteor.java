@@ -11,8 +11,12 @@ public class Meteor implements IGameObjects {
 
     private int meteorX, meteorY, meteorSpeed;
     private Bitmap meteorBitmap;
+
     private int bitmapResArr[] = {R.drawable.meteor1,R.drawable.meteor2,R.drawable.meteor3,R.drawable.meteor4,R.drawable.meteor5,
                                     R.drawable.meteor6, R.drawable.meteor7, R.drawable.meteor8, R.drawable.meteor9,R.drawable.meteor10};
+
+    private int boomResArr[] = {R.drawable.explosion_01,R.drawable.explosion_02,R.drawable.explosion_03,
+                                R.drawable.explosion_04,R.drawable.explosion_05};
 
 
     public Meteor(int playerMinX, int playerMaxX,int speed, Resources resources) {
@@ -35,6 +39,7 @@ public class Meteor implements IGameObjects {
     }
 
     public void setBitmap(Resources res, int i) {
+
         meteorBitmap = BitmapFactory.decodeResource(res,bitmapResArr[i]);
     }
 

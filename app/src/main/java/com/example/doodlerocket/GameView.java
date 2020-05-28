@@ -52,9 +52,7 @@ public class GameView extends View implements SensorEventListener {
     //player
     Player player;
     private int health;
-    private int rocketSpeed;
     private int score;
-    private boolean isMoving = false;
     private boolean isFire = false;
 
     //projectiles
@@ -65,6 +63,7 @@ public class GameView extends View implements SensorEventListener {
 
     //meteors
     private List<Meteor> meteors = new ArrayList<>();
+    private List<Meteor> removeMeteorsList = new ArrayList<>();
 
     //items
     private GoldCoin goldCoin;
@@ -168,6 +167,11 @@ public class GameView extends View implements SensorEventListener {
         canvas.drawBitmap(arrowLeft,10,canvasH - 450,null);
         canvas.drawBitmap(arrowRight,canvasW - 190,canvasH - 450,null);
 
+        //move outside
+        if(health == 0) {
+            gameOver();
+        }
+
         //update hearts bitmaps
         for(int i=0; i<3; i++) {
 
@@ -204,16 +208,15 @@ public class GameView extends View implements SensorEventListener {
             if(meteor.collisionDetection(playerX,playerY,playerBitmap)) {
 
                 health--;
+                //removeMeteorsList.add(meteor);
                 meteor.setMeteorY(canvasH + 50);
                 meteor.setBitmap(getResources(), (int) (Math.random()* (9)));
-
-                if(health == 0) {
-                    gameOver();
-                }
             }
 
             //meteor goes off screen
-            if(meteor.getObjectY() > canvasH) {
+            else if(meteor.getObjectY() > canvasH) {
+
+                //removeMeteorsList.add(meteor);
                 meteor.setMeteorY(0);
                 meteor.setMeteorX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
                 meteor.setBitmap(getResources(), (int) (Math.random()* (9)));
@@ -228,6 +231,7 @@ public class GameView extends View implements SensorEventListener {
                 if(bullet.collisionDetection(meteor.getObjectX(),meteor.getObjectY(),meteor.getMeteorBitmap())) {
 
                     //delete meteor
+                    removeMeteorsList.add(meteor);
                     meteor.setMeteorY(0);
                     meteor.setMeteorX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
                     meteor.setBitmap(getResources(), (int) (Math.random()* (9)));
@@ -259,7 +263,6 @@ public class GameView extends View implements SensorEventListener {
                 }
             }
         }
-
     }
 
     public void spawnCoins(Canvas canvas) {
@@ -348,6 +351,7 @@ public class GameView extends View implements SensorEventListener {
         }
         editor.commit();
 
+        //PROBLEM HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //move to game over intent
         Intent gameOverIntent = new Intent(getContext(), GameOverActivity.class);
         gameOverIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
