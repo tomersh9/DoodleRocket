@@ -10,13 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Activities.HomeActivity">
+        <activity android:name=".Activities.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Activities.HomeActivity"/>
 
         <activity   android:name=".Activities.MainActivity"
                     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
@@ -25,6 +27,9 @@
         <activity android:name=".Activities.GameOverActivity"/>
         <activity android:name=".Activities.LoginPage"/>
         <activity android:name=".Activities.ShopActivity"/>
+
+        <activity android:name=".Activities.LevelBlockOne"/>
+        <activity android:name=".Activities.LevelBlockTwo"/>
 
     </application>
 

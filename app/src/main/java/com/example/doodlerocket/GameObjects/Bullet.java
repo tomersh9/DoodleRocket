@@ -56,7 +56,7 @@ public class Bullet implements IGameObjects {
     @Override
     public boolean collisionDetection(int meteorX, int meteorY, Bitmap meteorBitmap) {
 
-        if(meteorX < x && x < (meteorX + meteorBitmap.getWidth())
+        if(meteorX - 50 < x && x < (meteorX + meteorBitmap.getWidth())
                 && meteorY < y && y < (meteorY + meteorBitmap.getHeight())) {
             return true;
         }

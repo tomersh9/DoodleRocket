@@ -28,8 +28,10 @@ public class HomeActivity extends AppCompatActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startGameIntent = new Intent(HomeActivity.this,MainActivity.class);
+                Intent startGameIntent = new Intent(HomeActivity.this,LevelBlockOne.class);
                 startActivity(startGameIntent);
+                //finish();
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
@@ -39,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this,ShopActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
     }

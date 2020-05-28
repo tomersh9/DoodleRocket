@@ -56,7 +56,6 @@ public class GameView extends View implements SensorEventListener {
     private int score;
     private boolean isMoving = false;
     private boolean isFire = false;
-    private Bitmap life[] = new Bitmap[2]; //hearts
 
     //projectiles
     private Bullet bullet;
@@ -79,8 +78,10 @@ public class GameView extends View implements SensorEventListener {
     private Rect rect;
     int dWidth, dHeight;
 
-    //paint
+    //UI
     private Paint scorePaint = new Paint();
+    private Bitmap arrowLeft, arrowRight;
+    private Bitmap life[] = new Bitmap[2]; //hearts
 
     public GameView(Context context) { //context when calling it
         super(context);
@@ -135,6 +136,10 @@ public class GameView extends View implements SensorEventListener {
         scorePaint.setTypeface(customTypeface);
         scorePaint.setAntiAlias(true);
 
+        //arrows
+        arrowLeft = BitmapFactory.decodeResource(getResources(),R.drawable.arrow_left_50);
+        arrowRight = BitmapFactory.decodeResource(getResources(),R.drawable.arrow_right_50);
+
         //life display of fish (have or not)
         life[0] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_red_50);
         life[1] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_gray_50);
@@ -160,6 +165,8 @@ public class GameView extends View implements SensorEventListener {
         //UI drawing
         canvas.drawBitmap(background,null,rect,null);
         canvas.drawText("Score:" + score, 60,150,scorePaint);
+        canvas.drawBitmap(arrowLeft,10,canvasH - 450,null);
+        canvas.drawBitmap(arrowRight,canvasW - 190,canvasH - 450,null);
 
         //update hearts bitmaps
         for(int i=0; i<3; i++) {
@@ -183,11 +190,7 @@ public class GameView extends View implements SensorEventListener {
         //spawn items
         spawnCoins(canvas);
 
-        //on touch event movement
-        if(isMoving) {
-            isMoving = false;
-        }
-
+        //spawn enemies
         enemy.drawObject(canvas);
         enemy.updateLocation();
 
@@ -230,8 +233,8 @@ public class GameView extends View implements SensorEventListener {
                     meteor.setBitmap(getResources(), (int) (Math.random()* (9)));
 
                     //relocate bullet
-                    bullet.setX(playerX + 50);
-                    bullet.setY(playerY);
+                    bullet.setX(playerX + playerBitmap.getWidth()/2); //center of player
+                    bullet.setY(playerY); //top center
                     isFire = false;
                 }
 
@@ -243,15 +246,15 @@ public class GameView extends View implements SensorEventListener {
                     enemy.setEnemyBitmap(getResources(), (int) (Math.random()* (8)));
 
                     //relocate bullet
-                    bullet.setX(playerX + 50);
-                    bullet.setY(playerY);
+                    bullet.setX(playerX + playerBitmap.getWidth()/2); //center of player
+                    bullet.setY(playerY); //top center
                     isFire = false;
                 }
 
                 if (bullet.getObjectY() < 0) {
 
-                    bullet.setX(playerX + 50);
-                    bullet.setY(playerY);
+                    bullet.setX(playerX + playerBitmap.getWidth()/2); //center of player
+                    bullet.setY(playerY); //top center
                     isFire = false;
                 }
             }
@@ -293,18 +296,30 @@ public class GameView extends View implements SensorEventListener {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+        int velocity = 30;
+
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_MOVE:
-                player.setX((int) event.getX());
-                isMoving = true;
+
+                if(     event.getX() < canvasW/2
+                        && event.getX() < player.getObjectX()
+                        && event.getX() < player.getObjectX() + player.getPlayerBitmap().getWidth()
+                        && event.getY() >= player.getObjectY() - 120) {
+                    player.setX(player.getObjectX() - velocity);
+                }
+                else if(event.getX() > canvasW/2
+                        && event.getX() > player.getObjectX()
+                        && event.getX() > player.getObjectX() + player.getPlayerBitmap().getWidth()
+                        && event.getY() >= player.getObjectY() - 120) {
+                    player.setX(player.getObjectX() + velocity);
+                }
                 break;
 
             case MotionEvent.ACTION_DOWN:
-                if(event.getY() < canvasH/2) { //top half of screen to fire
+                if(event.getY() < canvasH/1.3) //top half of screen to fire
                     isFire = true;
-                    break;
-                }
+                break;
         }
         return true;
     }

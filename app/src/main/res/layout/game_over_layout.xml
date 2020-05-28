@@ -14,11 +14,22 @@
         android:text="Game Over" />
 
     <TextView
+        android:id="@+id/coins_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gameover_tv"
+        android:text="Coins"
+        style="@style/score"
+        android:layout_marginTop="20dp"
+        android:background="@color/transparent"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
         android:id="@+id/score_tv"
         style="@style/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/gameover_tv"
+        android:layout_below="@id/coins_tv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="@color/transparent"

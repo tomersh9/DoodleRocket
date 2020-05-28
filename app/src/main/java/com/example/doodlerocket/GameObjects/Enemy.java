@@ -16,7 +16,7 @@ public class Enemy implements IGameObjects {
     private Bitmap enemyBitmap;
     private int[] enemySkins = {R.drawable.alien_spaceship_png,R.drawable.alien_elf_blue_png,R.drawable.alien_boss_rgb_png
                                 ,R.drawable.alien_green_png,R.drawable.alien_ship_reg_png,R.drawable.alien_spaceship_purple_png
-                                ,R.drawable.alienship_reg_purple_png,R.drawable.alienship_reg_red_png};
+                                ,R.drawable.alienship_reg_purple_png,R.drawable.alienship_reg_red_png,R.drawable.alien_grey_eye_png};
 
     public Enemy(Resources resources, int x, int y, int canvasW) {
         this.x = x;

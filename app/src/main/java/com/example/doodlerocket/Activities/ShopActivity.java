@@ -1,6 +1,7 @@
 package com.example.doodlerocket.Activities;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -42,6 +43,16 @@ public class ShopActivity extends AppCompatActivity {
         shopItems.add(new ShopItem(R.drawable.spaceship_orange_png,50,"Rare"));
         shopItems.add(new ShopItem(R.drawable.spaceship_purple_long_png,100,"Legendary"));
         shopItems.add(new ShopItem(R.drawable.premium_spaceship_png,250,"Premium"));
+        shopItems.add(new ShopItem(R.drawable.gold_green_spaceship_png,100,"Legendary"));
+        shopItems.add(new ShopItem(R.drawable.green_red_spaceship_png,50,"Rare"));
+        shopItems.add(new ShopItem(R.drawable.purple_green_ship_png,10,"Common"));
+        shopItems.add(new ShopItem(R.drawable.red_blue_ship_premium,50,"Rare"));
+        shopItems.add(new ShopItem(R.drawable.spaceship_red_png,100,"Legendary"));
+        shopItems.add(new ShopItem(R.drawable.ship_blue,250,"Premium"));
+        shopItems.add(new ShopItem(R.drawable.reg_ship_premium_png,50,"Rare"));
+        shopItems.add(new ShopItem(R.drawable.blue_purple_ship_premium,100,"Legendary"));
+        shopItems.add(new ShopItem(R.drawable.spaceship_polls_png,250,"Premium"));
+
 
         //create instance of adapter that has ViewHolder inside (to inflate our cells)
         final ShopItemAdapter shopItemAdapter = new ShopItemAdapter(shopItems);
@@ -61,8 +72,15 @@ public class ShopActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish(); //kills this activity
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
         });
+    }
 
+    //when pressing back btn
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 }
