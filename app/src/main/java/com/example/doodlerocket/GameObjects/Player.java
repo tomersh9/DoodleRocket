@@ -15,11 +15,11 @@ public class Player implements IGameObjects {
     private int health;
     private Bitmap playerBitmap;
 
-    public Player(int canvasW,Resources resources, int skinID) {
+    public Player(int canvasW,float screenRatioX,float screenRatioY,Resources resources, int skinID) {
 
         //initial position of player
-        this.x = 450;
-        this.y = 2100;
+        this.x = (int)(450 * screenRatioX);
+        this.y = (int)(2100 * screenRatioY);
         this.health = 3;
 
         //scaled bitmap

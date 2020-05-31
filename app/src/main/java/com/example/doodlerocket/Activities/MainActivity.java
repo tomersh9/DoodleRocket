@@ -2,6 +2,7 @@ package com.example.doodlerocket.Activities;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private int skinID;
     private int backgroundID;
 
+    private Point point = new Point();
+
     //only need 1 instance of AlertDialog and then inflate it with other layouts
     private AlertDialog gameAlertDialog;
 
@@ -38,13 +41,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindowManager().getDefaultDisplay().getSize(point);
+
         //getting info to send GameView
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         skinID = sp.getInt("skin_id", R.drawable.default_ship_100);
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
 
         //game is running on thread behind the scenes
-        gameView = new GameView(this,skinID,backgroundID);
+        gameView = new GameView(this,point.x,point.y,skinID,backgroundID);
         setContentView(gameView); //content display
 
         Timer timer = new Timer();
@@ -62,16 +67,7 @@ public class MainActivity extends AppCompatActivity {
         },0, interval); //delay = 0, each 10mis refresh screen
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        /*SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("skin_id",skinID);
-        editor.commit();*/
-    }
-
-    @Override
+    @Override //alert dialog when back pressed
     public void onBackPressed() {
 
 
@@ -83,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
         //alert animation
         YoYo.with(Techniques.BounceInUp).duration(1000).playOn(pauseView);
-
 
         Button yesBtn = pauseView.findViewById(R.id.alert_yes_btn);
         yesBtn.setOnClickListener(new View.OnClickListener() {

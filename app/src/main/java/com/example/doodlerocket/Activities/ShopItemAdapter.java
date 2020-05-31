@@ -21,8 +21,6 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
     private List<ShopItem> shopItems;
     private MyShopItemListener myShopItemListener;
 
-    private SharedPreferences sp;
-
     interface MyShopItemListener {
         void onItemClicked(int i , View v);
     }
@@ -35,6 +33,7 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
     {
         this.shopItems = shopItems;
     }
+
 
     //this class Holds our inflated views
     public class ShopItemViewHolder extends RecyclerView.ViewHolder {

@@ -38,6 +38,9 @@ public class GameView extends View {
     SharedPreferences sp;
     int money;
 
+    private int screenX, screenY;
+    private float screenRatioX,screenRatioY;
+
     //player
     Player player;
     private int health;
@@ -86,17 +89,34 @@ public class GameView extends View {
     private Paint scorePaint = new Paint();
     private Bitmap life[] = new Bitmap[2]; //hearts
 
+    //interface to communicate with the MainActivity "father" outside
+    public interface GameViewListener {
+        void pauseGame();
+        void resumeGame();
+        void exitGame();
+    }
 
+    //listener object
+    public GameViewListener gameViewListener;
 
-    public GameView(Context context, int skinID, int backgroundID) { //context when calling it
+    //will be called outside this class to use this interface methods
+    public void setGameViewListener(GameViewListener gameViewListener) {this.gameViewListener = gameViewListener;}
+
+    public GameView(Context context,int screenX,int screenY, int skinID, int backgroundID) { //context when calling it
         super(context);
 
         //reading total player money
         sp = getContext().getSharedPreferences("storage",Context.MODE_PRIVATE);
         money = sp.getInt("money",0);
 
+        //fit all screens
+        this.screenX = screenX;
+        this.screenY = screenY;
+        this.screenRatioX = 1440f / screenX;
+        this.screenRatioY = 2352f / screenY;
+
         //player
-        player = new Player(1440,getResources(),skinID);
+        player = new Player(screenX,screenRatioX,screenRatioY,getResources(),skinID);
 
         //setting up background to fit screen
         background = BitmapFactory.decodeResource(getResources(), backgroundID);
