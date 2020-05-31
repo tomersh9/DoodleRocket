@@ -8,9 +8,13 @@ import android.graphics.Rect;
 
 import com.example.doodlerocket.R;
 
+import static com.example.doodlerocket.GameView.screenRatioX;
+import static com.example.doodlerocket.GameView.screenRatioY;
+
 public class EnemyProjectile implements IGameObjects {
 
     private int x,y,speed;
+    private  int width, height;
     private Bitmap projectileBitmap;
 
     public EnemyProjectile(Resources resources, Enemy enemy) {
@@ -21,8 +25,14 @@ public class EnemyProjectile implements IGameObjects {
         speed = 30;
 
         projectileBitmap = BitmapFactory.decodeResource(resources, R.drawable.laser_2);
-        int width = projectileBitmap.getWidth()*3;
-        int height = projectileBitmap.getHeight()*3;
+
+        width = projectileBitmap.getWidth()*3;
+        height = projectileBitmap.getHeight()*3;
+
+        /*//fit screens sizes
+        width *= (int) screenRatioX;
+        height *= (int) screenRatioY;*/
+
         projectileBitmap = Bitmap.createScaledBitmap(projectileBitmap,width,height,false);
 
     }

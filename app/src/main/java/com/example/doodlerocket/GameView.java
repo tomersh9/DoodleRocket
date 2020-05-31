@@ -39,7 +39,7 @@ public class GameView extends View {
     int money;
 
     private int screenX, screenY;
-    public float screenRatioX,screenRatioY;
+    public static float screenRatioX,screenRatioY; //to access all around
 
     //player
     Player player;
@@ -112,11 +112,11 @@ public class GameView extends View {
         //fit all screens
         this.screenX = screenX;
         this.screenY = screenY;
-        this.screenRatioX = 1440f / screenX;
-        this.screenRatioY = 2352f / screenY;
+        /*this.screenRatioX = 1920f / screenX;
+        this.screenRatioY = 1080f / screenY;*/
 
         //player
-        player = new Player(screenX,screenRatioX,screenRatioY,getResources(),skinID);
+        player = new Player(1440,getResources(),skinID);
 
         //setting up background to fit screen
         background = BitmapFactory.decodeResource(getResources(), backgroundID);

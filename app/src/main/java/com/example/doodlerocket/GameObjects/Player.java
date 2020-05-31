@@ -8,6 +8,9 @@ import android.graphics.Canvas;
 
 import com.example.doodlerocket.R;
 
+import static com.example.doodlerocket.GameView.screenRatioX;
+import static com.example.doodlerocket.GameView.screenRatioY;
+
 public class Player implements IGameObjects {
 
     private int x,y;
@@ -16,11 +19,11 @@ public class Player implements IGameObjects {
     private int health;
     private Bitmap playerBitmap;
 
-    public Player(int canvasW,float screenRatioX,float screenRatioY,Resources resources, int skinID) {
+    public Player(int canvasW,Resources resources, int skinID) {
 
         //initial position of player
-        this.x = (int)(450 * screenRatioX);
-        this.y = (int)(2100 * screenRatioY);
+        this.x = canvasW/2;
+        this.y = 1500;
         this.health = 3;
 
         //scaled bitmap
@@ -29,9 +32,9 @@ public class Player implements IGameObjects {
         height = playerBitmap.getHeight()/2;
 
         //fit all screen sizes
-        width *= (int) screenRatioX;
+        /*width *= (int) screenRatioX;
         height *= (int) screenRatioY;
-
+*/
         playerBitmap = Bitmap.createScaledBitmap(playerBitmap,width,height,false);
 
         //bounds of player in screen
