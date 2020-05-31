@@ -84,6 +84,7 @@ public class GameView extends View {
     private Rect rect;
     private boolean isScale = true;
     private int dWidth, dHeight;
+    private int backgroundID;
 
     //UI
     private Paint scorePaint = new Paint();
@@ -102,22 +103,26 @@ public class GameView extends View {
     //will be called outside this class to use this interface methods
     public void setGameViewListener(GameViewListener gameViewListener) {this.gameViewListener = gameViewListener;}
 
-    public GameView(Context context,int screenX,int screenY, int skinID, int backgroundID) { //context when calling it
+    public GameView(Context context, int skinID, int backgroundID) { //context when calling it
         super(context);
 
         //reading total player money
         sp = getContext().getSharedPreferences("storage",Context.MODE_PRIVATE);
         money = sp.getInt("money",0);
 
-        //fit all screens
-        this.screenX = screenX;
-        this.screenY = screenY;
-        /*this.screenRatioX = 1920f / screenX;
-        this.screenRatioY = 1080f / screenY;*/
-
-        //player
+        //set player
         player = new Player(1440,getResources(),skinID);
 
+        //initialize background fit to screen
+        this.backgroundID = backgroundID;
+        setGameBackground();
+
+        //hearts, score and life
+        setUI();
+    }
+
+
+    private void setGameBackground() {
         //setting up background to fit screen
         background = BitmapFactory.decodeResource(getResources(), backgroundID);
 
@@ -133,10 +138,12 @@ public class GameView extends View {
             dHeight = size.y;
             rect = new Rect(0,0,dWidth,dHeight);
         }
+    }
 
+    private void setUI() {
         //setting score paint properties
         //custom font
-        Typeface customTypeface = ResourcesCompat.getFont(context, R.font.retro);
+        Typeface customTypeface = ResourcesCompat.getFont(getContext(), R.font.retro);
         scorePaint.setColor(Color.YELLOW);
         scorePaint.setTextSize(80);
         scorePaint.setTypeface(customTypeface);
@@ -172,9 +179,10 @@ public class GameView extends View {
             canvas.drawBitmap(background,0,0,null);
         }
 
+        //score text
         canvas.drawText("Score:" + score, 60,150,scorePaint);
 
-        //move outside
+        //saving data before death
         if(health == 0) {
 
             //deliver high score data
@@ -359,7 +367,6 @@ public class GameView extends View {
         if(isTimeToEnemy) {
 
             Enemy enemy = new Enemy(getResources(),(int) Math.floor(Math.random() * (player.getMaxX())),50,canvasW);
-            System.out.println(enemy.getHealth());
             enemies.add(enemy);
             delayEnemy();
         }
@@ -385,6 +392,7 @@ public class GameView extends View {
     private void spawnCoins() {
         if(isTimeToCoin) {
             goldCoins.add(new GoldCoin(player.getMinX(),player.getMaxX(),getResources()));
+            silverCoins.add(new SilverCoin(player.getMinX(),player.getMaxX(),getResources()));
             delayCoin();
         }
     }
@@ -404,7 +412,7 @@ public class GameView extends View {
             public void run() {
                 isProjectile = true;
             }
-        },650);
+        },1500);
     }
 
 
@@ -415,7 +423,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToEnemy = true;
             }
-        },2000);
+        },6000);
     }
 
     //delay between shots
@@ -426,7 +434,7 @@ public class GameView extends View {
             public void run() {
                 isBullet = true;
             }
-        },200);
+        },500);
     }
 
     //delay between meteor spawns
@@ -437,7 +445,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToSpawnMeteor = true;
             }
-        },250);
+        },3000);
     }
 
     //delay between meteor spawns
@@ -448,7 +456,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToCoin = true;
             }
-        },2500);
+        },1200);
     }
 
 
@@ -486,6 +494,7 @@ public class GameView extends View {
 
         //PROBLEM HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //move to game over intent
+        System.out.println("game Over!!!!!!!!!!!!!!!!!!!");
         Intent gameOverIntent = new Intent(getContext(), GameOverActivity.class);
         gameOverIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         gameOverIntent.putExtra("score", score);

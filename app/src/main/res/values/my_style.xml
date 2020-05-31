@@ -5,7 +5,7 @@
         <item name="fontFamily">@font/retro</item>
         <item name="android:padding">10dp</item>
         <item name="android:textColor">@color/purple</item>
-        <item name="android:textSize">50sp</item>
+        <item name="android:textSize">40sp</item>
         <item name="android:shadowColor">@color/black</item>
         <item name="android:shadowDx">15</item>
         <item name="android:shadowDy">15</item>
@@ -16,7 +16,7 @@
         <item name="fontFamily">@font/retro</item>
         <item name="android:padding">10dp</item>
         <item name="android:textColor">@color/yellow</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:shadowColor">@color/black</item>
         <item name="android:shadowDx">10</item>
         <item name="android:shadowDy">10</item>
@@ -38,7 +38,7 @@
         <item name="fontFamily">@font/retro</item>
         <item name="android:padding">10dp</item>
         <item name="android:textColor">@color/scorecolor</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:shadowColor">@color/black</item>
         <item name="android:shadowDx">8</item>
         <item name="android:shadowDy">8</item>
@@ -48,7 +48,7 @@
     <style name="btn_txt">
         <item name="fontFamily">@font/retro</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">19sp</item>
         <item name="android:padding">20dp</item>
         <item name="android:shadowColor">@color/black</item>
         <item name="android:shadowDx">8</item>

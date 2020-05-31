@@ -7,87 +7,89 @@
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/moon_bg"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/planets_gif_bg" />
 
     <TextView
         android:id="@+id/gameover_tv"
         style="@style/game_over"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="Game Over" />
 
-    <TextView
-        android:id="@+id/coins_tv"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/total_score_tv"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/gameover_tv"
-        android:text="Coins"
-        style="@style/score"
+        android:background="@drawable/transparent_shape"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
-        android:background="@color/transparent"
-        android:layout_centerHorizontal="true"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/score_tv"
-        style="@style/score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/coins_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@color/transparent"
-        android:gravity="center"
-        android:text="Score" />
+        <TextView
+            android:id="@+id/score_tv"
+            style="@style/score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Score" />
 
-    <TextView
-        android:id="@+id/highscore_tv"
-        style="@style/high_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/score_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@color/transparent"
-        android:gravity="center"
-        android:text="High Score" />
+        <TextView
+            android:id="@+id/highscore_tv"
+            style="@style/high_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High Score" />
 
-    <Button
-        android:id="@+id/reset_btn"
-        style="@style/btn_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/highscore_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_red_selector"
-        android:text="Play again"
-        android:textAllCaps="false" />
+        <TextView
+            android:id="@+id/coins_tv"
+            style="@style/score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Coins" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/score_board_btn"
-        style="@style/btn_txt"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/game_over_btn_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/reset_btn"
+        android:layout_below="@id/total_score_tv"
+        android:layout_margin="50dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_yellow_selector"
-        android:text="Score Board"
-        android:textAllCaps="false" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/menu_btn"
-        style="@style/btn_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/score_board_btn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_purple_selector"
-        android:text="Main Menu"
-        android:textAllCaps="false" />
+        <Button
+            android:id="@+id/reset_btn"
+            style="@style/btn_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_red_selector"
+            android:text="Play again"
+            android:layout_margin="10dp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/score_board_btn"
+            style="@style/btn_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_yellow_selector"
+            android:text="Score Board"
+            android:layout_margin="10dp"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/menu_btn"
+            style="@style/btn_txt"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_purple_selector"
+            android:text="Main Menu"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
 </RelativeLayout>

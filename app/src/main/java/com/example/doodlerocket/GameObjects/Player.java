@@ -28,13 +28,8 @@ public class Player implements IGameObjects {
 
         //scaled bitmap
         playerBitmap = BitmapFactory.decodeResource(resources, skinID);
-        width = playerBitmap.getWidth()/2;
-        height = playerBitmap.getHeight()/2;
-
-        //fit all screen sizes
-        /*width *= (int) screenRatioX;
-        height *= (int) screenRatioY;
-*/
+        width = (int)(playerBitmap.getWidth()/1.5f);
+        height = (int)(playerBitmap.getHeight()/1.5f);
         playerBitmap = Bitmap.createScaledBitmap(playerBitmap,width,height,false);
 
         //bounds of player in screen

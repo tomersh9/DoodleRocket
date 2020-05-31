@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.doodlerocket.R;
 
 import org.w3c.dom.Text;
@@ -24,6 +26,9 @@ public class GameOverActivity extends AppCompatActivity {
         setContentView(R.layout.game_over_layout);
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
+
+        TextView gameOverTv = findViewById(R.id.gameover_tv);
+        YoYo.with(Techniques.Flash).duration(2000).playOn(gameOverTv);
 
         //money
         TextView coinsTv = findViewById(R.id.coins_tv);
@@ -44,6 +49,7 @@ public class GameOverActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent backToGameIntent = new Intent(GameOverActivity.this,MainActivity.class);
                 startActivity(backToGameIntent);
+                finish();
             }
         });
 
@@ -53,6 +59,7 @@ public class GameOverActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent menuIntent = new Intent(GameOverActivity.this,HomeActivity.class);
                 startActivity(menuIntent);
+                finish();
             }
         });
 

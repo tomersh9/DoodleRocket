@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private final static long interval = 10; //refresh rate
 
     private SharedPreferences sp;
-    private int skinID;
-    private int backgroundID;
 
     private Point point = new Point();
 
@@ -44,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getSize(point);
 
         //getting info to send GameView
+        int skinID;
+        int backgroundID;
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         skinID = sp.getInt("skin_id", R.drawable.default_ship_100);
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
 
         //game is running on thread behind the scenes
-        gameView = new GameView(this,point.x,point.y,skinID,backgroundID);
+        gameView = new GameView(this,skinID,backgroundID);
         setContentView(gameView); //content display
 
         Timer timer = new Timer();

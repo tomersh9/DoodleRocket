@@ -19,9 +19,9 @@ public class Bullet implements IGameObjects {
         y = playerY;
         speed = 20;
 
-        bulletBitmap = BitmapFactory.decodeResource(resources, R.drawable.laser_1);
-        int width = bulletBitmap.getWidth()*3;
-        int height = bulletBitmap.getHeight()*3;
+        bulletBitmap = BitmapFactory.decodeResource(resources, R.drawable.slice_beams_43);
+        int width = bulletBitmap.getWidth()/2;
+        int height = bulletBitmap.getHeight()/2;
         bulletBitmap = Bitmap.createScaledBitmap(bulletBitmap,width,height,false);
 
     }

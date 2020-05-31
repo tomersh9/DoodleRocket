@@ -24,15 +24,9 @@ public class EnemyProjectile implements IGameObjects {
         y = enemy.getObjectY() + enemy.getEnemyHeight();
         speed = 30;
 
-        projectileBitmap = BitmapFactory.decodeResource(resources, R.drawable.laser_2);
-
-        width = projectileBitmap.getWidth()*3;
-        height = projectileBitmap.getHeight()*3;
-
-        /*//fit screens sizes
-        width *= (int) screenRatioX;
-        height *= (int) screenRatioY;*/
-
+        projectileBitmap = BitmapFactory.decodeResource(resources, R.drawable.slice_beams_40);
+        width = projectileBitmap.getWidth()/2;
+        height = projectileBitmap.getHeight()/2;
         projectileBitmap = Bitmap.createScaledBitmap(projectileBitmap,width,height,false);
 
     }
@@ -68,7 +62,8 @@ public class EnemyProjectile implements IGameObjects {
     @Override
     public boolean collisionDetection(int playerX, int playerY, Bitmap playerBitmap) {
 
-        if(playerX + 50 < x && x < (playerX + playerBitmap.getWidth() - 50)
+        //can tweak player hit box
+        if(playerX + 10 < x && x < (playerX + playerBitmap.getWidth() - 10)
                 && playerY < y && y < (playerY + playerBitmap.getHeight())) {
             return true;
         }

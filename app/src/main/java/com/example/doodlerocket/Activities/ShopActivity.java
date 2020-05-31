@@ -127,5 +127,6 @@ public class ShopActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
     }
 }

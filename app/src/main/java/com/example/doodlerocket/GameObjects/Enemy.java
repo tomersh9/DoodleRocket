@@ -43,10 +43,8 @@ public class Enemy implements IGameObjects {
         enemyBitmap = BitmapFactory.decodeResource(resources,enemySkins[randRes]);
         this.width = enemyBitmap.getWidth();
         this.height = enemyBitmap.getHeight();
+        enemyBitmap = Bitmap.createScaledBitmap(enemyBitmap,width,height,false);
 
-        if(height > 200) {
-            enemyBitmap = Bitmap.createScaledBitmap(enemyBitmap,width/2,height/2,false);
-        }
     }
 
     @Override

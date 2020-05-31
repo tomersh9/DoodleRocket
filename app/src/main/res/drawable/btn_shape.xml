@@ -9,11 +9,7 @@
         android:startColor="@color/purple"
         android:endColor="@color/pink"
         android:angle="90"/>
-    <padding
-        android:bottom="3dp"
-        android:top="3dp"
-        android:left="10dp"
-        android:right="10dp"/>
+
     <stroke android:color="@color/black"
         android:width="3dp"/>
 </shape>

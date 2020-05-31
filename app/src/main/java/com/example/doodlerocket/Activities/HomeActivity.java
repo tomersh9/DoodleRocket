@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -20,8 +21,11 @@ import com.example.doodlerocket.R;
 
 public class HomeActivity extends AppCompatActivity {
 
+    AlertDialog gameAlertDialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
 
@@ -32,7 +36,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent startGameIntent = new Intent(HomeActivity.this,LevelBlockOne.class);
-                startGameIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(startGameIntent);
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
@@ -53,5 +56,39 @@ public class HomeActivity extends AppCompatActivity {
         TextView titleTv = findViewById(R.id.home_title_tv);
 
         YoYo.with(Techniques.FadeInDown).duration(1500).playOn(titleTv);
+    }
+
+    @Override //alert dialog when back pressed
+    public void onBackPressed() {
+
+
+        //for each new dialog we create a builder to show this specific dialog
+        final AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+
+        //first you inflate the layout and then create the builder to show it
+        View pauseView = getLayoutInflater().inflate(R.layout.alert_dialog_view, null);
+
+        //alert animation
+        YoYo.with(Techniques.Landing).duration(1000).playOn(pauseView);
+
+        Button yesBtn = pauseView.findViewById(R.id.alert_yes_btn);
+        yesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        Button noBtn = pauseView.findViewById(R.id.alert_no_btn);
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gameAlertDialog.dismiss();
+            }
+        });
+
+        //building the alert dialog each time with different builder
+        gameAlertDialog = builder.setView(pauseView).show();
+        gameAlertDialog.setCanceledOnTouchOutside(false);
+        gameAlertDialog.setCancelable(false);
     }
 }

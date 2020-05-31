@@ -70,9 +70,8 @@ public class SplashScreen extends AppCompatActivity {
         ObjectAnimator shipAnimator = new ObjectAnimator().ofFloat(splashSpaceship,"translationY",-height).setDuration(2500);
         ObjectAnimator textAnimator = new ObjectAnimator().ofFloat(titleTv,"alpha",0f,1f).setDuration(1500);
         textAnimator.setStartDelay(1400);
-        AnimatorSet set = new AnimatorSet();
 
-        //activate animations
+        AnimatorSet set = new AnimatorSet();
         set.playTogether(shipAnimator,textAnimator);
         set.start();
 

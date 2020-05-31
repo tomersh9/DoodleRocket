@@ -87,18 +87,7 @@ public class LevelBlockOne extends AppCompatActivity {
         //FIX ON HEBREW!
         //animation planets - YoYo
         YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl1Btn);
-        //YoYo.with(Techniques.ZoomInRight).duration(1000).playOn(lvl1Tv);
         YoYo.with(Techniques.ZoomInRight).duration(1000).playOn(lvl2Btn);
-        //YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl2Tv);
-
-
-        /*//slide in planets
-        ObjectAnimator slideAnimator1 = new ObjectAnimator().ofFloat(lvl1Btn,"translationX",-1000,120).setDuration(900);
-        ObjectAnimator slideAnimator2 = new ObjectAnimator().ofFloat(lvl2Btn,"translationX",1500,-120).setDuration(900);
-
-        //slide in text
-        ObjectAnimator textAnimator1 = new ObjectAnimator().ofFloat(lvl1Tv,"translationX",1500,-10).setDuration(900);
-        ObjectAnimator textAnimator2 = new ObjectAnimator().ofFloat(lvl2Tv,"translationX",-1000,10).setDuration(900)*/;
 
         //bounce infinite text
         ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl1Tv,"translationY",-70).setDuration(1400);
