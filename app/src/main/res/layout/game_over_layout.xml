@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/vortex_pink_bg">
 
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/moon_bg"
+        android:scaleType="centerCrop"/>
+
     <TextView
         android:id="@+id/gameover_tv"
         style="@style/game_over"

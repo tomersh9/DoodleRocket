@@ -25,7 +25,7 @@
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_alignParentBottom="true"
-            android:src="@drawable/spaceship_tin_png" />
+            android:src="@drawable/default_ship_100" />
 
     </RelativeLayout>
 

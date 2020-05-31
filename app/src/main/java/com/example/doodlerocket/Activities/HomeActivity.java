@@ -1,5 +1,7 @@
 package com.example.doodlerocket.Activities;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,27 +12,25 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.example.doodlerocket.GameObjects.Bullet;
 import com.example.doodlerocket.R;
 
 public class HomeActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
-
-        SharedPreferences sp = getSharedPreferences("username",MODE_PRIVATE);
-
-        //TextView helloTv = findViewById(R.id.name_output);
-
-        //helloTv.setText("Hello " + sp.getString("username",""));
 
         Button playBtn = findViewById(R.id.play_btn);
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent startGameIntent = new Intent(HomeActivity.this,LevelBlockOne.class);
+                startGameIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(startGameIntent);
-                //finish();
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
@@ -44,5 +44,11 @@ public class HomeActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
+
+        Button rateBtn = findViewById(R.id.rate_btn);
+
+        TextView titleTv = findViewById(R.id.home_title_tv);
+
+        YoYo.with(Techniques.FadeInDown).duration(1500).playOn(titleTv);
     }
 }

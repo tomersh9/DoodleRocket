@@ -7,6 +7,7 @@ public class ShopItem {
     private int skinId;
     private int price;
     private String rarity;
+    private boolean isBought;
 
     public ShopItem(int skinId, int price, String rarity) {
         this.skinId = skinId;
@@ -36,5 +37,13 @@ public class ShopItem {
 
     public void setRarity(String rarity) {
         this.rarity = rarity;
+    }
+
+    public boolean isBought() {
+        return isBought;
+    }
+
+    public void setBought(boolean bought) {
+        isBought = bought;
     }
 }

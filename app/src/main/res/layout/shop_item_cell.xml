@@ -24,7 +24,7 @@
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:src="@drawable/blackship_premium" />
+            android:src="@drawable/ship_green_grey_100" />
 
         <LinearLayout
             android:layout_width="wrap_content"

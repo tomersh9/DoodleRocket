@@ -4,49 +4,112 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.doodlerocket.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class LevelBlockOne extends AppCompatActivity {
+
+    SharedPreferences sp;
+    private int backgroundID;
 
     ObjectAnimator animator1;
     ObjectAnimator animator2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.level_block_one_layout);
+
+        sp = getSharedPreferences("storage",MODE_PRIVATE);
+        backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png); //default bg
+
+        TextView lvl1Tv = findViewById(R.id.lvl_1_tv);
+        TextView lvl2Tv = findViewById(R.id.lvl_2_tv);
 
         //lvl 1
         final ImageView lvl1Btn = findViewById(R.id.lvl_1_btn);
         lvl1Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
-                startActivity(intent);
+
+                //set level background
+                backgroundID = R.drawable.moon_bg_800;
+
+                //time entry to lvl
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
+                        startActivity(intent);
+                    }
+                },650);
+
             }
         });
 
         //lvl 2
-        ImageView lvl2Btn = findViewById(R.id.lvl_2_btn);
+        final ImageView lvl2Btn = findViewById(R.id.lvl_2_btn);
         lvl2Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
-                startActivity(intent);
+
+                //set level background
+                backgroundID = R.drawable.city_bg;
+
+                //time entry to lvl
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
+                        startActivity(intent);
+                    }
+                },650);
             }
         });
 
-        //animation planets
+        //FIX ON HEBREW!
+        //animation planets - YoYo
+        YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl1Btn);
+        //YoYo.with(Techniques.ZoomInRight).duration(1000).playOn(lvl1Tv);
+        YoYo.with(Techniques.ZoomInRight).duration(1000).playOn(lvl2Btn);
+        //YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl2Tv);
+
+
+        /*//slide in planets
+        ObjectAnimator slideAnimator1 = new ObjectAnimator().ofFloat(lvl1Btn,"translationX",-1000,120).setDuration(900);
+        ObjectAnimator slideAnimator2 = new ObjectAnimator().ofFloat(lvl2Btn,"translationX",1500,-120).setDuration(900);
+
+        //slide in text
+        ObjectAnimator textAnimator1 = new ObjectAnimator().ofFloat(lvl1Tv,"translationX",1500,-10).setDuration(900);
+        ObjectAnimator textAnimator2 = new ObjectAnimator().ofFloat(lvl2Tv,"translationX",-1000,10).setDuration(900)*/;
+
+        //bounce infinite text
+        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl1Tv,"translationY",-70).setDuration(1400);
+        ObjectAnimator bounceTextAnimator2 = new ObjectAnimator().ofFloat(lvl2Tv,"translationY",-70).setDuration(1400);
+
+        bounceTextAnimator1.setRepeatMode(ValueAnimator.REVERSE);
+        bounceTextAnimator1.setRepeatCount(ValueAnimator.INFINITE);
+        bounceTextAnimator2.setRepeatMode(ValueAnimator.REVERSE);
+        bounceTextAnimator2.setRepeatCount(ValueAnimator.INFINITE);
+
+        //bounce infinite img
         animator1 = new ObjectAnimator().ofFloat(lvl1Btn,"translationY",-70).setDuration(1400);
         animator1.setRepeatMode(ValueAnimator.REVERSE);
         animator1.setRepeatCount(ValueAnimator.INFINITE);
@@ -55,10 +118,13 @@ public class LevelBlockOne extends AppCompatActivity {
         animator2.setRepeatMode(ValueAnimator.REVERSE);
         animator2.setRepeatCount(ValueAnimator.INFINITE);
 
+        //play animations together
         AnimatorSet set = new AnimatorSet();
+        /*set.playTogether(slideAnimator1,textAnimator1);
+        set.playTogether(slideAnimator2,textAnimator2);*/
         set.playTogether(animator1,animator2);
+        set.playTogether(bounceTextAnimator1,bounceTextAnimator2);
         set.start();
-
 
         //next page
         ImageButton nextBlockBtn = findViewById(R.id.next_btn_block_1);
@@ -83,6 +149,14 @@ public class LevelBlockOne extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("lvl_bg",backgroundID);
+        editor.commit();
     }
 
     //on back pressed

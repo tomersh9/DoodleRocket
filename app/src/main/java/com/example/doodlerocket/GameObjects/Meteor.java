@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.example.doodlerocket.R;
 
@@ -24,7 +25,12 @@ public class Meteor implements IGameObjects {
         meteorX = (int) Math.floor(Math.random() * ((playerMaxX - playerMinX) + playerMinX)); //random X position at spawn
         meteorY = 0; //top of screen
         meteorSpeed = speed;
+
+        //smaller bitmaps
         meteorBitmap = BitmapFactory.decodeResource(resources,bitmapResArr[(int) (Math.random()* (9))]);
+        float width = meteorBitmap.getWidth()*0.6f;
+        float height = meteorBitmap.getHeight()*0.6f;
+        meteorBitmap = Bitmap.createScaledBitmap(meteorBitmap,(int)width,(int)height,false);
     }
 
     @Override
@@ -66,7 +72,7 @@ public class Meteor implements IGameObjects {
     }
 
 
-    @Override
+    @Override //tweak here
     public boolean collisionDetection(int playerX, int playerY, Bitmap playerBitmap) {
 
         if     (playerX < getObjectX() + (meteorBitmap.getWidth())
@@ -76,6 +82,10 @@ public class Meteor implements IGameObjects {
             return true;
         }
         return false;
+    }
+
+    public Rect getCollisionShape() {
+        return new Rect(meteorX,meteorY,meteorX+meteorBitmap.getWidth(),meteorY+meteorBitmap.getHeight());
     }
 
 }

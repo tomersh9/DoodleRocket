@@ -3,7 +3,7 @@
     android:id="@+id/lvl_1_block"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/black_bg">
+    android:background="@drawable/stars_pxl_png">
 
     <TextView
         style="@style/high_score"
@@ -33,6 +33,7 @@
             android:src="@drawable/desert_300" />
 
         <TextView
+            android:id="@+id/lvl_3_tv"
             style="@style/reg_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/lvl_4_tv"
             style="@style/reg_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

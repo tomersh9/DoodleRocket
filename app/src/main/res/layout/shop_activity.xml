@@ -2,8 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/shop_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/planet_bg">
+    android:layout_height="match_parent">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/planets_gif_bg" />
 
     <TextView
         android:id="@+id/shop_tv"
@@ -15,25 +20,50 @@
         android:text="Cosmetic Shop"
         android:textSize="25sp" />
 
-    <Button
-        android:id="@+id/return_btn"
-        style="@style/btn_txt"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/coins_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/shop_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/btn_purple_selector"
-        android:padding="10dp"
-        android:text="Return"
-        android:textAllCaps="false"
-        android:textSize="15sp" />
+        android:layout_margin="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.2"
+            android:layout_gravity="top"
+            android:src="@drawable/goldcoin_1" />
+
+        <TextView
+            android:id="@+id/shop_coins_amount"
+            style="@style/reg_txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="1234567" />
+
+        <Button
+            android:id="@+id/return_btn"
+            style="@style/btn_txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:background="@drawable/btn_purple_selector"
+            android:padding="10dp"
+            android:text="Return"
+            android:textAllCaps="false"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shop_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/return_btn"
+        android:layout_below="@id/coins_layout"
         android:layout_marginTop="10dp" />
 
 </RelativeLayout>

@@ -20,8 +20,7 @@
 
         <activity android:name=".Activities.HomeActivity"/>
 
-        <activity   android:name=".Activities.MainActivity"
-                    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        <activity   android:name=".Activities.MainActivity">
         </activity>
 
         <activity android:name=".Activities.GameOverActivity"/>

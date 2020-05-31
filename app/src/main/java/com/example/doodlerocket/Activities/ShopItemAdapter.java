@@ -1,5 +1,7 @@
 package com.example.doodlerocket.Activities;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +19,16 @@ import java.util.List;
 public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopItemViewHolder>{
 
     private List<ShopItem> shopItems;
-    private MyShopItemListener listener;
+    private MyShopItemListener myShopItemListener;
+
+    private SharedPreferences sp;
 
     interface MyShopItemListener {
         void onItemClicked(int i , View v);
     }
 
     //decide who listens
-    public void setListener(MyShopItemListener listener) {this.listener = listener;}
+    public void setMyShopItemListener(MyShopItemListener myShopItemListener) {this.myShopItemListener = myShopItemListener;}
 
     //constructor
     public ShopItemAdapter(List<ShopItem> shopItems)
@@ -49,8 +53,8 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(listener != null)
-                        listener.onItemClicked(getAdapterPosition(),v);
+                    if(myShopItemListener != null)
+                        myShopItemListener.onItemClicked(getAdapterPosition(),v);
                 }
             });
         }
@@ -80,6 +84,25 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
         //current item in list
         ShopItem item = shopItems.get(position);
 
+        if(item.getPrice() > 1000000) {
+            holder.priceTv.setTextSize(10);
+        }
+
+        if(item.getRarity().matches("Common")) {
+            holder.rarityTv.setTextColor(Color.GREEN);
+        }
+        else if(item.getRarity().matches("Rare")) {
+            holder.rarityTv.setTextColor(Color.BLUE);
+        }
+        else if(item.getRarity().matches("Legendary")) {
+            holder.rarityTv.setTextColor(Color.YELLOW);
+        }
+        else if(item.getRarity().matches("Premium")) {
+            holder.rarityTv.setTextColor(Color.RED);
+        }
+        else if(item.isBought()) {
+            holder.rarityTv.setTextColor(Color.WHITE);
+        }
         //setting inflated views from our holder with data
         holder.itemIv.setImageResource(item.getSkinId());
         holder.priceTv.setText(item.getPrice()+"");

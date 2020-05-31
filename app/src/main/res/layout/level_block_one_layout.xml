@@ -3,7 +3,7 @@
     android:id="@+id/lvl_1_block"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/black_bg">
+    android:background="@drawable/stars_pxl_png">
 
     <TextView
         style="@style/high_score"
@@ -33,6 +33,7 @@
             android:src="@drawable/moon_300" />
 
         <TextView
+            android:id="@+id/lvl_1_tv"
             style="@style/reg_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/lvl_2_tv"
             style="@style/reg_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,8 +78,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/row_one_layout"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="80dp"
         android:orientation="horizontal">
 

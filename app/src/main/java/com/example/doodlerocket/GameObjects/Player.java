@@ -1,5 +1,6 @@
 package com.example.doodlerocket.GameObjects;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,7 +15,7 @@ public class Player implements IGameObjects {
     private int health;
     private Bitmap playerBitmap;
 
-    public Player(int canvasW,Resources resources) {
+    public Player(int canvasW,Resources resources, int skinID) {
 
         //initial position of player
         this.x = 450;
@@ -22,14 +23,14 @@ public class Player implements IGameObjects {
         this.health = 3;
 
         //scaled bitmap
-        playerBitmap = BitmapFactory.decodeResource(resources, R.drawable.spaceship_tin_png);
-        int width = playerBitmap.getWidth()/10;
-        int height = playerBitmap.getHeight()/10;
+        playerBitmap = BitmapFactory.decodeResource(resources, skinID);
+        int width = playerBitmap.getWidth()/2;
+        int height = playerBitmap.getHeight()/2;
         playerBitmap = Bitmap.createScaledBitmap(playerBitmap,width,height,false);
 
         //bounds of player in screen
         this.minX = 0;
-        this.maxX = canvasW - width;
+        this.maxX = canvasW - playerBitmap.getWidth();
 
     }
 
@@ -43,7 +44,6 @@ public class Player implements IGameObjects {
         if(x < minX) x = minX;
         if(x > maxX) x = maxX;
     }
-
 
     public Bitmap getPlayerBitmap() {
         return playerBitmap;

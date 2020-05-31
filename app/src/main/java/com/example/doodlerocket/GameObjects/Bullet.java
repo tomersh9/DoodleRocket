@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.example.doodlerocket.R;
 
@@ -61,5 +62,9 @@ public class Bullet implements IGameObjects {
             return true;
         }
         return false;
+    }
+
+    public Rect getCollisionShape() {
+        return new Rect(x,y,x+bulletBitmap.getWidth(),y+bulletBitmap.getHeight());
     }
 }

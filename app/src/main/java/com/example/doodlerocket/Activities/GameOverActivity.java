@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.doodlerocket.R;
 
+import org.w3c.dom.Text;
+
 public class GameOverActivity extends AppCompatActivity {
 
     SharedPreferences sp;
@@ -21,7 +23,11 @@ public class GameOverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_over_layout);
 
-        sp = getSharedPreferences("highscore",MODE_PRIVATE);
+        sp = getSharedPreferences("storage",MODE_PRIVATE);
+
+        //money
+        TextView coinsTv = findViewById(R.id.coins_tv);
+        coinsTv.setText("Coins "+sp.getInt("money",0));
 
         //highScore display
         TextView highScoreTv = findViewById(R.id.highscore_tv);

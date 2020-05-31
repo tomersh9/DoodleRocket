@@ -12,11 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +21,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.doodlerocket.Activities.GameOverActivity;
 import com.example.doodlerocket.GameObjects.Bullet;
 import com.example.doodlerocket.GameObjects.Enemy;
+import com.example.doodlerocket.GameObjects.EnemyProjectile;
 import com.example.doodlerocket.GameObjects.GoldCoin;
 import com.example.doodlerocket.GameObjects.Meteor;
 import com.example.doodlerocket.GameObjects.Player;
@@ -35,39 +31,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
 
-import static android.content.Context.SENSOR_SERVICE;
-
-public class GameView extends View implements SensorEventListener {
+public class GameView extends View {
 
     //high score data
     SharedPreferences sp;
-
-    //accelerometer sensor
-    SensorManager manager;
-    Sensor sensor;
-    private float velocity;
+    int money;
 
     //player
     Player player;
     private int health;
     private int score;
-    private boolean isFire = false;
+    private boolean isMoving = false;
 
-    //projectiles
-    private Bullet bullet;
+    //player bullets
+    private boolean isBullet = true;
+    private List<Bullet> bullets = new ArrayList<>();
+    private List<Bullet> removeBulletsList = new ArrayList<>();
+
+    //enemy projectiles
+    private boolean isProjectile = true;
+    private List<EnemyProjectile> projectiles = new ArrayList<>();
+    private List<EnemyProjectile> removeProjectilesList = new ArrayList<>();
 
     //enemies
-    Enemy enemy;
+    private boolean isTimeToEnemy = true;
+    private List<Enemy> enemies = new ArrayList<>();
+    private List<Enemy> removeEnemiesList = new ArrayList<>();
 
     //meteors
+    private boolean isTimeToSpawnMeteor = true;
     private List<Meteor> meteors = new ArrayList<>();
     private List<Meteor> removeMeteorsList = new ArrayList<>();
 
     //items
-    private GoldCoin goldCoin;
-    private SilverCoin silverCoin;
+    private boolean isTimeToCoin = true;
+
+    private List<GoldCoin> goldCoins = new ArrayList<>();
+    private List<GoldCoin> removeGoldCoins = new ArrayList<>();
+
+    private List<SilverCoin> silverCoins = new ArrayList<>();
+    private List<SilverCoin> removeSilverCoins = new ArrayList<>();
 
     //canvas properties
     private int canvasW, canvasH;
@@ -75,57 +79,40 @@ public class GameView extends View implements SensorEventListener {
     //background full screen
     private Bitmap background;
     private Rect rect;
-    int dWidth, dHeight;
+    private boolean isScale = true;
+    private int dWidth, dHeight;
 
     //UI
     private Paint scorePaint = new Paint();
-    private Bitmap arrowLeft, arrowRight;
     private Bitmap life[] = new Bitmap[2]; //hearts
 
-    public GameView(Context context) { //context when calling it
+
+
+    public GameView(Context context, int skinID, int backgroundID) { //context when calling it
         super(context);
 
-        //high-score
-        sp = getContext().getSharedPreferences("highscore",Context.MODE_PRIVATE);
+        //reading total player money
+        sp = getContext().getSharedPreferences("storage",Context.MODE_PRIVATE);
+        money = sp.getInt("money",0);
 
-        //setting up accelerometer sensor
-        manager = (SensorManager)context.getSystemService(SENSOR_SERVICE);
-        sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if(sensor!=null){
-            this.manager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_GAME);
-        }
-
-        player = new Player(1440,getResources());
-
-        //projectiles
-        bullet = new Bullet(getResources(),player.getObjectX(),player.getObjectY());
+        //player
+        player = new Player(1440,getResources(),skinID);
 
         //setting up background to fit screen
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.stars_pxl_png);
-        Display display = ((Activity)getContext()).getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        dWidth = size.x;
-        dHeight = size.y;
-        rect = new Rect(0,0,dWidth,dHeight);
+        background = BitmapFactory.decodeResource(getResources(), backgroundID);
 
-        //enemies
-        enemy = new Enemy(getResources(),player.getObjectX(),300,1440);
-
-        //meteors
-        Meteor meteor1 = new Meteor(0,1160,18,getResources());
-        Meteor meteor2 = new Meteor(0,1160,9,getResources());
-        Meteor meteor3 = new Meteor(0,1160,21,getResources());
-        Meteor meteor4 = new Meteor(0,1160,15,getResources());
-
-        meteors.add(meteor1);
-        meteors.add(meteor2);
-        meteors.add(meteor3);
-        meteors.add(meteor4);
-
-        //items
-        goldCoin = new GoldCoin(0,1160,getResources());
-        silverCoin = new SilverCoin(0,1160,getResources());
+        if(backgroundID == R.drawable.moon_bg_800) {
+            isScale = false; //stay original size
+        }
+        else {
+            isScale = true;
+            Display display = ((Activity)getContext()).getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            dWidth = size.x;
+            dHeight = size.y;
+            rect = new Rect(0,0,dWidth,dHeight);
+        }
 
         //setting score paint properties
         //custom font
@@ -135,13 +122,9 @@ public class GameView extends View implements SensorEventListener {
         scorePaint.setTypeface(customTypeface);
         scorePaint.setAntiAlias(true);
 
-        //arrows
-        arrowLeft = BitmapFactory.decodeResource(getResources(),R.drawable.arrow_left_50);
-        arrowRight = BitmapFactory.decodeResource(getResources(),R.drawable.arrow_right_50);
-
         //life display of fish (have or not)
-        life[0] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_red_50);
-        life[1] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_gray_50);
+        life[0] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_red_48);
+        life[1] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_gray_48);
 
         //initialize score & health
         score = 0;
@@ -156,19 +139,36 @@ public class GameView extends View implements SensorEventListener {
         canvasW = canvas.getWidth(); //1440
         canvasH = canvas.getHeight(); //2352
 
-        //local vars of player
+        //local vars of player constantly updating
         int playerX = player.getObjectX();
         int playerY = player.getObjectY();
         Bitmap playerBitmap = player.getPlayerBitmap();
 
         //UI drawing
-        canvas.drawBitmap(background,null,rect,null);
+        if(isScale) { //fit screen
+            canvas.drawBitmap(background,null,rect,null);
+        }
+        else { //don't fit screen
+            canvas.drawBitmap(background,0,0,null);
+        }
+
         canvas.drawText("Score:" + score, 60,150,scorePaint);
-        canvas.drawBitmap(arrowLeft,10,canvasH - 450,null);
-        canvas.drawBitmap(arrowRight,canvasW - 190,canvasH - 450,null);
 
         //move outside
         if(health == 0) {
+
+            //deliver high score data
+            SharedPreferences.Editor editor = sp.edit();
+            int total = money + score;
+
+            if(score>sp.getInt("highscore",0)) {
+                editor.putInt("highscore",score);
+            }
+            else {
+                editor.putInt("money",total);
+            }
+            editor.commit();
+
             gameOver();
         }
 
@@ -191,165 +191,278 @@ public class GameView extends View implements SensorEventListener {
         player.drawObject(canvas);
         player.updateLocation();
 
-        //spawn items
-        spawnCoins(canvas);
-
-        //spawn enemies
-        enemy.drawObject(canvas);
-        enemy.updateLocation();
+        //shoot bullets
+        shoot();
 
         //spawn meteors
+        spawnMeteors();
+
+        //spawn enemies with projectiles
+        spawnEnemies();
+
+        //enemy shoots
+        spawnProjectiles();
+
+        //spawn coins
+        spawnCoins();
+
+        //consumables
+        for(GoldCoin goldCoin : goldCoins) {
+            goldCoin.drawObject(canvas);
+            goldCoin.updateLocation();
+
+            if(goldCoin.collisionDetection(playerX,playerY,playerBitmap)) {
+                score += 50;
+                removeGoldCoins.add(goldCoin);
+            }
+            else if(goldCoin.getObjectY() > canvasH) {
+                removeGoldCoins.add(goldCoin);
+            }
+            else {
+                goldCoin.drawObject(canvas);
+            }
+        }
+        goldCoins.removeAll(removeGoldCoins);
+
+        for(SilverCoin silverCoin : silverCoins) {
+            silverCoin.drawObject(canvas);
+            silverCoin.updateLocation();
+
+            if(silverCoin.collisionDetection(playerX,playerY,playerBitmap)) {
+                score += 10;
+                removeSilverCoins.add(silverCoin);
+            }
+            else if(silverCoin.getObjectY() > canvasH) {
+                removeSilverCoins.add(silverCoin);
+            }
+            else {
+                silverCoin.drawObject(canvas);
+            }
+        }
+        silverCoins.removeAll(removeSilverCoins);
+
         for(Meteor meteor : meteors) {
 
-            meteor.drawObject(canvas);
             meteor.updateLocation();
 
             //meteor hits player
-            if(meteor.collisionDetection(playerX,playerY,playerBitmap)) {
-
+            if (meteor.collisionDetection(playerX, playerY, playerBitmap)) {
                 health--;
-                //removeMeteorsList.add(meteor);
-                meteor.setMeteorY(canvasH + 50);
-                meteor.setBitmap(getResources(), (int) (Math.random()* (9)));
+                removeMeteorsList.add(meteor);
             }
-
             //meteor goes off screen
-            else if(meteor.getObjectY() > canvasH) {
-
-                //removeMeteorsList.add(meteor);
-                meteor.setMeteorY(0);
-                meteor.setMeteorX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
-                meteor.setBitmap(getResources(), (int) (Math.random()* (9)));
+            else if (meteor.getObjectY() > canvasH) {
+                removeMeteorsList.add(meteor);
             }
+            else {
+                meteor.drawObject(canvas);
+            }
+        }
+        meteors.removeAll(removeMeteorsList);
 
-            //bullet hits meteor
-            if(isFire) {
+        for(Enemy enemy : enemies) {
 
+            enemy.updateLocation();
+
+            if(enemy.collisionDetection(playerX,playerY,playerBitmap)) {
+                health--;
+                removeEnemiesList.add(enemy);
+            }
+            else if(enemy.getObjectY() > canvasH) {
+                removeEnemiesList.add(enemy);
+            }
+            else {
+                enemy.drawObject(canvas);
+            }
+        }
+        enemies.removeAll(removeEnemiesList);
+
+        //handle bullets and collisions
+        for (Bullet bullet : bullets) {
+
+            bullet.updateLocation();
+
+            if (bullet.getObjectY() < 0) {
+
+                removeBulletsList.add(bullet);
+            }
+            else {
                 bullet.drawObject(canvas);
-                bullet.updateLocation();
+            }
 
-                if(bullet.collisionDetection(meteor.getObjectX(),meteor.getObjectY(),meteor.getMeteorBitmap())) {
-
-                    //delete meteor
+            //check for collision bullet-meteor
+            for (Meteor meteor : meteors) {
+                if(Rect.intersects(bullet.getCollisionShape(),meteor.getCollisionShape())) {
+                    removeBulletsList.add(bullet);
                     removeMeteorsList.add(meteor);
-                    meteor.setMeteorY(0);
-                    meteor.setMeteorX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
-                    meteor.setBitmap(getResources(), (int) (Math.random()* (9)));
-
-                    //relocate bullet
-                    bullet.setX(playerX + playerBitmap.getWidth()/2); //center of player
-                    bullet.setY(playerY); //top center
-                    isFire = false;
                 }
+            }
 
-                if(bullet.collisionDetection(enemy.getObjectX(),enemy.getObjectY(),enemy.getEnemyBitmap())) {
+            //collision bullet - enemy
+            for(Enemy enemy : enemies) {
 
-                    //delete meteor
-                    enemy.setY(300);
-                    enemy.setX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
-                    enemy.setEnemyBitmap(getResources(), (int) (Math.random()* (8)));
+                if(Rect.intersects(bullet.getCollisionShape(),enemy.getCollisionShape())) {
 
-                    //relocate bullet
-                    bullet.setX(playerX + playerBitmap.getWidth()/2); //center of player
-                    bullet.setY(playerY); //top center
-                    isFire = false;
+                    enemy.takeDamage(1); //dmg taken
+                    if(enemy.getHealth() == 0 ) {
+                        //enemy.die(); //animate death effect here
+                        removeEnemiesList.add(enemy);
+                    }
+                    removeBulletsList.add(bullet);
                 }
+            }
+            enemies.removeAll(removeEnemiesList);
+        }
+        //remove all previous bullets from list
+        bullets.removeAll(removeBulletsList);
 
-                if (bullet.getObjectY() < 0) {
+        for(EnemyProjectile projectile : projectiles) {
+            projectile.updateLocation();
 
-                    bullet.setX(playerX + playerBitmap.getWidth()/2); //center of player
-                    bullet.setY(playerY); //top center
-                    isFire = false;
-                }
+            if(projectile.getObjectY() > canvasH) {
+                removeProjectilesList.add(projectile);
+            }
+            else if(projectile.collisionDetection(playerX,playerY,playerBitmap)) {
+                health--;
+                removeProjectilesList.add(projectile);
+            }
+            else {
+                projectile.drawObject(canvas);
+            }
+        }
+        projectiles.removeAll(removeProjectilesList);
+
+    }
+
+    private void spawnEnemies() {
+
+        if(isTimeToEnemy) {
+
+            Enemy enemy = new Enemy(getResources(),(int) Math.floor(Math.random() * (player.getMaxX())),50,canvasW);
+            System.out.println(enemy.getHealth());
+            enemies.add(enemy);
+            delayEnemy();
+        }
+    }
+
+    private void spawnProjectiles() {
+
+        if(isProjectile) {
+            for(Enemy enemy : enemies) {
+                projectiles.add(new EnemyProjectile(getResources(), enemy));
+                delayEnemyShots();
             }
         }
     }
 
-    public void spawnCoins(Canvas canvas) {
-
-        goldCoin.drawObject(canvas);
-        goldCoin.updateLocation();
-
-        silverCoin.drawObject(canvas);
-        silverCoin.updateLocation();
-
-        if(silverCoin.collisionDetection(player.getObjectX(),player.getObjectY(),player.getPlayerBitmap())) {
-            score += 10;
-            silverCoin.setCoinY(0);
-            silverCoin.setCoinX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
-        }
-
-        if(silverCoin.getObjectY() > canvasH) {
-            silverCoin.setCoinY(0);
-            silverCoin.setCoinX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
-        }
-
-        if(goldCoin.collisionDetection(player.getObjectX(),player.getObjectY(),player.getPlayerBitmap())) {
-            score += 50;
-            goldCoin.setCoinY(0); //top screen
-            goldCoin.setCoinX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
-        }
-
-        if(goldCoin.getObjectY() > canvasH) {
-            goldCoin.setCoinY(0); //top screen
-            goldCoin.setCoinX((int) Math.floor(Math.random() * ((player.getMaxX() - player.getMinX()) + player.getMinX())));
+    private void spawnMeteors() {
+        if(isTimeToSpawnMeteor) {
+            meteors.add(new Meteor(player.getMinX(),player.getMaxX(),20,getResources()));
+            delayMeteor(); //wait 2 secs between spawns
         }
     }
+
+    private void spawnCoins() {
+        if(isTimeToCoin) {
+            goldCoins.add(new GoldCoin(player.getMinX(),player.getMaxX(),getResources()));
+            delayCoin();
+        }
+    }
+
+    //if can fire, add new bullet to list: draw and update its location in the for loop
+    private void shoot() {
+        if(isBullet) {
+            bullets.add(new Bullet(getResources(), player.getObjectX(), player.getObjectY()));
+            delayBullets(); //isFire = false cause delay between creating new bullets and drawing them
+        }
+    }
+
+    private void delayEnemyShots() {
+        isProjectile = false;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isProjectile = true;
+            }
+        },650);
+    }
+
+
+    private void delayEnemy() {
+        isTimeToEnemy = false;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isTimeToEnemy = true;
+            }
+        },2000);
+    }
+
+    //delay between shots
+    private void delayBullets() {
+        isBullet = false;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isBullet = true;
+            }
+        },200);
+    }
+
+    //delay between meteor spawns
+    private void delayMeteor() {
+        isTimeToSpawnMeteor = false;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isTimeToSpawnMeteor = true;
+            }
+        },250);
+    }
+
+    //delay between meteor spawns
+    private void delayCoin() {
+        isTimeToCoin = false;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isTimeToCoin = true;
+            }
+        },2500);
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        int velocity = 30;
 
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_MOVE:
 
-                if(     event.getX() < canvasW/2
-                        && event.getX() < player.getObjectX()
-                        && event.getX() < player.getObjectX() + player.getPlayerBitmap().getWidth()
-                        && event.getY() >= player.getObjectY() - 120) {
-                    player.setX(player.getObjectX() - velocity);
+                //Drag&Drop
+
+                if(isMoving) {
+                    player.setX((int)event.getX());
+                    player.setY((int)event.getY());
                 }
-                else if(event.getX() > canvasW/2
-                        && event.getX() > player.getObjectX()
-                        && event.getX() > player.getObjectX() + player.getPlayerBitmap().getWidth()
-                        && event.getY() >= player.getObjectY() - 120) {
-                    player.setX(player.getObjectX() + velocity);
+                else if(   event.getX() > player.getObjectX()
+                        && event.getX() < player.getObjectX() + player.getPlayerBitmap().getWidth()
+                        && event.getY() > player.getObjectY()
+                        && event.getY() < player.getObjectY() + player.getPlayerBitmap().getHeight()) {
+                    isMoving = true;
+
                 }
                 break;
 
-            case MotionEvent.ACTION_DOWN:
-                if(event.getY() < canvasH/1.3) //top half of screen to fire
-                    isFire = true;
+            case MotionEvent.ACTION_UP:
+                isMoving = false;
                 break;
+
         }
         return true;
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
-        /*velocity=event.values[0];
-        System.out.println(velocity);
-        rocketSpeed-=velocity/6;
-        if(rocketSpeed>20) rocketSpeed=20;
-        if(rocketSpeed<-20) rocketSpeed=-20;*/
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        //nothing
-    }
-
     public void gameOver() {
-
-        //deliver high score data
-        SharedPreferences.Editor editor = sp.edit();
-        if(score>sp.getInt("highscore",0)) {
-            editor.putInt("highscore",score);
-        }
-        editor.commit();
 
         //PROBLEM HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //move to game over intent
