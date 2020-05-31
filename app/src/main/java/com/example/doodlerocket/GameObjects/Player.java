@@ -11,6 +11,7 @@ import com.example.doodlerocket.R;
 public class Player implements IGameObjects {
 
     private int x,y;
+    private int width, height;
     private int minX, maxX;
     private int health;
     private Bitmap playerBitmap;
@@ -24,8 +25,13 @@ public class Player implements IGameObjects {
 
         //scaled bitmap
         playerBitmap = BitmapFactory.decodeResource(resources, skinID);
-        int width = playerBitmap.getWidth()/2;
-        int height = playerBitmap.getHeight()/2;
+        width = playerBitmap.getWidth()/2;
+        height = playerBitmap.getHeight()/2;
+
+        //fit all screen sizes
+        width *= (int) screenRatioX;
+        height *= (int) screenRatioY;
+
         playerBitmap = Bitmap.createScaledBitmap(playerBitmap,width,height,false);
 
         //bounds of player in screen

@@ -39,7 +39,7 @@ public class GameView extends View {
     int money;
 
     private int screenX, screenY;
-    private float screenRatioX,screenRatioY;
+    public float screenRatioX,screenRatioY;
 
     //player
     Player player;
