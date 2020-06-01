@@ -1,13 +1,10 @@
 package com.example.doodlerocket.Activities;
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,13 +17,12 @@ import com.example.doodlerocket.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
 
     private GameView gameView;
     private Handler handler = new Handler();
-    private final static long interval = 10; //refresh rate
+    private final static long refreshRate = 10; //refresh rate
 
     private SharedPreferences sp;
 
@@ -64,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        },0, interval); //delay = 0, each 10mis refresh screen
+        },0, refreshRate); //delay = 0, each 10mis refresh screen
     }
 
     @Override //alert dialog when back pressed

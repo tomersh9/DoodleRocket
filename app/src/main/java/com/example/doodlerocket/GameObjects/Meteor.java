@@ -35,7 +35,6 @@ public class Meteor implements IGameObjects {
 
     @Override
     public void drawObject(Canvas canvas) {
-
         canvas.drawBitmap(meteorBitmap,meteorX,meteorY,null);
     }
 

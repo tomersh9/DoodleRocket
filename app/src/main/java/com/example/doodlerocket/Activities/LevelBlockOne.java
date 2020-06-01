@@ -109,8 +109,6 @@ public class LevelBlockOne extends AppCompatActivity {
 
         //play animations together
         AnimatorSet set = new AnimatorSet();
-        /*set.playTogether(slideAnimator1,textAnimator1);
-        set.playTogether(slideAnimator2,textAnimator2);*/
         set.playTogether(animator1,animator2);
         set.playTogether(bounceTextAnimator1,bounceTextAnimator2);
         set.start();

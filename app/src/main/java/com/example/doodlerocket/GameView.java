@@ -26,6 +26,7 @@ import com.example.doodlerocket.GameObjects.GoldCoin;
 import com.example.doodlerocket.GameObjects.Meteor;
 import com.example.doodlerocket.GameObjects.Player;
 import com.example.doodlerocket.GameObjects.SilverCoin;
+import com.example.doodlerocket.GameObjects.SoundManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,8 @@ public class GameView extends View {
     SharedPreferences sp;
     int money;
 
-    private int screenX, screenY;
-    public static float screenRatioX,screenRatioY; //to access all around
+    //SFX manager
+    private SoundManager soundManager;
 
     //player
     Player player;
@@ -110,8 +111,11 @@ public class GameView extends View {
         sp = getContext().getSharedPreferences("storage",Context.MODE_PRIVATE);
         money = sp.getInt("money",0);
 
+        //initialize sound manager
+        soundManager = new SoundManager(getContext());
+
         //set player
-        player = new Player(1440,getResources(),skinID);
+        player = new Player(1440,2352,getResources(),skinID);
 
         //initialize background fit to screen
         this.backgroundID = backgroundID;
@@ -236,10 +240,11 @@ public class GameView extends View {
 
         //consumables
         for(GoldCoin goldCoin : goldCoins) {
-            goldCoin.drawObject(canvas);
+
             goldCoin.updateLocation();
 
             if(goldCoin.collisionDetection(playerX,playerY,playerBitmap)) {
+                soundManager.startGoldCoinSfx();
                 score += 50;
                 removeGoldCoins.add(goldCoin);
             }
@@ -253,10 +258,11 @@ public class GameView extends View {
         goldCoins.removeAll(removeGoldCoins);
 
         for(SilverCoin silverCoin : silverCoins) {
-            silverCoin.drawObject(canvas);
+
             silverCoin.updateLocation();
 
             if(silverCoin.collisionDetection(playerX,playerY,playerBitmap)) {
+                soundManager.startSilverCoinSfx();
                 score += 10;
                 removeSilverCoins.add(silverCoin);
             }
@@ -271,10 +277,13 @@ public class GameView extends View {
 
         for(Meteor meteor : meteors) {
 
+            //moving on screen
             meteor.updateLocation();
 
             //meteor hits player
             if (meteor.collisionDetection(playerX, playerY, playerBitmap)) {
+                soundManager.startMeteorDeathSfx();
+                soundManager.startPlayerHitSfx();
                 health--;
                 removeMeteorsList.add(meteor);
             }
@@ -293,6 +302,9 @@ public class GameView extends View {
             enemy.updateLocation();
 
             if(enemy.collisionDetection(playerX,playerY,playerBitmap)) {
+
+                soundManager.startPlayerHitSfx();
+                soundManager.startEnemyDeathSfx();
                 health--;
                 removeEnemiesList.add(enemy);
             }
@@ -311,7 +323,6 @@ public class GameView extends View {
             bullet.updateLocation();
 
             if (bullet.getObjectY() < 0) {
-
                 removeBulletsList.add(bullet);
             }
             else {
@@ -321,6 +332,7 @@ public class GameView extends View {
             //check for collision bullet-meteor
             for (Meteor meteor : meteors) {
                 if(Rect.intersects(bullet.getCollisionShape(),meteor.getCollisionShape())) {
+                    soundManager.startMeteorDeathSfx();
                     removeBulletsList.add(bullet);
                     removeMeteorsList.add(meteor);
                 }
@@ -331,9 +343,11 @@ public class GameView extends View {
 
                 if(Rect.intersects(bullet.getCollisionShape(),enemy.getCollisionShape())) {
 
+                    soundManager.startEnemyHitSfx();
                     enemy.takeDamage(1); //dmg taken
+
                     if(enemy.getHealth() == 0 ) {
-                        //enemy.die(); //animate death effect here
+                        soundManager.startPlayerDeathSfx();
                         removeEnemiesList.add(enemy);
                     }
                     removeBulletsList.add(bullet);
@@ -345,12 +359,14 @@ public class GameView extends View {
         bullets.removeAll(removeBulletsList);
 
         for(EnemyProjectile projectile : projectiles) {
+
             projectile.updateLocation();
 
             if(projectile.getObjectY() > canvasH) {
                 removeProjectilesList.add(projectile);
             }
             else if(projectile.collisionDetection(playerX,playerY,playerBitmap)) {
+                soundManager.startPlayerHitSfx();
                 health--;
                 removeProjectilesList.add(projectile);
             }
@@ -366,7 +382,7 @@ public class GameView extends View {
 
         if(isTimeToEnemy) {
 
-            Enemy enemy = new Enemy(getResources(),(int) Math.floor(Math.random() * (player.getMaxX())),50,canvasW);
+            Enemy enemy = new Enemy(getContext(),getResources(),(int) Math.floor(Math.random() * (player.getMaxX())),50,canvasW);
             enemies.add(enemy);
             delayEnemy();
         }
@@ -376,6 +392,7 @@ public class GameView extends View {
 
         if(isProjectile) {
             for(Enemy enemy : enemies) {
+                soundManager.startEnemyLaserSfx();
                 projectiles.add(new EnemyProjectile(getResources(), enemy));
                 delayEnemyShots();
             }
@@ -385,14 +402,14 @@ public class GameView extends View {
     private void spawnMeteors() {
         if(isTimeToSpawnMeteor) {
             meteors.add(new Meteor(player.getMinX(),player.getMaxX(),20,getResources()));
-            delayMeteor(); //wait 2 secs between spawns
+            delayMeteor(); //wait few secs between spawns
         }
     }
 
     private void spawnCoins() {
         if(isTimeToCoin) {
-            goldCoins.add(new GoldCoin(player.getMinX(),player.getMaxX(),getResources()));
-            silverCoins.add(new SilverCoin(player.getMinX(),player.getMaxX(),getResources()));
+            goldCoins.add(new GoldCoin(getContext(),player.getMinX(),player.getMaxX(),getResources()));
+            silverCoins.add(new SilverCoin(getContext(),player.getMinX(),player.getMaxX(),getResources()));
             delayCoin();
         }
     }
@@ -400,7 +417,8 @@ public class GameView extends View {
     //if can fire, add new bullet to list: draw and update its location in the for loop
     private void shoot() {
         if(isBullet) {
-            bullets.add(new Bullet(getResources(), player.getObjectX(), player.getObjectY()));
+            soundManager.startPlayerLaserSfx();
+            bullets.add(new Bullet(getContext(),getResources(), player.getObjectX(), player.getObjectY()));
             delayBullets(); //isFire = false cause delay between creating new bullets and drawing them
         }
     }

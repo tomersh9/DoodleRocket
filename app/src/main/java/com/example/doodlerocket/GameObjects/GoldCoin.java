@@ -1,9 +1,11 @@
 package com.example.doodlerocket.GameObjects;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 
 import com.example.doodlerocket.R;
 
@@ -12,7 +14,7 @@ public class GoldCoin implements IGameObjects {
     private int coinX, coinY, coinSpeed;
     private Bitmap coinBitmap;
 
-    public GoldCoin(int playerMinX, int playerMaxX, Resources resources) {
+    public GoldCoin(Context context, int playerMinX, int playerMaxX, Resources resources) {
 
         coinX = (int) Math.floor(Math.random() * ((playerMaxX - playerMinX) + playerMinX));
         coinY = 0;

@@ -8,8 +8,6 @@ import android.graphics.Rect;
 
 import com.example.doodlerocket.R;
 
-import static com.example.doodlerocket.GameView.screenRatioX;
-import static com.example.doodlerocket.GameView.screenRatioY;
 
 public class EnemyProjectile implements IGameObjects {
 

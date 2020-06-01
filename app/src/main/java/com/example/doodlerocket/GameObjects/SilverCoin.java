@@ -1,17 +1,20 @@
 package com.example.doodlerocket.GameObjects;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 
 import com.example.doodlerocket.R;
 
 public class SilverCoin implements IGameObjects {
+
     private int coinX, coinY, coinSpeed;
     private Bitmap coinBitmap;
 
-    public SilverCoin(int playerMinX, int playerMaxX, Resources resources) {
+    public SilverCoin(Context context, int playerMinX, int playerMaxX, Resources resources) {
 
         coinX = (int) Math.floor(Math.random() * ((playerMaxX - playerMinX) + playerMinX));
         coinY = 0;
@@ -28,6 +31,7 @@ public class SilverCoin implements IGameObjects {
     public void updateLocation() {
         coinY += coinSpeed;
     }
+
 
     @Override
     public int getObjectX() {

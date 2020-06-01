@@ -2,12 +2,15 @@ package com.example.doodlerocket;
 
 import android.graphics.Bitmap;
 
-public class ShopItem {
+import java.io.Serializable;
+
+public class ShopItem implements Serializable {
 
     private int skinId;
     private int price;
     private String rarity;
     private boolean isBought;
+    private boolean isEquipped;
 
     public ShopItem(int skinId, int price, String rarity) {
         this.skinId = skinId;
@@ -45,5 +48,13 @@ public class ShopItem {
 
     public void setBought(boolean bought) {
         isBought = bought;
+    }
+
+    public boolean isEquipped() {
+        return isEquipped;
+    }
+
+    public void setEquipped(boolean equipped) {
+        isEquipped = equipped;
     }
 }
