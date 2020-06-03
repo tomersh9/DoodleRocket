@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.doodlerocket.GameObjects.SoundManager;
 import com.example.doodlerocket.R;
 
 import org.w3c.dom.Text;
@@ -36,7 +37,8 @@ public class GameOverActivity extends AppCompatActivity {
 
         //highScore display
         TextView highScoreTv = findViewById(R.id.highscore_tv);
-        highScoreTv.setText("High Score " + sp.getInt("highscore",0) );
+        final int highScore = sp.getInt("highscore",0);
+        highScoreTv.setText("High Score " + highScore );
 
         //setting score
         TextView scoreTv = findViewById(R.id.score_tv);
@@ -47,7 +49,7 @@ public class GameOverActivity extends AppCompatActivity {
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToGameIntent = new Intent(GameOverActivity.this,MainActivity.class);
+                Intent backToGameIntent = new Intent(GameOverActivity.this,LevelBlockOne.class);
                 startActivity(backToGameIntent);
                 finish();
             }
@@ -63,5 +65,22 @@ public class GameOverActivity extends AppCompatActivity {
             }
         });
 
+        Button scoreBtn = findViewById(R.id.score_board_btn);
+        scoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent scoreIntent = new Intent(GameOverActivity.this,ScoreBoardActivity.class);
+                scoreIntent.putExtra("high_score",highScore);
+                startActivity(scoreIntent);
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(GameOverActivity.this,HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

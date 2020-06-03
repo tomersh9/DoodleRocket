@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.doodlerocket.GameObjects.SoundManager;
 import com.example.doodlerocket.GameView;
 import com.example.doodlerocket.R;
 
@@ -26,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sp;
 
-    private Point point = new Point();
+    private SoundManager soundManager;
+
+
 
     //only need 1 instance of AlertDialog and then inflate it with other layouts
     private AlertDialog gameAlertDialog;
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindowManager().getDefaultDisplay().getSize(point);
+        soundManager = new SoundManager(this);
 
         //getting info to send GameView
         int skinID;
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
 
         //game is running on thread behind the scenes
-        gameView = new GameView(this,skinID,backgroundID);
+        gameView = new GameView(this,skinID,backgroundID,soundManager);
         setContentView(gameView); //content display
 
         Timer timer = new Timer();
@@ -95,5 +98,12 @@ public class MainActivity extends AppCompatActivity {
         gameAlertDialog = builder.setView(pauseView).show();
         gameAlertDialog.setCanceledOnTouchOutside(false);
         gameAlertDialog.setCancelable(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        soundManager.stopSfx();
+
     }
 }

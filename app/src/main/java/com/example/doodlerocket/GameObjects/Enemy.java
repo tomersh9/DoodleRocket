@@ -113,7 +113,6 @@ public class Enemy implements IGameObjects {
         else {
             y += speed/4;
             //hi blalalal
-            //check.
         }
 
     }

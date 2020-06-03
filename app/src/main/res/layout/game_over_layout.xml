@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/vortex_pink_bg">
+    android:layout_height="match_parent">
 
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
@@ -24,14 +23,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/gameover_tv"
-        android:background="@drawable/transparent_shape"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/score_tv"
-            style="@style/score"
+            style="@style/shop_item"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Score" />
@@ -39,6 +38,7 @@
         <TextView
             android:id="@+id/highscore_tv"
             style="@style/high_score"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="High Score" />
@@ -46,6 +46,7 @@
         <TextView
             android:id="@+id/coins_tv"
             style="@style/score"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Total Coins" />
@@ -66,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_red_selector"
-            android:text="Play again"
+            android:text="Levels Map"
             android:layout_margin="10dp"
             android:textAllCaps="false" />
 

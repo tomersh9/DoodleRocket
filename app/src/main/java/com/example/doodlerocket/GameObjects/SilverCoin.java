@@ -9,22 +9,35 @@ import android.media.MediaPlayer;
 
 import com.example.doodlerocket.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SilverCoin implements IGameObjects {
 
     private int coinX, coinY, coinSpeed;
-    private Bitmap coinBitmap;
 
-    public SilverCoin(Context context, int playerMinX, int playerMaxX, Resources resources) {
+    private List<Bitmap> silverCoinBitmapList = new ArrayList<>();
+    private int pos = 0;
+
+    public SilverCoin(int playerMinX, int playerMaxX, Resources resources) {
 
         coinX = (int) Math.floor(Math.random() * ((playerMaxX - playerMinX) + playerMinX));
         coinY = 0;
         coinSpeed = 12;
-        coinBitmap = BitmapFactory.decodeResource(resources, R.drawable.silvercoin_1);
+
+        silverCoinBitmapList.add(BitmapFactory.decodeResource(resources,R.drawable.silvercoin_1));
+        silverCoinBitmapList.add(BitmapFactory.decodeResource(resources,R.drawable.silvercoin_2));
+        silverCoinBitmapList.add(BitmapFactory.decodeResource(resources,R.drawable.silvercoin_3));
+        silverCoinBitmapList.add(BitmapFactory.decodeResource(resources,R.drawable.silvercoin_4));
+        silverCoinBitmapList.add(BitmapFactory.decodeResource(resources,R.drawable.silvercoin_5));
+
     }
 
     @Override
     public void drawObject(Canvas canvas) {
-        canvas.drawBitmap(coinBitmap,getObjectX(),getObjectY(),null);
+        canvas.drawBitmap(silverCoinBitmapList.get(pos/5),getObjectX(),getObjectY(),null);
+        pos++;
+        pos=pos%25;
     }
 
     @Override

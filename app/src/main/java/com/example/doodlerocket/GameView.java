@@ -1,5 +1,8 @@
 package com.example.doodlerocket;
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +27,7 @@ import com.example.doodlerocket.GameObjects.Enemy;
 import com.example.doodlerocket.GameObjects.EnemyProjectile;
 import com.example.doodlerocket.GameObjects.GoldCoin;
 import com.example.doodlerocket.GameObjects.Meteor;
+import com.example.doodlerocket.GameObjects.MeteorFactory;
 import com.example.doodlerocket.GameObjects.Player;
 import com.example.doodlerocket.GameObjects.SilverCoin;
 import com.example.doodlerocket.GameObjects.SoundManager;
@@ -39,7 +43,8 @@ public class GameView extends View {
     SharedPreferences sp;
     int money;
 
-    //check
+    //animations
+    ValueAnimator valueAnimator;
 
     //SFX manager
     private SoundManager soundManager;
@@ -69,6 +74,9 @@ public class GameView extends View {
     private boolean isTimeToSpawnMeteor = true;
     private List<Meteor> meteors = new ArrayList<>();
     private List<Meteor> removeMeteorsList = new ArrayList<>();
+
+    //meteor factory DP
+    private MeteorFactory meteorFactory;
 
     //items
     private boolean isTimeToCoin = true;
@@ -106,15 +114,16 @@ public class GameView extends View {
     //will be called outside this class to use this interface methods
     public void setGameViewListener(GameViewListener gameViewListener) {this.gameViewListener = gameViewListener;}
 
-    public GameView(Context context, int skinID, int backgroundID) { //context when calling it
+    public GameView(Context context, int skinID, int backgroundID,SoundManager soundManager) { //context when calling it
         super(context);
+
 
         //reading total player money
         sp = getContext().getSharedPreferences("storage",Context.MODE_PRIVATE);
         money = sp.getInt("money",0);
 
         //initialize sound manager
-        soundManager = new SoundManager(getContext());
+        this.soundManager = soundManager;
 
         //set player
         player = new Player(1440,2352,getResources(),skinID);
@@ -122,6 +131,9 @@ public class GameView extends View {
         //initialize background fit to screen
         this.backgroundID = backgroundID;
         setGameBackground();
+
+        //factories
+        meteorFactory = new MeteorFactory(player.getMinX(),player.getMaxX(),20,getResources());
 
         //hearts, score and life
         setUI();
@@ -191,6 +203,7 @@ public class GameView extends View {
         //saving data before death
         if(health == 0) {
 
+            soundManager.startPlayerDeathSfx();
             //deliver high score data
             SharedPreferences.Editor editor = sp.edit();
             int total = money + score;
@@ -320,7 +333,7 @@ public class GameView extends View {
         enemies.removeAll(removeEnemiesList);
 
         //handle bullets and collisions
-        for (Bullet bullet : bullets) {
+        for (final Bullet bullet : bullets) {
 
             bullet.updateLocation();
 
@@ -333,24 +346,43 @@ public class GameView extends View {
 
             //check for collision bullet-meteor
             for (Meteor meteor : meteors) {
+
                 if(Rect.intersects(bullet.getCollisionShape(),meteor.getCollisionShape())) {
+
                     soundManager.startMeteorDeathSfx();
-                    removeBulletsList.add(bullet);
+                    bullet.setBoom(true);
+
+                    //hit animation and then remove it
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            removeBulletsList.add(bullet);
+                        }
+                    },500);
                     removeMeteorsList.add(meteor);
                 }
             }
 
             //collision bullet - enemy
-            for(Enemy enemy : enemies) {
+            for(final Enemy enemy : enemies) {
 
                 if(Rect.intersects(bullet.getCollisionShape(),enemy.getCollisionShape())) {
-
+                    //flash enemy
                     soundManager.startEnemyHitSfx();
                     enemy.takeDamage(1); //dmg taken
 
+                    //enemy death
                     if(enemy.getHealth() == 0 ) {
-                        soundManager.startPlayerDeathSfx();
-                        removeEnemiesList.add(enemy);
+
+                        //death animation
+                        soundManager.startEnemyDeathSfx();
+                        enemy.setDead(true);
+                        new Timer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                removeEnemiesList.add(enemy);
+                            }
+                        },500);
                     }
                     removeBulletsList.add(bullet);
                 }
@@ -391,7 +423,7 @@ public class GameView extends View {
     }
 
     private void spawnProjectiles() {
-
+        //for each enemy spawns a projectile to shoot
         if(isProjectile) {
             for(Enemy enemy : enemies) {
                 soundManager.startEnemyLaserSfx();
@@ -403,15 +435,15 @@ public class GameView extends View {
 
     private void spawnMeteors() {
         if(isTimeToSpawnMeteor) {
-            meteors.add(new Meteor(player.getMinX(),player.getMaxX(),20,getResources()));
-            delayMeteor(); //wait few secs between spawns
+            meteors.add(meteorFactory.generateMeteor(backgroundID));
+            delayMeteor();
         }
     }
 
     private void spawnCoins() {
         if(isTimeToCoin) {
-            goldCoins.add(new GoldCoin(getContext(),player.getMinX(),player.getMaxX(),getResources()));
-            silverCoins.add(new SilverCoin(getContext(),player.getMinX(),player.getMaxX(),getResources()));
+            goldCoins.add(new GoldCoin(player.getMinX(),player.getMaxX(),getResources()));
+            silverCoins.add(new SilverCoin(player.getMinX(),player.getMaxX(),getResources()));
             delayCoin();
         }
     }
@@ -443,7 +475,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToEnemy = true;
             }
-        },6000);
+        },5000);
     }
 
     //delay between shots
@@ -454,7 +486,7 @@ public class GameView extends View {
             public void run() {
                 isBullet = true;
             }
-        },500);
+        },250);
     }
 
     //delay between meteor spawns
@@ -465,7 +497,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToSpawnMeteor = true;
             }
-        },3000);
+        },900);
     }
 
     //delay between meteor spawns
@@ -481,25 +513,22 @@ public class GameView extends View {
 
 
     @Override
-
     public boolean onTouchEvent(MotionEvent event) {
 
         switch (event.getAction()) {
 
+            //Drag&Drop
             case MotionEvent.ACTION_MOVE:
 
-                //Drag&Drop
-
                 if(isMoving) {
-                    player.setX((int)event.getRawX() - 110);
-                    player.setY((int)event.getRawY() - 110);
+                    player.setX((int)event.getRawX() - 100);
+                    player.setY((int)event.getRawY() - 100);
                 }
                 else if(   event.getX() > player.getObjectX()
                         && event.getX() < player.getObjectX() + player.getPlayerBitmap().getWidth()
                         && event.getY() > player.getObjectY()
                         && event.getY() < player.getObjectY() + player.getPlayerBitmap().getHeight()) {
                     isMoving = true;
-
                 }
                 break;
 
@@ -507,21 +536,16 @@ public class GameView extends View {
                 isMoving = false;
                 break;
 
-
-
         }
         return true;
     }
 
     public void gameOver() {
 
-        //PROBLEM HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //move to game over intent
-        System.out.println("game Over!!!!!!!!!!!!!!!!!!!");
         Intent gameOverIntent = new Intent(getContext(), GameOverActivity.class);
         gameOverIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         gameOverIntent.putExtra("score", score);
         getContext().startActivity(gameOverIntent);
     }
-
 }
