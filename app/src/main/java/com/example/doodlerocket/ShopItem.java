@@ -9,6 +9,7 @@ public class ShopItem implements Serializable {
     private int skinId;
     private int price;
     private String rarity;
+
     private boolean isBought;
     private boolean isEquipped;
 

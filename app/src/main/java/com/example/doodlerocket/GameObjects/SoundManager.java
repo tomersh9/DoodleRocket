@@ -1,14 +1,19 @@
 package com.example.doodlerocket.GameObjects;
 
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.os.Build;
 
 import com.example.doodlerocket.R;
 
 public class SoundManager {
 
     private static SoundPool soundPool;
+
+    //SFX
     private static int playerHitSound;
     private static int enemyHitSound;
     private static int playerLaserSound;
@@ -21,7 +26,22 @@ public class SoundManager {
 
     public SoundManager (Context context) {
 
-        soundPool = new SoundPool(9, AudioManager.STREAM_MUSIC,0);
+        //new versions
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+
+            soundPool = new SoundPool.Builder()
+                            .setMaxStreams(9)
+                            .setAudioAttributes(audioAttributes)
+                            .build();
+        }
+        else { //old versions
+            soundPool = new SoundPool(9, AudioManager.STREAM_MUSIC,0);
+        }
+
 
         playerHitSound = soundPool.load(context, R.raw.hurt1,1);
         enemyHitSound = soundPool.load(context,R.raw.enemy_hit,1);
@@ -35,7 +55,7 @@ public class SoundManager {
     }
 
     public void startPlayerHitSfx() {
-        soundPool.play(playerHitSound,0.5f,0.5f,1,0,1);
+        soundPool.play(playerHitSound,0.7f,0.7f,1,0,1);
     }
 
     public void startPlayerDeathSfx() {
@@ -51,11 +71,11 @@ public class SoundManager {
     }
 
     public void startMeteorDeathSfx() {
-        soundPool.play(meteorDeathSound,0.4f,0.4f,1,0,1);
+        soundPool.play(meteorDeathSound,0.7f,0.7f,1,0,1);
     }
 
     public void startPlayerLaserSfx() {
-        soundPool.play(playerLaserSound,0.15f,0.3f,1,0,1);
+        soundPool.play(playerLaserSound,0.15f,0.15f,1,0,1);
     }
 
     public void startEnemyLaserSfx() {
@@ -68,5 +88,11 @@ public class SoundManager {
 
     public void startSilverCoinSfx() {
         soundPool.play(silverCoinSound,0.3f,0.3f,1,0,1);
+    }
+
+    //release memory
+    public void stopSfx() {
+        soundPool.release();
+        soundPool = null;
     }
 }

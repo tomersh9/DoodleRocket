@@ -53,13 +53,8 @@ public class LevelBlockOne extends AppCompatActivity {
                 backgroundID = R.drawable.moon_bg_800;
 
                 //time entry to lvl
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
-                        startActivity(intent);
-                    }
-                },650);
+                Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -74,13 +69,8 @@ public class LevelBlockOne extends AppCompatActivity {
                 backgroundID = R.drawable.city_bg;
 
                 //time entry to lvl
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
-                        startActivity(intent);
-                    }
-                },650);
+                Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -150,6 +140,14 @@ public class LevelBlockOne extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(LevelBlockOne.this,HomeActivity.class);
+        startActivity(intent);
+        finish();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 }

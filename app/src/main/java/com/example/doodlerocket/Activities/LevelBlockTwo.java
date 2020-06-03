@@ -49,13 +49,8 @@ public class LevelBlockTwo extends AppCompatActivity {
                 backgroundID = R.drawable.desert_backgorund;
 
                 //time entry to lvl
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
-                        startActivity(intent);
-                    }
-                },650);
+                Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -70,13 +65,8 @@ public class LevelBlockTwo extends AppCompatActivity {
                 backgroundID = R.drawable.forest_bg_400;
 
                 //time entry to lvl
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
-                        startActivity(intent);
-                    }
-                },650);
+                Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
+                startActivity(intent);
             }
         });
 

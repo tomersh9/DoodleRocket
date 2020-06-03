@@ -20,14 +20,14 @@ public class Meteor implements IGameObjects {
                                 R.drawable.explosion_04,R.drawable.explosion_05};
 
 
-    public Meteor(int playerMinX, int playerMaxX,int speed, Resources resources) {
+    public Meteor(int playerMinX, int playerMaxX,int speed, int meteorSkinID,Resources resources) {
 
         meteorX = (int) Math.floor(Math.random() * ((playerMaxX - playerMinX) + playerMinX)); //random X position at spawn
         meteorY = 0; //top of screen
         meteorSpeed = speed;
 
         //smaller bitmaps
-        meteorBitmap = BitmapFactory.decodeResource(resources,bitmapResArr[(int) (Math.random()* (9))]);
+        meteorBitmap = BitmapFactory.decodeResource(resources,meteorSkinID);
         float width = meteorBitmap.getWidth()*0.6f;
         float height = meteorBitmap.getHeight()*0.6f;
         meteorBitmap = Bitmap.createScaledBitmap(meteorBitmap,(int)width,(int)height,false);
