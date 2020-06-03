@@ -39,6 +39,8 @@ public class GameView extends View {
     SharedPreferences sp;
     int money;
 
+    //check
+
     //SFX manager
     private SoundManager soundManager;
 
@@ -479,6 +481,7 @@ public class GameView extends View {
 
 
     @Override
+
     public boolean onTouchEvent(MotionEvent event) {
 
         switch (event.getAction()) {
@@ -488,8 +491,8 @@ public class GameView extends View {
                 //Drag&Drop
 
                 if(isMoving) {
-                    player.setX((int)event.getX());
-                    player.setY((int)event.getY());
+                    player.setX((int)event.getRawX() - 110);
+                    player.setY((int)event.getRawY() - 110);
                 }
                 else if(   event.getX() > player.getObjectX()
                         && event.getX() < player.getObjectX() + player.getPlayerBitmap().getWidth()
@@ -503,6 +506,8 @@ public class GameView extends View {
             case MotionEvent.ACTION_UP:
                 isMoving = false;
                 break;
+
+
 
         }
         return true;
