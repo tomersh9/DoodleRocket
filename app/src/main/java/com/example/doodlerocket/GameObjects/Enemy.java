@@ -33,40 +33,25 @@ public class Enemy implements IGameObjects {
     private Resources resources;
     private boolean movingLeft = true;
     private Bitmap enemyBitmap;
-    private Paint paint;
-
-    private int[] enemySkins = {R.drawable.alien_boss_rgb_100,R.drawable.alien_boss_ship_detailed_100,R.drawable.alien_elf_100
-                                ,R.drawable.alien_eye_100,R.drawable.alien_green_100,R.drawable.alien_ship_boss_purple_100
-                                ,R.drawable.alien_ship_boss_red_100,R.drawable.alien_ship_grey_100
-                                ,R.drawable.alien_ship_pink_100,R.drawable.alien_ship_purple_100};
 
     //creating death effect
     private List<Bitmap> deathEffectList = new ArrayList<>();
     private boolean isDead = false;
     private int i = 0;
 
-    public Enemy(Context context, Resources resources, int x, int y, int canvasW) {
-
-        //random works this way..
-        Random rand = new Random();
-        int randRes = rand.nextInt(9);
+    public Enemy(Resources resources, int x, int y, int speed, int health,int canvasW,int enemySkinID) {
 
         this.resources = resources;
         this.x = x;
         this.y = y;
-        this.speed = 10;
-        this.health = 10;
+        this.speed = speed;
+        this.health = health;
         this.canvasW = canvasW;
 
-        enemyBitmap = BitmapFactory.decodeResource(resources,enemySkins[randRes]);
+        enemyBitmap = BitmapFactory.decodeResource(resources,enemySkinID);
         this.width = enemyBitmap.getWidth();
         this.height = enemyBitmap.getHeight();
         enemyBitmap = Bitmap.createScaledBitmap(enemyBitmap,width,height,false);
-
-        //paint for hit mark (become white)
-        paint = new Paint();
-        paint.setAntiAlias(false);
-        paint.setARGB(255,255,255,255);
 
         //death effect
         deathEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom1));
@@ -81,7 +66,7 @@ public class Enemy implements IGameObjects {
     public void drawObject(Canvas canvas) {
 
         if(!isDead) {
-            canvas.drawBitmap(enemyBitmap,getObjectX(),getObjectY(),paint);
+            canvas.drawBitmap(enemyBitmap,getObjectX(),getObjectY(),null);
         }
         else {
             canvas.drawBitmap(deathEffectList.get(i/5),(x+enemyBitmap.getWidth()/2),(y+enemyBitmap.getHeight()/2),null);
@@ -99,7 +84,7 @@ public class Enemy implements IGameObjects {
 
             if(movingLeft) {
                 x -= speed;
-                if(x + enemyBitmap.getWidth() < canvasW/6) {
+                if(x + enemyBitmap.getWidth() < canvasW/4) {
                     movingLeft = false;
                 }
             }
@@ -112,7 +97,6 @@ public class Enemy implements IGameObjects {
         }
         else {
             y += speed/4;
-            //hi blalalal
         }
 
     }

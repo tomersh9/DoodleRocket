@@ -24,6 +24,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.doodlerocket.Activities.GameOverActivity;
 import com.example.doodlerocket.GameObjects.Bullet;
 import com.example.doodlerocket.GameObjects.Enemy;
+import com.example.doodlerocket.GameObjects.EnemyFactory;
 import com.example.doodlerocket.GameObjects.EnemyProjectile;
 import com.example.doodlerocket.GameObjects.GoldCoin;
 import com.example.doodlerocket.GameObjects.Meteor;
@@ -41,7 +42,8 @@ public class GameView extends View {
 
     //high score data
     SharedPreferences sp;
-    int money;
+    private int money;
+    private int currLvl;
 
     //animations
     ValueAnimator valueAnimator;
@@ -69,6 +71,9 @@ public class GameView extends View {
     private boolean isTimeToEnemy = true;
     private List<Enemy> enemies = new ArrayList<>();
     private List<Enemy> removeEnemiesList = new ArrayList<>();
+
+    //enemy factory
+    private EnemyFactory enemyFactory;
 
     //meteors
     private boolean isTimeToSpawnMeteor = true;
@@ -115,7 +120,7 @@ public class GameView extends View {
     //will be called outside this class to use this interface methods
     public void setGameViewListener(GameViewListener gameViewListener) {this.gameViewListener = gameViewListener;}
 
-    public GameView(Context context, int skinID, int backgroundID,SoundManager soundManager) { //context when calling it
+    public GameView(Context context, int skinID, int backgroundID, int currLvl, SoundManager soundManager) { //context when calling it
         super(context);
 
 
@@ -129,12 +134,16 @@ public class GameView extends View {
         //set player
         player = new Player(1440,2352,getResources(),skinID);
 
+        //current lvl (to delay objects)
+        this.currLvl = currLvl;
+
         //initialize background fit to screen
         this.backgroundID = backgroundID;
         setGameBackground();
 
         //factories
         meteorFactory = new MeteorFactory(player.getMinX(),player.getMaxX(),20,getResources());
+        enemyFactory = new EnemyFactory(getResources(),player.getMinX(),player.getMaxX(),5,3,1440);
 
         //hearts, score and life
         setUI();
@@ -422,20 +431,21 @@ public class GameView extends View {
     private void spawnEnemies() {
 
         if(isTimeToEnemy) {
-
-            Enemy enemy = new Enemy(getContext(),getResources(),(int) Math.floor(Math.random() * (player.getMaxX())),50,canvasW);
-            enemies.add(enemy);
+            enemies.add(enemyFactory.generateEnemy(currLvl));
             delayEnemy();
         }
     }
 
     private void spawnProjectiles() {
         //for each enemy spawns a projectile to shoot
+        //don't shoot when dead
         if(isProjectile) {
             for(Enemy enemy : enemies) {
-                soundManager.startEnemyLaserSfx();
-                projectiles.add(new EnemyProjectile(getResources(), enemy));
-                delayEnemyShots();
+                if(!enemy.isDead()) {
+                    soundManager.startEnemyLaserSfx();
+                    projectiles.add(new EnemyProjectile(getResources(), enemy));
+                    delayEnemyShots();
+                }
             }
         }
     }
@@ -471,7 +481,7 @@ public class GameView extends View {
             public void run() {
                 isProjectile = true;
             }
-        },1500);
+        },2000 - (currLvl*100));
     }
 
 
@@ -482,7 +492,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToEnemy = true;
             }
-        },5000);
+        },7000 - (currLvl*600));
     }
 
     //delay between shots
@@ -493,7 +503,7 @@ public class GameView extends View {
             public void run() {
                 isBullet = true;
             }
-        },250);
+        },400 - (currLvl*20));
     }
 
     //delay between meteor spawns
@@ -504,7 +514,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToSpawnMeteor = true;
             }
-        },900);
+        },2200 - (currLvl*200));
     }
 
     //delay between meteor spawns
@@ -515,7 +525,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToCoin = true;
             }
-        },1200);
+        },5000 - (currLvl*50));
     }
 
 
@@ -543,7 +553,7 @@ public class GameView extends View {
                 isMoving = false;
                 break;
 
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN: //pause button
 
                 if(!isMoving) {
                     if(event.getX() >= canvasW - 250 && event.getX() <= canvasW-250 + pauseBtn.getWidth()
@@ -558,7 +568,6 @@ public class GameView extends View {
     }
 
     public void gameOver() {
-        System.out.println("game OVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         //move to game over intent
         gameViewListener.endGame(score);
     }

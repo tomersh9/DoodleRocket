@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SoundManager soundManager;
 
-
-
     //only need 1 instance of AlertDialog and then inflate it with other layouts
     private AlertDialog gameAlertDialog;
 
@@ -45,12 +43,14 @@ public class MainActivity extends AppCompatActivity {
         //getting info to send GameView
         int skinID;
         int backgroundID;
+        int currLvl;
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         skinID = sp.getInt("skin_id", R.drawable.default_ship_100);
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
+        currLvl = sp.getInt("curr_lvl",1);
 
         //game is running on thread behind the scenes
-        gameView = new GameView(this,skinID,backgroundID,soundManager);
+        gameView = new GameView(this,skinID,backgroundID,currLvl,soundManager);
         setContentView(gameView); //content display
 
         timer = new Timer();
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 yesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //endGame();
+                        //kill intent without saving score
                         finish();
                     }
                 });
@@ -150,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
     @Override //alert dialog when back pressed
     public void onBackPressed() {
 
-
         //for each new dialog we create a builder to show this specific dialog
         final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -184,6 +183,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 }

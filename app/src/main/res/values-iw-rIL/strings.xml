@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">bit.Rocket</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="game_over">המשחק נגמר</string>
+    <string name="score">ניקוד</string>
+    <string name="high_score">ניקוד שיא</string>
+    <string name="choose_level">שחק שוב</string>
+    <string name="score_board">לוח תוצאות</string>
+    <string name="main_menu">תפריט ראשי</string>
+    <string name="play">שחק</string>
+    <string name="shop">חנות</string>
+    <string name="rate_us">דרג אותנו</string>
+    <string name="galaxy_1">גלקסיה 1</string>
+    <string name="moon">ירח</string>
+    <string name="earth">כדור הארץ</string>
+    <string name="galaxy_3">גלקסיה 3</string>
+    <string name="ocean">אוקינוס</string>
+    <string name="ice">קרח</string>
+    <string name="galaxy_2">גלקסיה 2</string>
+    <string name="desert">מדבר</string>
+    <string name="forest">יער</string>
+    <string name="cosmetic_shop">חנות סקינים</string>
+    <string name="back">חזור</string>
+    <string name="quit_game">לצאת מהמשחק?</string>
+    <string name="total_coins">סך מטבעות</string>
+</resources>

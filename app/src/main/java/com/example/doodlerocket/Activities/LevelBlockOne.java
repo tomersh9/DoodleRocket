@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.doodlerocket.R;
+import com.r0adkll.slidr.Slidr;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,6 +28,7 @@ public class LevelBlockOne extends AppCompatActivity {
 
     SharedPreferences sp;
     private int backgroundID;
+    private int currLvl;
 
     ObjectAnimator animator1;
     ObjectAnimator animator2;
@@ -40,6 +42,9 @@ public class LevelBlockOne extends AppCompatActivity {
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png); //default bg
 
+        //slide between level blocks
+        //Slidr.attach(this);
+
         TextView lvl1Tv = findViewById(R.id.lvl_1_tv);
         TextView lvl2Tv = findViewById(R.id.lvl_2_tv);
 
@@ -51,6 +56,7 @@ public class LevelBlockOne extends AppCompatActivity {
 
                 //set level background
                 backgroundID = R.drawable.moon_bg_800;
+                currLvl = 1;
 
                 //time entry to lvl
                 Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
@@ -67,6 +73,7 @@ public class LevelBlockOne extends AppCompatActivity {
 
                 //set level background
                 backgroundID = R.drawable.city_bg;
+                currLvl = 2;
 
                 //time entry to lvl
                 Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
@@ -131,8 +138,10 @@ public class LevelBlockOne extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("lvl_bg",backgroundID);
+        editor.putInt("curr_lvl",currLvl);
         editor.commit();
     }
 

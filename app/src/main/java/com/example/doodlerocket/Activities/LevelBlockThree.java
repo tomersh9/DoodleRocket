@@ -1,6 +1,5 @@
 package com.example.doodlerocket.Activities;
 
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -18,13 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.doodlerocket.R;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class LevelBlockTwo extends AppCompatActivity {
+public class LevelBlockThree extends AppCompatActivity {
 
     SharedPreferences sp;
     private int backgroundID;
@@ -33,58 +27,56 @@ public class LevelBlockTwo extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.level_block_two_layout);
+        setContentView(R.layout.level_block_three_layout);
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
 
-        //slide between level blocks
-        //Slidr.attach(this);
 
-        TextView lvl3Tv = findViewById(R.id.lvl_3_tv);
-        TextView lvl4Tv = findViewById(R.id.lvl_4_tv);
+        TextView lvl5Tv = findViewById(R.id.lvl_5_tv);
+        TextView lvl6Tv = findViewById(R.id.lvl_6_tv);
 
 
         //lvl 3
-        final ImageView lvl3Btn = findViewById(R.id.lvl_3_btn);
-        lvl3Btn.setOnClickListener(new View.OnClickListener() {
+        final ImageView lvl5Btn = findViewById(R.id.lvl_5_btn);
+        lvl5Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //lvl background
-                backgroundID = R.drawable.desert_backgorund;
-                currLvl = 3;
+                backgroundID = R.drawable.ocean_bg_1;
+                currLvl = 5;
 
                 //time entry to lvl
-                Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
+                Intent intent = new Intent(LevelBlockThree.this,MainActivity.class);
                 startActivity(intent);
 
             }
         });
 
         //lvl 4
-        final ImageView lvl4Btn = findViewById(R.id.lvl_4_btn);
-        lvl4Btn.setOnClickListener(new View.OnClickListener() {
+        final ImageView lvl6Btn = findViewById(R.id.lvl_6_btn);
+        lvl6Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //put level background
-                backgroundID = R.drawable.forest_bg_400;
-                currLvl = 4;
+                backgroundID = R.drawable.ice_bg_800;
+                currLvl = 6;
 
                 //time entry to lvl
-                Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
+                Intent intent = new Intent(LevelBlockThree.this,MainActivity.class);
                 startActivity(intent);
             }
         });
 
         //animation planets - YoYo
-        YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl3Btn);
-        YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl4Btn);
+        YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl5Btn);
+        YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl6Btn);
 
         //bounce infinite text
-        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl3Tv,"translationY",-70).setDuration(1400);
-        ObjectAnimator bounceTextAnimator2 = new ObjectAnimator().ofFloat(lvl4Tv,"translationY",-70).setDuration(1400);
+        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl5Tv,"translationY",-70).setDuration(1400);
+        ObjectAnimator bounceTextAnimator2 = new ObjectAnimator().ofFloat(lvl6Tv,"translationY",-70).setDuration(1400);
 
         bounceTextAnimator1.setRepeatMode(ValueAnimator.REVERSE);
         bounceTextAnimator1.setRepeatCount(ValueAnimator.INFINITE);
@@ -92,11 +84,11 @@ public class LevelBlockTwo extends AppCompatActivity {
         bounceTextAnimator2.setRepeatCount(ValueAnimator.INFINITE);
 
         //animation planets
-        ObjectAnimator animator1 = new ObjectAnimator().ofFloat(lvl3Btn,"translationY",-70).setDuration(1400);
+        ObjectAnimator animator1 = new ObjectAnimator().ofFloat(lvl5Btn,"translationY",-70).setDuration(1400);
         animator1.setRepeatMode(ValueAnimator.REVERSE);
         animator1.setRepeatCount(ValueAnimator.INFINITE);
 
-        ObjectAnimator animator2 = new ObjectAnimator().ofFloat(lvl4Btn,"translationY",-70).setDuration(1400);
+        ObjectAnimator animator2 = new ObjectAnimator().ofFloat(lvl6Btn,"translationY",-70).setDuration(1400);
         animator2.setRepeatMode(ValueAnimator.REVERSE);
         animator2.setRepeatCount(ValueAnimator.INFINITE);
 
@@ -107,11 +99,11 @@ public class LevelBlockTwo extends AppCompatActivity {
 
 
         //next page
-        ImageButton nextBlockBtn = findViewById(R.id.next_btn_block_2);
+        ImageButton nextBlockBtn = findViewById(R.id.next_btn_block_3);
         nextBlockBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockTwo.this,LevelBlockThree.class);
+                Intent intent = new Intent(LevelBlockThree.this,MainActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
@@ -119,11 +111,11 @@ public class LevelBlockTwo extends AppCompatActivity {
         });
 
         //previous page
-        ImageButton prevBlockBtn = findViewById(R.id.prev_btn_block_2);
+        ImageButton prevBlockBtn = findViewById(R.id.prev_btn_block_3);
         prevBlockBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockTwo.this,LevelBlockOne.class);
+                Intent intent = new Intent(LevelBlockThree.this,LevelBlockTwo.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);

@@ -6,19 +6,21 @@ import java.util.List;
 public class SingleShopList {
 
     private static SingleShopList instance;
+    private List<ShopItem> shopItems = null;
 
     private SingleShopList(){}
 
     public static SingleShopList getInstance(){
         if(instance == null){
             instance = new SingleShopList();
+            instance.createShopList(); //create List only 1 time
         }
         return instance;
     }
 
-    public List<ShopItem> createShopList() {
+    public void createShopList() {
 
-        List<ShopItem> shopItems = new ArrayList<>();
+        shopItems = new ArrayList<>();
         shopItems.add(new ShopItem(R.drawable.ship_green_grey_100,100,"Legendary"));
         shopItems.add(new ShopItem(R.drawable.ship_grey_orange_100,50,"Rare"));
         shopItems.add(new ShopItem(R.drawable.ship_grey_red_100,1999999990,"Common"));
@@ -38,7 +40,9 @@ public class SingleShopList {
         shopItems.add(new ShopItem(R.drawable.blueship_prem_100,1044440,"Legendary"));
         shopItems.add(new ShopItem(R.drawable.blueship_reg_100,250,"Premium"));
         shopItems.add(new ShopItem(R.drawable.blueship_tiny_100,250,"Premium"));
+    }
 
-        return shopItems;
+    public List<ShopItem> getShopList() {
+        return this.shopItems;
     }
 }

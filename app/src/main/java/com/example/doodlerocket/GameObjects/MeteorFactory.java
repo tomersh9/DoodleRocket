@@ -16,6 +16,7 @@ public class MeteorFactory {
     private int desertSkins[] = {R.drawable.meteor9, R.drawable.meteor10};
     private int forestSkins[] = {R.drawable.meteor7, R.drawable.meteor8};
     private int waterSkins[] = {R.drawable.meteor5,R.drawable.meteor6};
+    private int iceSkins[] = {R.drawable.meteor5,R.drawable.meteor1};
 
     public MeteorFactory(int playerMinX, int playerMaxX, int speed, Resources resources) {
         this.playerMinX = playerMinX;
@@ -31,20 +32,32 @@ public class MeteorFactory {
         Random random = new Random();
         int randRes = random.nextInt(2);
 
-            switch (backgroundID) {
+        switch (backgroundID) {
 
-                case R.drawable.desert_backgorund:
-                    return new Meteor(playerMinX,playerMaxX,speed,desertSkins[randRes],resources);
+            //lvl 1
+            case R.drawable.moon_bg_800:
+                return new Meteor(playerMinX,playerMaxX,speed,moonSkins[randRes],resources);
 
-                case R.drawable.moon_bg_800:
-                    return new Meteor(playerMinX,playerMaxX,speed,moonSkins[randRes],resources);
+            //lvl 2
+            case R.drawable.city_bg:
+                return new Meteor(playerMinX,playerMaxX,speed+3,earthSkins[randRes],resources);
 
-                case R.drawable.city_bg:
-                    return new Meteor(playerMinX,playerMaxX,speed,earthSkins[randRes],resources);
+            //lvl 3
+            case R.drawable.desert_backgorund:
+                return new Meteor(playerMinX,playerMaxX,speed+5,desertSkins[randRes],resources);
 
-                case R.drawable.forest_bg_400:
-                    return new Meteor(playerMinX,playerMaxX,speed,forestSkins[randRes],resources);
-            }
-            return null;
+            //lvl 4
+            case R.drawable.forest_bg_400:
+                return new Meteor(playerMinX,playerMaxX,speed+7,forestSkins[randRes],resources);
+
+            //lvl 5
+            case R.drawable.ocean_bg_1:
+                return new Meteor(playerMinX,playerMaxX,speed+10,waterSkins[randRes],resources);
+
+            //lvl 6
+            case R.drawable.ice_bg_800:
+                return new Meteor(playerMinX,playerMaxX,speed+13,iceSkins[randRes],resources);
+        }
+        return null;
     }
 }

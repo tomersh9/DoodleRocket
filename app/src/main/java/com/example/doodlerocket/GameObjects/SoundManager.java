@@ -55,7 +55,7 @@ public class SoundManager {
     }
 
     public void startPlayerHitSfx() {
-        soundPool.play(playerHitSound,0.7f,0.7f,1,0,1);
+        soundPool.play(playerHitSound,0.9f,0.9f,1,0,1);
     }
 
     public void startPlayerDeathSfx() {
@@ -71,7 +71,7 @@ public class SoundManager {
     }
 
     public void startMeteorDeathSfx() {
-        soundPool.play(meteorDeathSound,0.7f,0.7f,1,0,1);
+        soundPool.play(meteorDeathSound,0.9f,0.9f,1,0,1);
     }
 
     public void startPlayerLaserSfx() {
@@ -79,15 +79,15 @@ public class SoundManager {
     }
 
     public void startEnemyLaserSfx() {
-        soundPool.play(enemyLaserSound,0.25f,0.25f,1,0,1);
+        soundPool.play(enemyLaserSound,0.4f,0.4f,1,0,1);
     }
 
     public void startGoldCoinSfx() {
-        soundPool.play(goldCoinSound,0.3f,0.3f,1,0,1);
+        soundPool.play(goldCoinSound,0.2f,0.2f,1,0,1);
     }
 
     public void startSilverCoinSfx() {
-        soundPool.play(silverCoinSound,0.3f,0.3f,1,0,1);
+        soundPool.play(silverCoinSound,0.2f,0.2f,1,0,1);
     }
 
     //release memory

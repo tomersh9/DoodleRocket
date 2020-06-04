@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -25,7 +26,8 @@ public class HomeActivity extends AppCompatActivity {
 
     AlertDialog gameAlertDialog;
 
-    //MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer;
+    private boolean isMute = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,8 +36,8 @@ public class HomeActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //start playing music
-        //startMusic();
+        //start background music
+        startMusic();
 
         Button playBtn = findViewById(R.id.play_btn);
         playBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,17 +59,33 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Button rateBtn = findViewById(R.id.rate_btn);
+        //mute music btn
+        final ImageButton volumeBtn = findViewById(R.id.vol_btn);
+        volumeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isMute) {
+                    volumeBtn.setImageResource(R.drawable.mute_yellow_50);
+                    pauseMusic();
+                    isMute = true;
+                }
+                else {
+                    volumeBtn.setImageResource(R.drawable.vol_yellow_50);
+                    startMusic();
+                    isMute = false;
+                }
+            }
+        });
 
+        //title animation
         TextView titleTv = findViewById(R.id.home_title_tv);
-
         YoYo.with(Techniques.FadeInDown).duration(1500).playOn(titleTv);
     }
 
-/*
     public void startMusic() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(this, R.raw.theme_compressed);
+            mediaPlayer.setVolume(0.75f,0.75f);
             mediaPlayer.setLooping(true);
         }
         mediaPlayer.start();
@@ -87,14 +105,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        pauseMusic();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
+        isMute = false;
         startMusic();
     }
 
@@ -102,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         stopMusic();
-    }*/
+    }
 
     @Override //alert dialog when back pressed
     public void onBackPressed() {

@@ -38,8 +38,7 @@ public class ShopActivity extends AppCompatActivity {
         coins = sp.getInt("money",0);
 
         //Singleton of shop list (static)
-        SingleShopList singleShopList = SingleShopList.getInstance();
-        shopItems = singleShopList.createShopList();
+        shopItems = SingleShopList.getInstance().getShopList();
 
         //load history of shop
         loadData();

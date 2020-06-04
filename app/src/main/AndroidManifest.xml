@@ -21,15 +21,17 @@
         <activity android:name=".Activities.HomeActivity"
             android:launchMode="singleTask"/>
 
-        <activity   android:name=".Activities.MainActivity">
-        </activity>
+        <activity   android:name=".Activities.MainActivity"/>
         <activity android:name=".Activities.GameOverActivity"/>
-        <activity android:name=".Activities.LoginPage"/>
+        <activity android:name=".Activities.ScoreBoardActivity"/>
         <activity android:name=".Activities.ShopActivity"/>
-
         <activity android:name=".Activities.LevelBlockOne"/>
         <activity android:name=".Activities.LevelBlockTwo"/>
-        <activity android:name=".Activities.ScoreBoardActivity"/>
+        <activity android:name=".Activities.LevelBlockThree"/>
+
+
+
+        <activity android:name=".Activities.LoginPage"/>
 
     </application>
 

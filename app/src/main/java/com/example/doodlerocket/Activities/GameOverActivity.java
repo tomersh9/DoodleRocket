@@ -33,23 +33,28 @@ public class GameOverActivity extends AppCompatActivity {
 
         //money
         TextView coinsTv = findViewById(R.id.coins_tv);
-        coinsTv.setText("Coins "+sp.getInt("money",0));
+        int totalCoins = sp.getInt("money",0);
+        String totalCoinsString = getString(R.string.total_coins);
+        coinsTv.setText(totalCoinsString + " " + totalCoins );
 
         //highScore display
         TextView highScoreTv = findViewById(R.id.highscore_tv);
         final int highScore = sp.getInt("highscore",0);
-        highScoreTv.setText("High Score " + highScore );
+        String highscoreString = getString(R.string.high_score);
+        highScoreTv.setText(highscoreString + " " + highScore );
 
         //setting score
         TextView scoreTv = findViewById(R.id.score_tv);
-        scoreTv.setText("Score " + getIntent().getIntExtra("score",0));
+        int score = getIntent().getIntExtra("score",0);
+        String scoreString = getString(R.string.score);
+        scoreTv.setText(scoreString + " " + score );
 
         //return to game
         Button resetBtn = findViewById(R.id.reset_btn);
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToGameIntent = new Intent(GameOverActivity.this,LevelBlockOne.class);
+                Intent backToGameIntent = new Intent(GameOverActivity.this,MainActivity.class);
                 startActivity(backToGameIntent);
                 finish();
             }

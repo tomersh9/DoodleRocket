@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lvl_1_block"
+    android:id="@+id/lvl_2_block"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/stars_pxl_png">
@@ -11,10 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Galaxy 2" />
+        android:text="@string/galaxy_2" />
 
     <LinearLayout
-        android:id="@+id/row_one_layout"
+        android:id="@+id/row_one_layout_b2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -40,15 +40,15 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Desert" />
+            android:text="@string/desert" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/row_two_layout"
+        android:id="@+id/row_two_layout_b2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/row_one_layout"
+        android:layout_below="@id/row_one_layout_b2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
         android:orientation="horizontal">
@@ -61,7 +61,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Forest" />
+            android:text="@string/forest" />
 
         <ImageView
             android:id="@+id/lvl_4_btn"
