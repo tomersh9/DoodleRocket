@@ -93,6 +93,6 @@ public class SoundManager {
     //release memory
     public void stopSfx() {
         soundPool.release();
-        soundPool = null;
+        //soundPool = null;
     }
 }

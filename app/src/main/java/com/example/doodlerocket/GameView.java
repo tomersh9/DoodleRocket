@@ -100,12 +100,13 @@ public class GameView extends View {
     //UI
     private Paint scorePaint = new Paint();
     private Bitmap life[] = new Bitmap[2]; //hearts
+    private Bitmap pauseBtn;
 
     //interface to communicate with the MainActivity "father" outside
     public interface GameViewListener {
         void pauseGame();
         void resumeGame();
-        void exitGame();
+        void endGame(int score);
     }
 
     //listener object
@@ -171,6 +172,9 @@ public class GameView extends View {
         life[0] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_red_48);
         life[1] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_gray_48);
 
+        //pause button
+        pauseBtn = BitmapFactory.decodeResource(getResources(),R.drawable.pause_icon_50);
+
         //initialize score & health
         score = 0;
         health = player.getHealth(); // 3 life points
@@ -199,6 +203,9 @@ public class GameView extends View {
 
         //score text
         canvas.drawText("Score:" + score, 60,150,scorePaint);
+
+        //draw pause button
+        canvas.drawBitmap(pauseBtn,canvasW - 250,100,null);
 
         //saving data before death
         if(health == 0) {
@@ -536,16 +543,23 @@ public class GameView extends View {
                 isMoving = false;
                 break;
 
+            case MotionEvent.ACTION_DOWN:
+
+                if(!isMoving) {
+                    if(event.getX() >= canvasW - 250 && event.getX() <= canvasW-250 + pauseBtn.getWidth()
+                            && event.getY() >= 100 && event.getY() <= 100 + pauseBtn.getHeight()) {
+                        gameViewListener.pauseGame();
+                    }
+                }
+
+                break;
         }
         return true;
     }
 
     public void gameOver() {
-
+        System.out.println("game OVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         //move to game over intent
-        Intent gameOverIntent = new Intent(getContext(), GameOverActivity.class);
-        gameOverIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        gameOverIntent.putExtra("score", score);
-        getContext().startActivity(gameOverIntent);
+        gameViewListener.endGame(score);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.doodlerocket.Activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private GameView gameView;
     private Handler handler = new Handler();
+    private Timer timer; //resume or stop GameView thread
     private final static long refreshRate = 10; //refresh rate
 
     private SharedPreferences sp;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         gameView = new GameView(this,skinID,backgroundID,soundManager);
         setContentView(gameView); //content display
 
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -64,6 +66,85 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         },0, refreshRate); //delay = 0, each 10mis refresh screen
+
+        //listens to events in GameView
+        gameView.setGameViewListener(new GameView.GameViewListener() {
+
+            @Override
+            public void pauseGame() {
+
+                //stop GameView thread
+                timer.cancel();
+
+                //for each new dialog we create a builder to show this specific dialog
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                //first you inflate the layout and then create the builder to show it
+                View pauseView = getLayoutInflater().inflate(R.layout.alert_dialog_view, null);
+
+                //alert animation
+                YoYo.with(Techniques.BounceInUp).duration(1000).playOn(pauseView);
+
+                Button yesBtn = pauseView.findViewById(R.id.alert_yes_btn);
+                yesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //endGame();
+                        finish();
+                    }
+                });
+                Button noBtn = pauseView.findViewById(R.id.alert_no_btn);
+                noBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gameAlertDialog.dismiss();
+                        resumeGame();
+                    }
+                });
+
+                //building the alert dialog each time with different builder
+                gameAlertDialog = builder.setView(pauseView).show();
+                gameAlertDialog.setCanceledOnTouchOutside(false);
+                gameAlertDialog.setCancelable(false);
+            }
+
+            @Override
+            public void resumeGame() {
+
+                //need to create new Timer after it has been stopped
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                gameView.invalidate(); //refresh screen (repaint canvas)
+                            }
+                        });
+                    }
+                },0, refreshRate); //delay = 0, each 10mis refresh screen
+            }
+
+            @Override
+            public void endGame(int score) {
+
+                //stop invalidate
+                timer.cancel();
+
+                //release sounds
+                soundManager.stopSfx();
+
+                //move to game over page
+                Intent gameOverIntent = new Intent(MainActivity.this, GameOverActivity.class);
+                gameOverIntent.putExtra("score", score);
+                startActivity(gameOverIntent);
+
+                //kill intent
+                finish();
+            }
+        });
     }
 
     @Override //alert dialog when back pressed
@@ -103,7 +184,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        soundManager.stopSfx();
 
     }
 }
