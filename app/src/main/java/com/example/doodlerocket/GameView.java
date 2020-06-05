@@ -1,11 +1,8 @@
 package com.example.doodlerocket;
 
-import android.animation.Animator;
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,7 +18,9 @@ import android.view.View;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.doodlerocket.Activities.GameOverActivity;
+import com.example.doodlerocket.GameObjects.Boss;
+import com.example.doodlerocket.GameObjects.BossFactory;
+import com.example.doodlerocket.GameObjects.BossProjectile;
 import com.example.doodlerocket.GameObjects.Bullet;
 import com.example.doodlerocket.GameObjects.Enemy;
 import com.example.doodlerocket.GameObjects.EnemyFactory;
@@ -67,28 +66,36 @@ public class GameView extends View {
     private List<EnemyProjectile> projectiles = new ArrayList<>();
     private List<EnemyProjectile> removeProjectilesList = new ArrayList<>();
 
+    //enemy counter to know when to spawn boss
+    //boss unique projectiles
+    private int enemyCounter;
+    private boolean isBoss = false;
+    private boolean isBossProjectile = true;
+    private Boss boss; //to link him projectiles
+    private BossFactory bossFactory;
+    private List<BossProjectile> bossProjectiles = new ArrayList<>();
+    private List<BossProjectile> removeBossProjectilesList = new ArrayList<>();
+
+    //enemy factory
+    private EnemyFactory enemyFactory;
     //enemies
     private boolean isTimeToEnemy = true;
     private List<Enemy> enemies = new ArrayList<>();
     private List<Enemy> removeEnemiesList = new ArrayList<>();
 
-    //enemy factory
-    private EnemyFactory enemyFactory;
-
+    //meteor factory DP
+    private MeteorFactory meteorFactory;
     //meteors
     private boolean isTimeToSpawnMeteor = true;
     private List<Meteor> meteors = new ArrayList<>();
     private List<Meteor> removeMeteorsList = new ArrayList<>();
 
-    //meteor factory DP
-    private MeteorFactory meteorFactory;
 
     //items
-    private boolean isTimeToCoin = true;
-
+    private boolean isTimeToGoldCoin = true;
+    private boolean isTimeToSilverCoin = true;
     private List<GoldCoin> goldCoins = new ArrayList<>();
     private List<GoldCoin> removeGoldCoins = new ArrayList<>();
-
     private List<SilverCoin> silverCoins = new ArrayList<>();
     private List<SilverCoin> removeSilverCoins = new ArrayList<>();
 
@@ -134,6 +141,9 @@ public class GameView extends View {
         //set player
         player = new Player(1440,2352,getResources(),skinID);
 
+        //enemy counter
+        enemyCounter = 0;
+
         //current lvl (to delay objects)
         this.currLvl = currLvl;
 
@@ -143,7 +153,10 @@ public class GameView extends View {
 
         //factories
         meteorFactory = new MeteorFactory(player.getMinX(),player.getMaxX(),20,getResources());
-        enemyFactory = new EnemyFactory(getResources(),player.getMinX(),player.getMaxX(),5,3,1440);
+        enemyFactory = new EnemyFactory(getResources(),player.getMinX(),player.getMaxX(),10,3,1440);
+        bossFactory = new BossFactory(getResources(),10,5,1440);
+
+        boss = bossFactory.generateBoss(currLvl);
 
         //hearts, score and life
         setUI();
@@ -254,20 +267,56 @@ public class GameView extends View {
         player.drawObject(canvas);
         player.updateLocation();
 
+        //keep spawning objects until end level then spawn boss
+        if(enemyCounter < 1) {
+
+            //spawn meteors
+            spawnMeteors();
+
+            //spawn enemies with projectiles
+            spawnEnemies();
+
+            //enemy shoots
+            spawnProjectiles();
+
+            //spawn coins
+            spawnGoldCoins();
+            spawnSilverCoins();
+
+        }
+        else { //finished all enemies for this lvl, so spawn boss
+
+            //draw boss
+            isBoss = true;
+            boss.drawObject(canvas);
+            boss.updateLocation();
+
+            //boss lasers
+            spawnBossProjectiles();
+
+            //end level
+            if(boss.getHealth() == 0) {
+
+                boss.setDead(true);
+                soundManager.startEnemyDeathSfx();
+
+                //FIX!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        gameOver();
+                    }
+                },250);
+
+            }
+
+        }
+
+        //needs to happen all the time
         //shoot bullets
         shoot();
 
-        //spawn meteors
-        spawnMeteors();
-
-        //spawn enemies with projectiles
-        spawnEnemies();
-
-        //enemy shoots
-        spawnProjectiles();
-
-        //spawn coins
-        spawnCoins();
+        //*******HANDLES EVENTS OF OBJECTS COLLISIONS OR EXITING SCREEN*************//
 
         //consumables
         for(GoldCoin goldCoin : goldCoins) {
@@ -336,6 +385,7 @@ public class GameView extends View {
 
                 soundManager.startPlayerHitSfx();
                 soundManager.startEnemyDeathSfx();
+                enemyCounter++; //after number of enemies, release the boss
                 health--;
                 removeEnemiesList.add(enemy);
             }
@@ -391,6 +441,7 @@ public class GameView extends View {
                     if(enemy.getHealth() == 0 ) {
 
                         //death animation
+                        enemyCounter++; //after number of enemies, release the boss
                         soundManager.startEnemyDeathSfx();
                         enemy.setDead(true);
                         new Timer().schedule(new TimerTask() {
@@ -426,8 +477,81 @@ public class GameView extends View {
         }
         projectiles.removeAll(removeProjectilesList);
 
+        //handles boss events
+        if(isBoss) {
+
+            for (final Bullet bullet : bullets) {
+
+                bullet.updateLocation();
+
+                if(Rect.intersects(bullet.getCollisionShape(),boss.getCollisionShape())) {
+                    soundManager.startEnemyHitSfx();
+                    boss.takeDamage(1);
+                    removeBulletsList.add(bullet);
+                }
+                if (bullet.getObjectY() < 0) {
+                    removeBulletsList.add(bullet);
+                } else {
+                    bullet.drawObject(canvas);
+                }
+            }
+            bullets.removeAll(removeBulletsList);
+
+            //handles boss projectile when hitting player
+            for(BossProjectile bossProjectile : bossProjectiles) {
+
+                bossProjectile.updateLocation();
+
+                if(bossProjectile.getObjectY() > canvasH) {
+                    removeBossProjectilesList.add(bossProjectile);
+                }
+                else if(bossProjectile.collisionDetection(playerX,playerY,playerBitmap)) {
+                    soundManager.startPlayerHitSfx();
+                    health--;
+                    removeBossProjectilesList.add(bossProjectile);
+                }
+                else {
+                    bossProjectile.drawObject(canvas);
+                }
+            }
+            bossProjectiles.removeAll(removeBossProjectilesList);
+        }
+
     }
 
+
+    //*********SPAWNING OBJECTS TO THE GAME (WITH DELAY ACCORDING TO THE LEVEL)**************//
+
+    /*private void spawnBoss() {
+        boss = bossFactory.generateBoss(currLvl);
+    }*/
+
+    private void spawnBossProjectiles() {
+        if(isBossProjectile) {
+            bossProjectiles.add(new BossProjectile(getResources(),boss));
+            delayBossProjectiles();
+        }
+    }
+
+    private void delayBossProjectiles() {
+        isBossProjectile = false;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isBossProjectile = true;
+            }
+        },700 - (currLvl*10));
+    }
+
+
+    private void spawnSilverCoins() {
+
+        if(isTimeToSilverCoin) {
+            silverCoins.add(new SilverCoin(player.getMinX(),player.getMaxX(),getResources()));
+            delaySilverCoin();
+        }
+        
+    }
     private void spawnEnemies() {
 
         if(isTimeToEnemy) {
@@ -457,11 +581,10 @@ public class GameView extends View {
         }
     }
 
-    private void spawnCoins() {
-        if(isTimeToCoin) {
+    private void spawnGoldCoins() {
+        if(isTimeToGoldCoin) {
             goldCoins.add(new GoldCoin(player.getMinX(),player.getMaxX(),getResources()));
-            silverCoins.add(new SilverCoin(player.getMinX(),player.getMaxX(),getResources()));
-            delayCoin();
+            delayGoldCoin();
         }
     }
 
@@ -503,7 +626,7 @@ public class GameView extends View {
             public void run() {
                 isBullet = true;
             }
-        },400 - (currLvl*20));
+        },300 - (currLvl*20));
     }
 
     //delay between meteor spawns
@@ -514,20 +637,29 @@ public class GameView extends View {
             public void run() {
                 isTimeToSpawnMeteor = true;
             }
-        },2200 - (currLvl*200));
+        },1600 - (currLvl*200));
     }
 
-    //delay between meteor spawns
-    private void delayCoin() {
-        isTimeToCoin = false;
+    //delay between coins spawns
+    private void delayGoldCoin() {
+        isTimeToGoldCoin = false;
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                isTimeToCoin = true;
+                isTimeToGoldCoin = true;
             }
         },5000 - (currLvl*50));
     }
 
+    private void delaySilverCoin() {
+        isTimeToSilverCoin = false;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isTimeToSilverCoin = true;
+            }
+        },3000 - (currLvl*50));
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

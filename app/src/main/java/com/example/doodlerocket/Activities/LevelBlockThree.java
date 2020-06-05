@@ -106,7 +106,7 @@ public class LevelBlockThree extends AppCompatActivity {
                 Intent intent = new Intent(LevelBlockThree.this,MainActivity.class);
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                //overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
