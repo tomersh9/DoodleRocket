@@ -1,14 +1,21 @@
 package com.example.doodlerocket.GameObjects;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.example.doodlerocket.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BossFactory {
 
     private int speed, health;
     private int canvasW;
     private Resources resources;
+
+    private List<Bitmap> idleList = new ArrayList<>();
 
     //boss skins
     private int[] bossSkins = {R.drawable.moon_boss_200,R.drawable.kraken_boss_200,R.drawable.spider_boss_200
@@ -31,23 +38,59 @@ public class BossFactory {
 
         switch (lvl) {
 
-            case 1:
-                return new Boss(canvasW/2,0,speed,health+10,canvasW,bossSkins[0],resources);
+            case 1: //moon - gunner
+                idleList.clear();
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.frame_0000));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.frame_0010));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.frame_0014));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.frame_0018));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.frame_0021));
+                return new Boss(canvasW/2,-100,speed,health+20,bossSkins[0],canvasW,idleList,resources);
 
-            case 2:
-                return new Boss(canvasW/2,0,speed,health+20,canvasW,bossSkins[1],resources);
+            case 2: //earth
+                idleList.clear();
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.kraken_boss_200));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.kraken_boss_200));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.kraken_boss_200));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.kraken_boss_200));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.kraken_boss_200));
+                return new Boss(canvasW/2,-100,speed+3,health+30,bossSkins[1],canvasW,idleList,resources);
 
-            case 3:
-                return new Boss(canvasW/2,0,speed,health+30,canvasW,bossSkins[2],resources);
+            case 3: //desert - spider
+                idleList.clear();
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f1_spider_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f2_spider_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f3_spider_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f4_spider_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f5_spider_boss));
+                return new Boss(canvasW/2,0,speed+5,health+40,bossSkins[2],canvasW,idleList,resources);
 
-            case 4:
-                return new Boss(canvasW/2,0,speed,health+40,canvasW,bossSkins[3],resources);
+            case 4: //forest - squid
+                idleList.clear();
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f1_forest_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f2_forest_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f3_forest_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f4_forest_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f5_forest_boss));
+                return new Boss(canvasW/2,0,speed+7,health+50,bossSkins[3],canvasW,idleList,resources);
 
-            case 5:
-                return new Boss(canvasW/2,0,speed,health+50,canvasW,bossSkins[4],resources);
+            case 5: //ocean - blue octupus
+                idleList.clear();
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f1_ocean_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f2_ocean_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f3_ocean_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f4_ocean_boss));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.f5_ocean_boss));
+                return new Boss(canvasW/2,0,speed+9,health+60,bossSkins[4],canvasW,idleList,resources);
 
-            case 6:
-                return new Boss(canvasW/2,0,speed,health+70,canvasW,bossSkins[5],resources);
+            case 6: //ice
+                idleList.clear();
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.blood_boss_170));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.blood_boss_170));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.blood_boss_170));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.blood_boss_170));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.blood_boss_170));
+                return new Boss(canvasW/2,0,speed+10,health+90,bossSkins[5],canvasW,idleList,resources);
 
         }
         return null;

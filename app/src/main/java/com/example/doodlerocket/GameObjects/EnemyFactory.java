@@ -31,26 +31,27 @@ public class EnemyFactory {
 
     public Enemy generateEnemy(int lvl) {
 
+        //public Enemy(Resources resources, int x, int y, int speed, int health,int canvasW,int enemySkinID)
         //spawn enemies with different properties according to level
         switch (lvl) {
 
             case 1:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed,health,canvasW,enemySkins[0],resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed,health,enemySkins[0],canvasW,resources);
 
             case 2:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+3,health+1,canvasW,enemySkins[1],resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+3,health+1,enemySkins[1],canvasW,resources);
 
             case 3:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+5,health+2,canvasW,enemySkins[2],resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+5,health+2,enemySkins[2],canvasW,resources);
 
             case 4:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+7,health+3,canvasW,enemySkins[3],resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+7,health+3,enemySkins[3],canvasW,resources);
 
             case 5:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+10,health+4,canvasW,enemySkins[4],resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+9,health+4,enemySkins[4],canvasW,resources);
 
             case 6:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+12,health+5,canvasW,enemySkins[5],resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+10,health+5,enemySkins[5],canvasW,resources);
 
         }
         return null;

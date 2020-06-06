@@ -46,6 +46,10 @@ public abstract class Mob implements IGameObjects {
         return this.speed;
     }
 
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
     public void moveHorizontal(int x) {
         this.x = x;
     }

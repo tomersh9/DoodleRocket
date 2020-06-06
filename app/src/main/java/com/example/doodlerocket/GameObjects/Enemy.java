@@ -24,31 +24,28 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Enemy extends Mob {
+public class Enemy implements IGameObjects {
 
-    private int x,y,speed,health;
+    private int x,y,speed;
+    private int health;
     private int width, height;
     private int canvasW;
-    private Bitmap enemyBitmap;
     private boolean movingLeft = true;
+    private Bitmap enemyBitmap;
 
     //creating death effect
     private List<Bitmap> deathEffectList = new ArrayList<>();
+    private boolean isDead = false;
     private int i = 0;
 
-    public Enemy(int x, int y, int speed, int health, int canvasW, int enemySkinID, Resources resources) {
-        super(x, y, speed,health); //base of mob
+    public Enemy(int x, int y, int speed, int health, int enemySkinID, int canvasW, Resources resources) {
 
-        //from father
-        this.x = getObjectX();
-        this.y = getObjectY();
-        this.speed = getSpeed();
-        //this.health = getHealth();
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.health = health;
+        this.canvasW = canvasW;
 
-        //unique son
-        this.canvasW  = canvasW;
-
-        //assign enemy bitmap picture
         enemyBitmap = BitmapFactory.decodeResource(resources,enemySkinID);
         this.width = enemyBitmap.getWidth();
         this.height = enemyBitmap.getHeight();
@@ -60,83 +57,91 @@ public class Enemy extends Mob {
         deathEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom3));
         deathEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom4));
         deathEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom5));
+
     }
 
     @Override
     public void drawObject(Canvas canvas) {
-        if(!this.isDead()) {
+
+        if(!isDead) {
             canvas.drawBitmap(enemyBitmap,getObjectX(),getObjectY(),null);
         }
         else {
-            canvas.drawBitmap(deathEffectList.get(i/5),(this.getObjectX()+enemyBitmap.getWidth()/2),(this.getObjectY()+enemyBitmap.getHeight()/2),null);
+            canvas.drawBitmap(deathEffectList.get(i/5),(x+enemyBitmap.getWidth()/2),(y+enemyBitmap.getHeight()/2),null);
             i++;
             i=i%25;
         }
+
     }
 
     @Override
     public void updateLocation() {
 
-        if(!this.isDead()) {
-
-            moveVertical(speed/2);
+        if(!isDead) {
+            y += speed/2;
 
             if(movingLeft) {
-                moveHorizontal(x -= speed);
-                if(getObjectX() + enemyBitmap.getWidth() < canvasW/4) {
+                x -= speed;
+                if(x + enemyBitmap.getWidth() < canvasW/4) {
                     movingLeft = false;
                 }
             }
             else {
-                moveHorizontal(x += speed);
-                if(getObjectX() + enemyBitmap.getWidth() > canvasW - 100) {
+                x += speed;
+                if(x + enemyBitmap.getWidth() > canvasW - 100) {
                     movingLeft = true;
                 }
             }
         }
         else {
-            moveVertical(speed/4);
+            y += speed/4;
         }
+
     }
 
     @Override
     public int getObjectX() {
-        return super.getObjectX();
+        return x;
+    }
+
+    public int getHealth() { return health;}
+
+    public void takeDamage(int dmg) {
+        this.health -= dmg;
+        this.y-=90; // bounce - unique to enemy
     }
 
     @Override
     public int getObjectY() {
-        return super.getObjectY();
+        return y;
     }
 
-    @Override
-    public int getHealth() {
-        return super.getHealth();
+    public void setX(int x) {
+        this.x = x;
     }
 
-    @Override
-    public void takeDamage(int dmg) {
-        super.takeDamage(dmg); //take dmg
-        moveVertical(-90); // bounce - unique to enemy
+    public void setY(int y) {
+        this.y = y;
     }
 
     //to resize in GameView
     public int getEnemyHeight() {return height;}
     public int getEnemyWidth() {return width;}
 
-    @Override
-    public boolean isDead() {
-        return super.isDead();
+    public Bitmap getEnemyBitmap() {
+        return enemyBitmap;
     }
 
-    @Override
+    public boolean isDead() {
+        return isDead;
+    }
+
     public void setDead(boolean dead) {
-        super.setDead(dead);
+        isDead = dead;
     }
 
     @Override
     public boolean collisionDetection(int playerX, int playerY, Bitmap playerBitmap) {
-
         if     (playerX < getObjectX() + (enemyBitmap.getWidth())
                 && getObjectX() < (playerX + playerBitmap.getWidth()) //rocket between obstacle width
                 && playerY < getObjectY() + (enemyBitmap.getHeight())
@@ -147,6 +152,6 @@ public class Enemy extends Mob {
     }
 
     public Rect getCollisionShape() {
-        return new Rect(getObjectX(),getObjectY(),getObjectX()+enemyBitmap.getWidth(),getObjectY()+enemyBitmap.getHeight());
+        return new Rect(x,y,x+enemyBitmap.getWidth(),y+enemyBitmap.getHeight());
     }
 }

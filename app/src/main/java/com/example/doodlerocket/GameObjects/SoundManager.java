@@ -23,6 +23,10 @@ public class SoundManager {
     private static int enemyDeathSound;
     private static int goldCoinSound;
     private static int silverCoinSound;
+    private static int fireBoostSound;
+
+    //fields
+    public int playerLaser;
 
     public SoundManager (Context context) {
 
@@ -34,12 +38,12 @@ public class SoundManager {
                     .build();
 
             soundPool = new SoundPool.Builder()
-                            .setMaxStreams(9)
+                            .setMaxStreams(10)
                             .setAudioAttributes(audioAttributes)
                             .build();
         }
         else { //old versions
-            soundPool = new SoundPool(9, AudioManager.STREAM_MUSIC,0);
+            soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
         }
 
 
@@ -52,6 +56,7 @@ public class SoundManager {
         playerDeathSound = soundPool.load(context, R.raw.boom1,1);
         goldCoinSound = soundPool.load(context, R.raw.pick_gold_coin,1);
         silverCoinSound = soundPool.load(context,R.raw.pick_silver_coin,1);
+        fireBoostSound = soundPool.load(context,R.raw.fire_boost_sfx,1);
     }
 
     public void startPlayerHitSfx() {
@@ -74,8 +79,7 @@ public class SoundManager {
         soundPool.play(meteorDeathSound,0.9f,0.9f,1,0,1);
     }
 
-    public void startPlayerLaserSfx() {
-        soundPool.play(playerLaserSound,0.15f,0.15f,1,0,1);
+    public void startPlayerLaserSfx() {soundPool.play(playerLaserSound,0.15f,0.15f,1,0,1);
     }
 
     public void startEnemyLaserSfx() {
@@ -90,9 +94,21 @@ public class SoundManager {
         soundPool.play(silverCoinSound,0.2f,0.2f,1,0,1);
     }
 
+    public void startFireBoostSfx() {
+        soundPool.play(fireBoostSound,0.8f,0.8f,1,0,1);
+    }
+
     //release memory
     public void stopSfx() {
         soundPool.release();
         //soundPool = null;
+    }
+
+    public void killSfx(int id) {
+        soundPool.stop(id);
+    }
+
+    public void pauseSfx() {
+        soundPool.autoPause();
     }
 }

@@ -56,6 +56,14 @@
         <item name="android:shadowRadius">3</item>
     </style>
 
+    <style name="btn_txt_pressed">
+        <item name="fontFamily">@font/retro</item>
+        <item name="android:textColor">@color/scorecolor</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:shadowColor">@color/black</item>
+    </style>
+
     <style name="play_btn_txt">
         <item name="fontFamily">@font/retro</item>
         <item name="android:textColor">@color/white</item>

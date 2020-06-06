@@ -1,6 +1,7 @@
 package com.example.doodlerocket.Activities;
 
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,12 +28,15 @@ public class ShopActivity extends AppCompatActivity {
     private SharedPreferences sp;
 
     private int coins;
-    private List<ShopItem> shopItems;
+    private static List<ShopItem> shopItems;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
+
+        //fixed portrait mode
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         coins = sp.getInt("money",0);

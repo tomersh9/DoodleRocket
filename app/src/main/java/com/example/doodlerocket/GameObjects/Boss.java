@@ -11,34 +11,37 @@ import com.example.doodlerocket.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Boss extends Mob {
+public class Boss implements IGameObjects {
 
     //properties
-    private int x,y,speed;
+    private int x,y,speed, health;
     private int width, height;
     private int canvasW;
     private boolean movingLeft = true;
     private Bitmap bossBitmap;
+    private boolean enteringScreen = true;
+    private boolean isDead = false;
+
+    //animation list
+    private List<Bitmap> idleList;
+    private int j = 0;
 
     //creating death effect
     private List<Bitmap> deathEffectList = new ArrayList<>();
-    private boolean enteringScreen = true;
     private int i = 0;
 
 
-    public Boss(int x, int y, int speed, int health, int canvasW, int enemySkinID, Resources resources) {
-        super(x, y, speed,health);
+    public Boss(int x, int y, int speed, int health, int enemySkinID, int canvasW, List<Bitmap> idleList, Resources resources) {
 
-        //from father
-        this.x = getObjectX();
-        this.y = getObjectY();
-        this.speed = getSpeed();
-        //this.health = getHealth();
-
-        //unique
+        //properties
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.health = health;
         this.canvasW = canvasW;
+        this.idleList = idleList; //each boss has its own idle animation
 
-        //assign enemy bitmap picture
+        //assign boss bitmap picture
         bossBitmap = BitmapFactory.decodeResource(resources,enemySkinID);
         this.width = bossBitmap.getWidth();
         this.height = bossBitmap.getHeight();
@@ -55,8 +58,10 @@ public class Boss extends Mob {
     @Override
     public void drawObject(Canvas canvas) {
 
-        if(!this.isDead()) {
-            canvas.drawBitmap(bossBitmap,getObjectX(),getObjectY(),null);
+        if(!isDead) {
+            canvas.drawBitmap(idleList.get(j/5),getObjectX(),getObjectY(),null);
+            j++;
+            j=j%25;
         }
         else {
             canvas.drawBitmap(deathEffectList.get(i/5),(getObjectX()+ bossBitmap.getWidth()/2),(getObjectY()+ bossBitmap.getHeight()/2),null);
@@ -70,29 +75,33 @@ public class Boss extends Mob {
 
         //enter screen from top and only then move horizontally
         while(enteringScreen) {
-            moveVertical(speed/5);
-            if(getObjectY()> 150) {
+            y += speed/5;
+            if(y > 150) {
                 enteringScreen = false;
             }
         }
 
         //after entering start moving
-        if(!this.isDead()) {
+        if(!isDead) {
             //moving horizontally
             if(movingLeft) {
-                moveHorizontal(x -= speed);
-                if(getObjectX() + bossBitmap.getWidth() < canvasW/3) {
+                x -= speed;
+                if(x + bossBitmap.getWidth() < canvasW/3) {
                     movingLeft = false;
                 }
             }
             else {
-                moveHorizontal(x += speed);
-                if(getObjectX() + bossBitmap.getWidth() > canvasW - 100) {
+                x += speed;
+                if(x + bossBitmap.getWidth() > canvasW + 300) {
                     movingLeft = true;
                 }
             }
         }
 
+    }
+
+    public void takeDamage(int dmg) {
+        this.health -= dmg;
     }
 
     public int getBossWidth() {
@@ -103,38 +112,54 @@ public class Boss extends Mob {
         return height;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
     @Override
     public int getObjectX() {
-        return super.getObjectX();
+        return this.x;
     }
 
     @Override
     public int getObjectY() {
-        return super.getObjectY();
-    }
-
-    @Override
-    public void takeDamage(int dmg) {
-        super.takeDamage(dmg);
-    }
-
-    @Override
-    public int getHealth() {
-        return super.getHealth();
-    }
-
-    public Bitmap getBossBitmap() {
-        return bossBitmap;
-    }
-
-    @Override
-    public boolean isDead() {
-        return super.isDead();
-    }
-
-    @Override
-    public void setDead(boolean dead) {
-        super.setDead(dead);
+        return this.y;
     }
 
     @Override

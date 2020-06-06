@@ -24,4 +24,7 @@
     <string name="quit_game">Quit Game?</string>
     <string name="total_coins">Total Coins</string>
     <string name="choose_level">Play again</string>
+    <string name="victory">Victory!</string>
+    <string name="next_level">Next Level</string>
+    <string name="gems_earned">Gems Earned</string>
 </resources>

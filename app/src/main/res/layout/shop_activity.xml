@@ -34,7 +34,7 @@
             android:layout_height="40dp"
             android:layout_weight="0.2"
             android:layout_gravity="top"
-            android:src="@drawable/goldcoin_1" />
+            android:src="@drawable/green_coin_orig" />
 
         <TextView
             android:id="@+id/shop_coins_amount"

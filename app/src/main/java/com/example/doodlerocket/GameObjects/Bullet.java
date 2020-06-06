@@ -22,7 +22,7 @@ public class Bullet implements IGameObjects {
     private int i = 0;
     private List<Bitmap> hitEffectList = new ArrayList<>();
 
-    public Bullet(Context context, Resources resources, int playerX, int playerY) {
+    public Bullet(Resources resources, int playerX, int playerY) {
 
         x = playerX + 75;
         y = playerY;

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/vortex_pink_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/victory_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/victory"
+        style="@style/title"
+        android:textStyle="italic"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/victory_stats_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/victory_tv"
+        android:layout_marginHorizontal="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/victory_score_tv"
+            style="@style/shop_item"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/score"/>
+
+        <TextView
+            android:id="@+id/victory_highscore_tv"
+            style="@style/high_score"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/high_score" />
+
+        <TextView
+            android:id="@+id/victory_gems_tv"
+            style="@style/high_score"
+            android:gravity="center"
+            android:textColor="@color/green"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/gems_earned" />
+
+        <TextView
+            android:id="@+id/victory_coins_tv"
+            style="@style/score"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/total_coins" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/victory_stats_layout">
+
+    <Button
+        android:id="@+id/victory_dialog_menu_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:text="@string/main_menu"
+        style="@style/btn_txt"
+        android:background="@drawable/btn_red_selector"/>
+
+        <Button
+            android:id="@+id/victory_dialog_next_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            android:text="@string/next_level"
+            style="@style/btn_txt"
+            android:background="@drawable/btn_green_selector"/>
+
+    </LinearLayout>
+</RelativeLayout>

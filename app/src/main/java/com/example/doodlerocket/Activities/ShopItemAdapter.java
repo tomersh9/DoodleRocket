@@ -83,6 +83,11 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
         //current item in list
         ShopItem item = shopItems.get(position);
 
+        //setting inflated views from our holder with data
+        holder.itemIv.setImageResource(item.getSkinId());
+        holder.priceTv.setText(item.getPrice()+"");
+        holder.rarityTv.setText(item.getRarity());
+
         if(item.getPrice() > 1000000) {
             holder.priceTv.setTextSize(10);
         }
@@ -104,12 +109,6 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
         if(item.isEquipped()) {
             holder.rarityTv.setTextColor(Color.GREEN);
         }
-
-        //setting inflated views from our holder with data
-        holder.itemIv.setImageResource(item.getSkinId());
-        holder.priceTv.setText(item.getPrice()+"");
-        holder.rarityTv.setText(item.getRarity());
-
     }
 
     @Override

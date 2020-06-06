@@ -6,7 +6,7 @@ import java.util.List;
 public class SingleShopList {
 
     private static SingleShopList instance;
-    private List<ShopItem> shopItems = null;
+    private static List<ShopItem> shopItems = null;
 
     private SingleShopList(){}
 
@@ -18,7 +18,7 @@ public class SingleShopList {
         return instance;
     }
 
-    public void createShopList() {
+    private void createShopList() {
 
         shopItems = new ArrayList<>();
         shopItems.add(new ShopItem(R.drawable.ship_green_grey_100,100,"Legendary"));
@@ -43,6 +43,6 @@ public class SingleShopList {
     }
 
     public List<ShopItem> getShopList() {
-        return this.shopItems;
+        return shopItems;
     }
 }

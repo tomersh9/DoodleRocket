@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -36,8 +37,15 @@ public class HomeActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        //fixed portrait mode
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         //start background music
-        startMusic();
+        //startMusic();
+
+        //title animation
+        TextView titleTv = findViewById(R.id.home_title_tv);
+        YoYo.with(Techniques.FadeInDown).duration(1500).playOn(titleTv);
 
         Button playBtn = findViewById(R.id.play_btn);
         playBtn.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        //mute music btn
+       /* //mute music btn
         final ImageButton volumeBtn = findViewById(R.id.vol_btn);
         volumeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,14 +83,11 @@ public class HomeActivity extends AppCompatActivity {
                     isMute = false;
                 }
             }
-        });
+        });*/
 
-        //title animation
-        TextView titleTv = findViewById(R.id.home_title_tv);
-        YoYo.with(Techniques.FadeInDown).duration(1500).playOn(titleTv);
     }
 
-    public void startMusic() {
+    /*public void startMusic() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(this, R.raw.theme_compressed);
             mediaPlayer.setVolume(0.75f,0.75f);
@@ -115,7 +120,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         stopMusic();
-    }
+    }*/
 
     @Override //alert dialog when back pressed
     public void onBackPressed() {

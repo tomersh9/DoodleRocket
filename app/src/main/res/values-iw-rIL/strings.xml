@@ -25,4 +25,6 @@
     <string name="back">חזור</string>
     <string name="quit_game">לצאת מהמשחק?</string>
     <string name="total_coins">סך מטבעות</string>
+    <string name="victory">ניצחון!</string>
+    <string name="next_level">לשלב הבא</string>
 </resources>

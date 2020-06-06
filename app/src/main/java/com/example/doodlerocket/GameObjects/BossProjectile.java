@@ -19,12 +19,12 @@ public class BossProjectile implements IGameObjects {
 
         //projectile from bottom center of enemy
         x = boss.getObjectX() + boss.getBossWidth()/2;
-        y = boss.getObjectY() + boss.getBossHeight();
+        y = boss.getObjectY() + boss.getBossHeight() - 200;
         speed = 40;
 
-        projectileBitmap = BitmapFactory.decodeResource(resources, R.drawable.boss_beam);
-        width = projectileBitmap.getWidth()/2;
-        height = projectileBitmap.getHeight()/2;
+        projectileBitmap = BitmapFactory.decodeResource(resources, R.drawable.boss_blue_laser);
+        width =(int) (projectileBitmap.getWidth()/1.5f);
+        height = (int) (projectileBitmap.getHeight()/1.5f);
         projectileBitmap = Bitmap.createScaledBitmap(projectileBitmap,width,height,false);
 
     }
