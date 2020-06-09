@@ -75,32 +75,28 @@
             android:src="@drawable/ice_300" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="80dp"
-        android:layout_marginStart="20dp"
-        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/prev_btn_block_3"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="280dp"
-            android:layout_weight="1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="140dp"
             android:background="@null"
             android:src="@drawable/arrow_left_50" />
 
         <ImageButton
             android:id="@+id/next_btn_block_3"
-            android:layout_width="0dp"
+
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="140dp"
             android:background="@null"
             android:src="@drawable/arrow_right_50" />
 
-
-    </LinearLayout>
 
 </RelativeLayout>

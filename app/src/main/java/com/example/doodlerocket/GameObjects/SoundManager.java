@@ -60,7 +60,7 @@ public class SoundManager {
     }
 
     public void startPlayerHitSfx() {
-        soundPool.play(playerHitSound,0.9f,0.9f,1,0,1);
+        soundPool.play(playerHitSound,1f,1f,1,0,1);
     }
 
     public void startPlayerDeathSfx() {

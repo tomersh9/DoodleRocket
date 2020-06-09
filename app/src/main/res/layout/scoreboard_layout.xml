@@ -2,15 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@drawable/splash_screen_png">
 
     <TextView
         android:id="@+id/highscore_title"
         style="@style/high_score"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:textSize="20sp"
         android:text="HIGH SCORES" />
 
     <LinearLayout
@@ -19,10 +21,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/highscore_title"
         android:layout_centerHorizontal="true"
-        android:layout_margin="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/rank_layout_tv"
             style="@style/score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,6 +35,7 @@
             android:text="RANK" />
 
         <TextView
+            android:id="@+id/score_layout_tv"
             style="@style/score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -39,6 +44,7 @@
             android:text="SCORE" />
 
         <TextView
+            android:id="@+id/name_layout_tv"
             style="@style/score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -47,5 +53,35 @@
             android:text="NAME" />
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/table_layout"
+        android:layout_centerHorizontal="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/score_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp" />
+
+    <Button
+        android:id="@+id/back_to_home_board_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/btn_txt"
+        android:background="@drawable/btn_purple_selector"
+        android:text="@string/main_menu"
+        android:textSize="12sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"/>
+    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

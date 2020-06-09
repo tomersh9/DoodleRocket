@@ -75,8 +75,8 @@ public class Boss implements IGameObjects {
 
         //enter screen from top and only then move horizontally
         while(enteringScreen) {
-            y += speed/5;
-            if(y > 150) {
+            y += speed/3;
+            if(y > 380) {
                 enteringScreen = false;
             }
         }
@@ -98,6 +98,14 @@ public class Boss implements IGameObjects {
             }
         }
 
+    }
+
+    public boolean isEnteringScreen() {
+        return enteringScreen;
+    }
+
+    public void setEnteringScreen(boolean enteringScreen) {
+        this.enteringScreen = enteringScreen;
     }
 
     public void takeDamage(int dmg) {

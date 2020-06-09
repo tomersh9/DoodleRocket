@@ -54,6 +54,8 @@ public class EnemyFactory {
                 return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+10,health+5,enemySkins[5],canvasW,resources);
 
         }
+        System.out.println("nullllllllllllllllllllllllllllllllllllllllllllllllllllllll");
+        System.out.println("Current lvl is: ");
         return null;
     }
 }

@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-    app:cardBackgroundColor="@color/black"
-    app:cardElevation="5dp"
+    app:cardBackgroundColor="@color/clean"
     app:contentPadding="15dp"
+    app:cardCornerRadius="10dp"
+    app:cardUseCompatPadding="true"
     app:layout_anchorGravity="center">
     <!--Good properties to play with-->
 
@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="1st" />
+            android:text="1st"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/score_cell_tv"
@@ -32,7 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="5490" />
+            android:text="5490"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/name_cell_tv"
@@ -41,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Tomer" />
+            android:text="Tomer"
+            android:textSize="15sp" />
 
     </LinearLayout>
 

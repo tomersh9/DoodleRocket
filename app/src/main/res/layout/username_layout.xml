@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/city_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/record_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You broke a record!"
+        style="@style/title"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/record_dialog_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/record_title"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="Your'e placed 1st in the high score board"
+        style="@style/high_score"
+        android:textSize="15sp"/>
+
+    <EditText
+        android:id="@+id/name_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/record_dialog_text"
+        android:layout_margin="10dp"
+        android:hint="Enter name and submit high score"
+        style="@style/reg_txt"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColorHint="@color/gray_trans"/>
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sumbit"
+        android:layout_marginTop="20dp"
+        android:textAllCaps="false"
+        android:layout_below="@id/name_et"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_yellow_selector"
+        style="@style/btn_txt"/>
+</RelativeLayout>

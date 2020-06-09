@@ -102,7 +102,7 @@ public class LevelBlockThree extends AppCompatActivity {
         set.start();
 
 
-        //next page
+        /*//next page
         ImageButton nextBlockBtn = findViewById(R.id.next_btn_block_3);
         nextBlockBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +112,7 @@ public class LevelBlockThree extends AppCompatActivity {
                 finish();
                 //overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
-        });
+        });*/
 
         //previous page
         ImageButton prevBlockBtn = findViewById(R.id.prev_btn_block_3);

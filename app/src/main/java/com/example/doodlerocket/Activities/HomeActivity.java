@@ -67,6 +67,16 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        Button leadboardBtn = findViewById(R.id.leadboard_btn);
+        leadboardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this,ScoreBoardActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+            }
+        });
+
        /* //mute music btn
         final ImageButton volumeBtn = findViewById(R.id.vol_btn);
         volumeBtn.setOnClickListener(new View.OnClickListener() {

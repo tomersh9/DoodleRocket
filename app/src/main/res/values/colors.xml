@@ -6,6 +6,7 @@
 
     <color name="white">#FFFFFF</color>
     <color name="transparent">#20DFDFDF</color>
+    <color name="clean">#00FFFFFF</color>
     <color name="red">#FF0000</color>
     <color name="crimson">#9E0000</color>
     <color name="blue">#0000FF</color>

@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/planets_gif_bg" />
+        android:src="@drawable/moon_bg" />
 
     <TextView
         android:id="@+id/shop_tv"
