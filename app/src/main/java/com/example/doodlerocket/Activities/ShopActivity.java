@@ -28,7 +28,7 @@ public class ShopActivity extends AppCompatActivity {
     private SharedPreferences sp;
 
     private int coins;
-    private static List<ShopItem> shopItems;
+    private static List<ShopItem> shopItems = SingleShopList.getInstance().getShopList();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,9 +40,6 @@ public class ShopActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         coins = sp.getInt("money",0);
-
-        //Singleton of shop list (static)
-        shopItems = SingleShopList.getInstance().getShopList();
 
         //load history of shop
         loadData();

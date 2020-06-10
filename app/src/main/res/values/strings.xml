@@ -27,4 +27,6 @@
     <string name="victory">Victory!</string>
     <string name="next_level">Next Level</string>
     <string name="gems_earned">Gems Earned</string>
+    <string name="hell">Hell</string>
+    <string name="final_galaxy">Final Galaxy</string>
 </resources>

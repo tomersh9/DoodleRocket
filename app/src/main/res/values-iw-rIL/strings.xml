@@ -27,4 +27,7 @@
     <string name="total_coins">סך מטבעות</string>
     <string name="victory">ניצחון!</string>
     <string name="next_level">לשלב הבא</string>
+    <string name="hell">גיהינום</string>
+    <string name="gems_earned">יהלומים שהרווחת</string>
+    <string name="final_galaxy">גלקסיה אחרונה</string>
 </resources>

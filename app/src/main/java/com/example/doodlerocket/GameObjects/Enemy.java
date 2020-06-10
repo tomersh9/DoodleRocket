@@ -30,7 +30,7 @@ public class Enemy implements IGameObjects {
     private int health;
     private int width, height;
     private int canvasW;
-    private boolean movingLeft = true;
+    private boolean movingLeft;
     private Bitmap enemyBitmap;
 
     //creating death effect
@@ -38,13 +38,14 @@ public class Enemy implements IGameObjects {
     private boolean isDead = false;
     private int i = 0;
 
-    public Enemy(int x, int y, int speed, int health, int enemySkinID, int canvasW, Resources resources) {
+    public Enemy(int x, int y, int speed, int health, int enemySkinID, int canvasW,boolean movingLeft ,Resources resources) {
 
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.health = health;
         this.canvasW = canvasW;
+        this.movingLeft = movingLeft;
 
         enemyBitmap = BitmapFactory.decodeResource(resources,enemySkinID);
         this.width = enemyBitmap.getWidth();

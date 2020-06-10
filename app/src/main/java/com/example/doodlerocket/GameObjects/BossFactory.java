@@ -19,7 +19,7 @@ public class BossFactory {
 
     //boss skins
     private int[] bossSkins = {R.drawable.moon_boss_200,R.drawable.kraken_boss_200,R.drawable.spider_boss_200
-                              ,R.drawable.forest_boss_200, R.drawable.ocean_boss_150
+                              ,R.drawable.forest_boss_200, R.drawable.ocean_boss_150,R.drawable.blood_boss_170
                               ,R.drawable.lava_boss_200};
 
     //setting base parameters of enemy and increase with levels
@@ -92,6 +92,14 @@ public class BossFactory {
                 idleList.add(BitmapFactory.decodeResource(resources,R.drawable.blood_boss_170));
                 return new Boss(canvasW/2,0,speed+10,health+90,bossSkins[5],canvasW,idleList,resources);
 
+            case 7: //hell
+                idleList.clear();
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.lava_boss_200));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.lava_boss_200));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.lava_boss_200));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.lava_boss_200));
+                idleList.add(BitmapFactory.decodeResource(resources,R.drawable.lava_boss_200));
+                return new Boss(canvasW/2,0,speed+15,health+200,bossSkins[6],canvasW,idleList,resources);
         }
         return null;
     }

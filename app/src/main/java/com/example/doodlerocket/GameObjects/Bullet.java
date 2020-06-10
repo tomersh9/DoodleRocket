@@ -26,7 +26,7 @@ public class Bullet implements IGameObjects {
 
         x = playerX + 75;
         y = playerY;
-        speed = 20;
+        speed = 25;
 
         //hit effect
         hitEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom1));
@@ -97,8 +97,8 @@ public class Bullet implements IGameObjects {
     public boolean collisionDetection(int meteorX, int meteorY, Bitmap meteorBitmap) {
 
         if(meteorX < x && x < (meteorX + meteorBitmap.getWidth())
-                && meteorY < y && y < (meteorY + meteorBitmap.getHeight())) {
-            return true;
+                && meteorY < y && y < ((meteorY + meteorBitmap.getHeight())/2)) {
+            return true; //meteorY + 50 to hit in center of enemy
         }
         return false;
     }

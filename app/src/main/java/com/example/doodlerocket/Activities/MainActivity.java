@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
 
                 //values to move on
                 final int currScore = score;
-                //final int scoreBoardPosition = getHighScorePosition(score);
                 boolean isTop10 = getIsTop10(score);
 
                 if (isTop10) {
@@ -223,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
                     gameAlertDialog.setCanceledOnTouchOutside(false);
                     gameAlertDialog.setCancelable(false);
                 }
-
                 //won the level
                 else if (isWon) {
                     //victory alert dialog
@@ -282,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                     gameAlertDialog = builder.setView(victoryView).show();
                     gameAlertDialog.setCanceledOnTouchOutside(false);
                     gameAlertDialog.setCancelable(false);
+
                 } else {
                     //move to game over page
                     Intent gameOverIntent = new Intent(MainActivity.this, GameOverActivity.class);

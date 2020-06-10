@@ -17,6 +17,7 @@ public class MeteorFactory {
     private int forestSkins[] = {R.drawable.meteor7, R.drawable.meteor8};
     private int waterSkins[] = {R.drawable.meteor5,R.drawable.meteor6};
     private int iceSkins[] = {R.drawable.meteor5,R.drawable.meteor1};
+    private int hellSkins[] = {R.drawable.meteor10,R.drawable.meteor7,R.drawable.meteor1,R.drawable.meteor5};
 
     public MeteorFactory(int playerMinX, int playerMaxX, int speed, Resources resources) {
         this.playerMinX = playerMinX;
@@ -31,6 +32,7 @@ public class MeteorFactory {
         //random between 2 meteors each level
         Random random = new Random();
         int randRes = random.nextInt(2);
+        int randHell = random.nextInt(3);
 
         switch (backgroundID) {
 
@@ -52,11 +54,14 @@ public class MeteorFactory {
 
             //lvl 5
             case R.drawable.ocean_bg_1:
-                return new Meteor(playerMinX,playerMaxX,speed+10,waterSkins[randRes],resources);
+                return new Meteor(playerMinX,playerMaxX,speed+8,waterSkins[randRes],resources);
 
             //lvl 6
             case R.drawable.ice_bg_800:
-                return new Meteor(playerMinX,playerMaxX,speed+13,iceSkins[randRes],resources);
+                return new Meteor(playerMinX,playerMaxX,speed+10,iceSkins[randRes],resources);
+
+            case R.drawable.lava_bg_1:
+                return new Meteor(playerMinX,playerMaxX,speed+9,hellSkins[randHell],resources);
         }
         return null;
     }

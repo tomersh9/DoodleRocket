@@ -1,6 +1,9 @@
 package com.example.doodlerocket.GameObjects;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import com.example.doodlerocket.R;
 
@@ -12,11 +15,14 @@ public class EnemyFactory {
     private int canvasW;
     private Resources resources;
 
+    //switch enemy movement
+    private static int i = 0;
+
     //regular enemies skins
     private int[] enemySkins =
             {R.drawable.alien_eye_100,R.drawable.alien_ship_boss_purple_100
             ,R.drawable.alien_ship_boss_red_100,R.drawable.alien_ship_grey_100
-            ,R.drawable.alien_ship_pink_100,R.drawable.alien_ship_purple_100};
+            ,R.drawable.alien_ship_pink_100,R.drawable.alien_ship_purple_100, R.drawable.alien_boss_rgb_100};
 
     //setting base parameters of enemy and increase with levels
     public EnemyFactory(Resources resources, int playerMinX, int playerMaxX, int speed, int health ,int canvasW) {
@@ -31,31 +37,36 @@ public class EnemyFactory {
 
     public Enemy generateEnemy(int lvl) {
 
+        //switch enemy movement
+        i++;
+        System.out.println(i+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
         //public Enemy(Resources resources, int x, int y, int speed, int health,int canvasW,int enemySkinID)
         //spawn enemies with different properties according to level
         switch (lvl) {
 
             case 1:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed,health,enemySkins[0],canvasW,resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed,health,enemySkins[0],canvasW,(i%2==0),resources);
 
             case 2:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+3,health+1,enemySkins[1],canvasW,resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+2,health+1,enemySkins[1],canvasW,(i%2==0),resources);
 
             case 3:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+5,health+2,enemySkins[2],canvasW,resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+3,health+2,enemySkins[2],canvasW,(i%2==0),resources);
 
             case 4:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+7,health+3,enemySkins[3],canvasW,resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+4,health+3,enemySkins[3],canvasW,(i%2==0),resources);
 
             case 5:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+9,health+4,enemySkins[4],canvasW,resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+5,health+4,enemySkins[4],canvasW,(i%2==0),resources);
 
             case 6:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+10,health+5,enemySkins[5],canvasW,resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+7,health+5,enemySkins[5],canvasW,(i%2==0),resources);
+
+            case 7:
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+9,health+3,R.drawable.hell_mob_85,canvasW,(i%2==0),resources);
 
         }
-        System.out.println("nullllllllllllllllllllllllllllllllllllllllllllllllllllllll");
-        System.out.println("Current lvl is: ");
         return null;
     }
 }

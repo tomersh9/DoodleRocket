@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lvl_4_block"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/stars_pxl_png">
+
+    <TextView
+        android:id="@+id/final_galaxy_title"
+        style="@style/high_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/final_galaxy" />
+
+
+    <ImageView
+        android:id="@+id/lvl_7_btn"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/final_galaxy_title"
+        android:layout_marginTop="110dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:src="@drawable/lava_300" />
+
+    <TextView
+        android:id="@+id/lvl_7_tv"
+        style="@style/reg_txt"
+        android:layout_below="@id/lvl_7_btn"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hell" />
+
+    <ImageButton
+        android:id="@+id/prev_btn_block_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="140dp"
+        android:background="@null"
+        android:src="@drawable/arrow_left_50" />
+
+</RelativeLayout>
