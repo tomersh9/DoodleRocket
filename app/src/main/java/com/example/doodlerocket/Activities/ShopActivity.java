@@ -1,5 +1,6 @@
 package com.example.doodlerocket.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -28,12 +29,14 @@ public class ShopActivity extends AppCompatActivity {
     private SharedPreferences sp;
 
     private int coins;
-    private static List<ShopItem> shopItems = SingleShopList.getInstance().getShopList();
+    private List<ShopItem> shopItems;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
+        this.shopItems = SingleShopList.getInstance();
 
         //fixed portrait mode
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -132,7 +135,10 @@ public class ShopActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = sp.getString("items",null);
         Type type = new TypeToken<List<ShopItem>>() {}.getType();
-        shopItems = gson.fromJson(json,type);
+        if(gson.fromJson(json,type) !=null){
+            shopItems = gson.fromJson(json,type);
+        }
+
 
     }
 

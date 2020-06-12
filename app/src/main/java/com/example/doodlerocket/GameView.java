@@ -318,7 +318,7 @@ public class GameView extends View {
         player.updateLocation();
 
         //keep spawning objects until end level then spawn boss
-        if (enemyCounter < 5) {
+        if (enemyCounter < 1) {
 
             //spawn meteors
             spawnMeteors();

@@ -1,52 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/city_bg"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@drawable/vortex_pink_bg">
 
     <TextView
-        android:id="@+id/record_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="You broke a record!"
+        android:id="@+id/victory_record_tv"
         style="@style/title"
-        android:textSize="18sp"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"/>
-
-    <TextView
-        android:id="@+id/record_dialog_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/record_title"
-        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"
-        android:text="Your'e placed 1st in the high score board"
-        style="@style/high_score"
-        android:textSize="15sp"/>
+        android:layout_margin="10dp"
+        android:text="@string/victory"
+        android:textSize="30sp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/broke_record_tv"
+        style="@style/reg_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/victory_record_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="Youv'e entered the Top 10!"
+        android:textColor="@color/yellow" />
 
     <EditText
         android:id="@+id/name_et"
+        style="@style/reg_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/record_dialog_text"
+        android:layout_below="@id/broke_record_tv"
         android:layout_margin="10dp"
-        android:hint="Enter name and submit high score"
-        style="@style/reg_txt"
-        android:textSize="12sp"
         android:gravity="center"
-        android:textColorHint="@color/gray_trans"/>
+        android:hint="Enter name"
+        android:textColorHint="@color/transparent"
+        android:textSize="17dp" />
 
     <Button
         android:id="@+id/submit_btn"
+        style="@style/btn_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sumbit"
-        android:layout_marginTop="20dp"
-        android:textAllCaps="false"
         android:layout_below="@id/name_et"
         android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
         android:background="@drawable/btn_yellow_selector"
-        style="@style/btn_txt"/>
+        android:text="Sumbit"
+        android:textAllCaps="false" />
+    <Button
+        android:id="@+id/record_board_btn"
+        style="@style/btn_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_et"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_yellow_selector"
+        android:text="Score Board"
+        android:textAllCaps="false"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/record_victory_stats_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/record_board_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/record_victory_score_tv"
+            style="@style/shop_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/score" />
+
+        <TextView
+            android:id="@+id/record_victory_highscore_tv"
+            style="@style/high_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/high_score"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/record_victory_gems_tv"
+            style="@style/high_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/gems_earned"
+            android:textColor="@color/green"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/record_victory_coins_tv"
+            style="@style/score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/total_coins"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/record_victory_stats_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/record_menu_btn"
+            style="@style/btn_txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_red_selector"
+            android:text="@string/main_menu"
+            android:textAllCaps="false"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/record_next_btn"
+            style="@style/btn_txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_green_selector"
+            android:text="@string/next_level"
+            android:textAllCaps="false"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 </RelativeLayout>

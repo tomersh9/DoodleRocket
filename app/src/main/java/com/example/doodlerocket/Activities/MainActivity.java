@@ -42,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
     private Timer timer; //resume or stop GameView thread
     private final static long refreshRate = 10; //refresh rate
 
+    //current level
+    private int currLvl;
+    private int skinID;
+    private int backgroundID;
+
     //screen size
     int width, height;
 
@@ -54,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog gameAlertDialog;
 
     private List<User> users = new ArrayList<>();
+
+    //backgrounds ID (fix later to work only with lvl)
+    private int[] bgID = {R.drawable.moon_bg_800,R.drawable.city_bg,R.drawable.desert_backgorund
+                        ,R.drawable.forest_bg_400,R.drawable.ocean_bg_1,R.drawable.ice_bg_800
+                        ,R.drawable.lava_bg_1};
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -72,19 +82,16 @@ public class MainActivity extends AppCompatActivity {
         width = displayMetrics.widthPixels;
 
         //getting info to send GameView
-        int skinID;
-        int backgroundID;
-        final int currLvl;
         sp = getSharedPreferences("storage", MODE_PRIVATE);
         skinID = sp.getInt("skin_id", R.drawable.default_ship_100);
         backgroundID = sp.getInt("lvl_bg", R.drawable.stars_pxl_png);
         currLvl = sp.getInt("curr_lvl", 1);
 
+        //initialize actual game
+        setGameView();
+        setContentView(gameView);
 
-        //game is running on thread behind the scenes
-        gameView = new GameView(this, width, height, skinID, backgroundID, currLvl, soundManager);
-        setContentView(gameView); //content display
-
+        //refresh canvas
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -98,6 +105,12 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }, 0, refreshRate); //delay = 0, each 10mis refresh screen
+    }
+
+    //calling this method to load game when needed
+    private void setGameView() {
+        //game is running on thread behind the scenes
+        gameView = new GameView(this, width, height, skinID, backgroundID, currLvl, soundManager);
 
         //listens to events in GameView
         gameView.setGameViewListener(new GameView.GameViewListener() {
@@ -195,24 +208,99 @@ public class MainActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     View usernameView = getLayoutInflater().inflate(R.layout.username_layout, null);
 
+                    //alert animation
+                    YoYo.with(Techniques.SlideInDown).duration(1000).playOn(usernameView);
+
+                    //money
+                    TextView coinsTv = usernameView.findViewById(R.id.record_victory_coins_tv);
+                    int totalCoins = sp.getInt("money", 0);
+                    String totalCoinsString = getString(R.string.total_coins);
+                    coinsTv.setText(totalCoinsString + " " + totalCoins);
+
+                    //highScore display
+                    TextView highScoreTv = usernameView.findViewById(R.id.record_victory_highscore_tv);
+                    final int highScore = sp.getInt("highscore", 0);
+                    String highscoreString = getString(R.string.high_score);
+                    highScoreTv.setText(highscoreString + " " + highScore);
+
+                    TextView gemsTv = usernameView.findViewById(R.id.record_victory_gems_tv);
+                    int gems = sp.getInt("gems", 0);
+                    String gemsString = getString(R.string.gems_earned);
+                    gemsTv.setText(gemsString + " " + gems);
+
+                    //setting score
+                    TextView scoreTv = usernameView.findViewById(R.id.record_victory_score_tv);
+                    String scoreString = getString(R.string.score);
+                    scoreTv.setText(scoreString + " " + score);
+
                     //input username
                     final EditText nameEt = usernameView.findViewById(R.id.name_et);
 
                     //submit to leadBoard
-                    Button submitBtn = usernameView.findViewById(R.id.submit_btn);
+                    final Button boardBtn = usernameView.findViewById(R.id.record_board_btn);
+                    final Button submitBtn = usernameView.findViewById(R.id.submit_btn);
                     submitBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
+                            if(nameEt.getText().toString().equals("")) {
+                                Toast.makeText(MainActivity.this, "Enter valid name", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 
                             //save user in List
                             User user = new User(nameEt.getText().toString(), currScore);
                             users.add(user);
 
-                            //move to leadBoard intent
-                            Intent intent = new Intent(MainActivity.this, ScoreBoardActivity.class);
+                            //disable edit text and enable access to score board
+                            nameEt.setVisibility(View.GONE);
+                            submitBtn.setVisibility(View.GONE);
+                            boardBtn.setVisibility(View.VISIBLE);
+
+                            Toast.makeText(MainActivity.this, nameEt.getText().toString()+" is in Top 10!", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                    boardBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this,ScoreBoardActivity.class);
                             startActivity(intent);
-                            gameAlertDialog.dismiss();
                             finish();
+                            gameAlertDialog.dismiss();
+                        }
+                    });
+
+                    Button menuBtn = usernameView.findViewById(R.id.record_menu_btn);
+                    menuBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                            gameAlertDialog.dismiss();
+                        }
+                    });
+
+                    Button nextLvlBtn = usernameView.findViewById(R.id.record_next_btn);
+                    nextLvlBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            //start next level now
+                            SharedPreferences.Editor editor = sp.edit();
+                            currLvl++; //next lvl
+                            editor.putInt("curr_lvl",currLvl); //commit next lvl
+                            editor.putInt("lvl_bg",bgID[currLvl-1]); //next background
+                            editor.commit();
+
+                            //restart gameView
+                            gameAlertDialog.dismiss();
+                            setGameView();
+                            setContentView(gameView);
+                            resumeGame();
+
 
                         }
                     });
@@ -223,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                     gameAlertDialog.setCancelable(false);
                 }
                 //won the level
-                else if (isWon) {
+                else if (isWon && !isTop10) {
                     //victory alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -334,6 +422,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override //alert dialog when back pressed
     public void onBackPressed() {
+
+       // timer.cancel();
+
+        soundManager.pauseSfx();
 
         //for each new dialog we create a builder to show this specific dialog
         final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
