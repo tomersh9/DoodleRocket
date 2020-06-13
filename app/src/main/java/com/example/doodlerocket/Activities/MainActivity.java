@@ -300,8 +300,6 @@ public class MainActivity extends AppCompatActivity {
                             setGameView();
                             setContentView(gameView);
                             resumeGame();
-
-
                         }
                     });
 
@@ -311,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                     gameAlertDialog.setCancelable(false);
                 }
                 //won the level
-                else if (isWon && !isTop10) {
+                else if (isWon) {
                     //victory alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
