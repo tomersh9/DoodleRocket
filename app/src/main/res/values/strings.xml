@@ -29,4 +29,6 @@
     <string name="gems_earned">Gems Earned</string>
     <string name="hell">Hell</string>
     <string name="final_galaxy">Final Galaxy</string>
+    <string name="valid_name">Enter valid name</string>
+    <string name="is_in_top_10">\" is in Top 10!\"</string>
 </resources>

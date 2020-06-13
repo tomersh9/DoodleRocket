@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
-        android:text="@string/victory"
+        android:text="@string/game_over"
         android:textSize="30sp"
         android:textStyle="italic" />
 
@@ -23,7 +23,7 @@
         android:layout_below="@id/victory_record_tv"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
-        android:text="Youv'e entered the Top 10!"
+        android:text="But.. Youv'e entered the Top 10!"
         android:textColor="@color/yellow" />
 
     <EditText
@@ -35,8 +35,10 @@
         android:layout_margin="10dp"
         android:gravity="center"
         android:hint="Enter name"
+        android:padding="10dp"
+        android:background="@drawable/edittext_shape"
         android:textColorHint="@color/transparent"
-        android:textSize="17dp" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/submit_btn"
@@ -60,7 +62,7 @@
         android:background="@drawable/btn_yellow_selector"
         android:text="Score Board"
         android:textAllCaps="false"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <LinearLayout
         android:id="@+id/record_victory_stats_layout"
@@ -135,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn_green_selector"
-            android:text="@string/next_level"
+            android:text="@string/choose_level"
             android:textAllCaps="false"
             android:textSize="15sp" />
 

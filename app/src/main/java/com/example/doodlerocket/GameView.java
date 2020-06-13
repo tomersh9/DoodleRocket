@@ -52,6 +52,9 @@ public class GameView extends View {
     private int currLvl;
     private boolean isWon;
 
+    //end level timer
+    Timer timer;
+
     //SFX manager
     private SoundManager soundManager;
 
@@ -154,6 +157,9 @@ public class GameView extends View {
         sp = getContext().getSharedPreferences("storage", Context.MODE_PRIVATE);
         money = sp.getInt("money", 0);
         isWon = false;
+
+        //end level timer
+        timer = new Timer();
 
         //adjust screen to all sizes
         canvasW = screenW;
@@ -362,6 +368,7 @@ public class GameView extends View {
 
             //win the level
             if (boss.getHealth() <= 0) {
+
                 isWon = true;
                 boss.setDead(true);
                 soundManager.startEnemyDeathSfx();
