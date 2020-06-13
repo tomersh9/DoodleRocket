@@ -3,16 +3,19 @@ package com.example.doodlerocket.Activities;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -33,10 +36,12 @@ public class HomeActivity extends AppCompatActivity {
     private int skinID;
 
     private ImageView shipIcon;
+    private ImageButton playBtn;
 
     MediaPlayer mediaPlayer;
     private boolean isMute = false;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         shipIcon = findViewById(R.id.home_ship_icon);
         shipIcon.setImageResource(skinID);
 
-        //animate ship
-        ObjectAnimator animator1 = new ObjectAnimator().ofFloat(shipIcon,"translationY",-70).setDuration(1400);
-        animator1.start();
-        animator1.setRepeatMode(ValueAnimator.REVERSE);
-        animator1.setRepeatCount(ValueAnimator.INFINITE);
-
-        ImageButton playBtn = findViewById(R.id.play_btn);
+        playBtn = findViewById(R.id.play_btn);
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +96,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //set buttons animations
+        setAnimations();
+
        /* //mute music btn
         final ImageButton volumeBtn = findViewById(R.id.vol_btn);
         volumeBtn.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +117,33 @@ public class HomeActivity extends AppCompatActivity {
             }
         });*/
 
+    }
+
+    private void setAnimations() {
+
+        //layout btn drops down
+        LinearLayout linearLayout = findViewById(R.id.home_btn_layout);
+        ObjectAnimator layoutAnimator = new ObjectAnimator().ofFloat(linearLayout,"translationY",-2000,0).setDuration(1500);
+
+        //play btn drops down
+        ObjectAnimator playAnimator = new ObjectAnimator().ofFloat(playBtn,"translationY",-2000,0).setDuration(1500);
+
+        //set
+        AnimatorSet btnsSet = new AnimatorSet();
+        btnsSet.playTogether(layoutAnimator,playAnimator);
+        btnsSet.start();
+
+        //animate ship
+        ObjectAnimator shipFlyAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",3500,0).setDuration(1600);
+        ObjectAnimator shipBounceAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",-70).setDuration(1400);
+
+        AnimatorSet shipSet = new AnimatorSet();
+        shipSet.play(shipFlyAnimator).before(shipBounceAnimator);
+        shipSet.start();
+
+        //shipBounceAnimator.start();
+        shipBounceAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        shipBounceAnimator.setRepeatCount(ValueAnimator.INFINITE);
     }
 
     /*public void startMusic() {

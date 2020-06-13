@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
-        <activity android:name=".Activities.SplashScreen">
+        <activity android:name=".Activities.HomeActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -18,8 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.HomeActivity"
-            android:launchMode="singleTask"></activity>
+        <activity android:name=".Activities.SplashScreen"/>
 
         <activity   android:name=".Activities.MainActivity"/>
         <activity android:name=".Activities.GameOverActivity"/>

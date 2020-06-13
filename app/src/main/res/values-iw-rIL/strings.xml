@@ -30,4 +30,6 @@
     <string name="hell">גיהינום</string>
     <string name="gems_earned">יהלומים שהרווחת</string>
     <string name="final_galaxy">גלקסיה אחרונה</string>
+    <string name="valid_name">הכנס שם תקין</string>
+    <string name="is_in_top_10">" נמצא בעשרת הגדולים!"</string>
 </resources>

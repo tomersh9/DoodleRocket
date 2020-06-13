@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
 
     //calling this method to load game when needed
     private void setGameView() {
-        //game is running on thread behind the scenes
+
+        //game is running on a back thread
         gameView = new GameView(this, width, height, skinID, backgroundID, currLvl, soundManager);
 
         //listens to events in GameView
@@ -202,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 final int currScore = score;
                 boolean isTop10 = getIsTop10(score);
 
-                if (isTop10) {
+                if (isTop10 && !isWon) {
 
                     //popping alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -244,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View v) {
 
                             if(nameEt.getText().toString().equals("")) {
-                                Toast.makeText(MainActivity.this, "Enter valid name", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, R.string.valid_name, Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -257,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
                             submitBtn.setVisibility(View.GONE);
                             boardBtn.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(MainActivity.this, nameEt.getText().toString()+" is in Top 10!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, nameEt.getText().toString()+getString(R.string.is_in_top_10), Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -283,17 +284,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    Button nextLvlBtn = usernameView.findViewById(R.id.record_next_btn);
-                    nextLvlBtn.setOnClickListener(new View.OnClickListener() {
+                    Button resetBtn = usernameView.findViewById(R.id.record_next_btn);
+                    resetBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            //start next level now
-                            SharedPreferences.Editor editor = sp.edit();
-                            currLvl++; //next lvl
-                            editor.putInt("curr_lvl",currLvl); //commit next lvl
-                            editor.putInt("lvl_bg",bgID[currLvl-1]); //next background
-                            editor.commit();
 
                             //restart gameView
                             gameAlertDialog.dismiss();
@@ -305,8 +299,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //building the alert dialog each time with different builder
                     gameAlertDialog = builder.setView(usernameView).show();
-                    gameAlertDialog.setCanceledOnTouchOutside(false);
-                    gameAlertDialog.setCancelable(false);
+                    Toast.makeText(MainActivity.this, "SHOW USERNAME DIALOG", Toast.LENGTH_SHORT).show();
                 }
                 //won the level
                 else if (isWon) {
@@ -364,8 +357,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //building the alert dialog each time with different builder
                     gameAlertDialog = builder.setView(victoryView).show();
-                    gameAlertDialog.setCanceledOnTouchOutside(false);
-                    gameAlertDialog.setCancelable(false);
+                    //being called twice!!!
 
                 } else {
                     //move to game over page
@@ -376,6 +368,9 @@ public class MainActivity extends AppCompatActivity {
                     //kill intent
                     finish();
                 }
+
+                gameAlertDialog.setCanceledOnTouchOutside(false);
+                gameAlertDialog.setCancelable(false);
             }
         });
     }
