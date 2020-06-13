@@ -2,6 +2,7 @@ package com.example.doodlerocket.Activities;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -27,6 +29,11 @@ public class HomeActivity extends AppCompatActivity {
 
     AlertDialog gameAlertDialog;
 
+    SharedPreferences sp;
+    private int skinID;
+
+    private ImageView shipIcon;
+
     MediaPlayer mediaPlayer;
     private boolean isMute = false;
 
@@ -40,6 +47,9 @@ public class HomeActivity extends AppCompatActivity {
         //fixed portrait mode
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        sp = getSharedPreferences("storage",MODE_PRIVATE);
+        skinID = sp.getInt("skin_id",R.drawable.default_ship_100);
+
         //start background music
         //startMusic();
 
@@ -47,7 +57,17 @@ public class HomeActivity extends AppCompatActivity {
         TextView titleTv = findViewById(R.id.home_title_tv);
         YoYo.with(Techniques.FadeInDown).duration(1500).playOn(titleTv);
 
-        Button playBtn = findViewById(R.id.play_btn);
+        //showing current ship equipped
+        shipIcon = findViewById(R.id.home_ship_icon);
+        shipIcon.setImageResource(skinID);
+
+        //animate ship
+        ObjectAnimator animator1 = new ObjectAnimator().ofFloat(shipIcon,"translationY",-70).setDuration(1400);
+        animator1.start();
+        animator1.setRepeatMode(ValueAnimator.REVERSE);
+        animator1.setRepeatCount(ValueAnimator.INFINITE);
+
+        ImageButton playBtn = findViewById(R.id.play_btn);
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Button shopBtn = findViewById(R.id.store_btn);
+        ImageButton shopBtn = findViewById(R.id.store_btn);
         shopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +87,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Button leadboardBtn = findViewById(R.id.leadboard_btn);
+        ImageButton leadboardBtn = findViewById(R.id.leadboard_btn);
         leadboardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,6 +151,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onDestroy();
         stopMusic();
     }*/
+
+    //put skin on image when back
+    @Override
+    protected void onResume() {
+        super.onResume();
+        skinID = sp.getInt("skin_id",R.drawable.default_ship_100);
+        shipIcon.setImageResource(skinID);
+    }
 
     @Override //alert dialog when back pressed
     public void onBackPressed() {

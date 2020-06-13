@@ -7,80 +7,79 @@
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/moon_gif"
-        android:scaleType="fitXY" />
-
-    <ImageButton
-        android:id="@+id/vol_btn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/vol_yellow_50"
-        android:background="@null"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="15dp"
-        android:visibility="gone"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/moon_gif" />
 
     <TextView
         android:id="@+id/home_title_tv"
+        style="@style/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="bit.Rocket"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
         android:fontFamily="@font/retro"
+        android:padding="10dp"
+        android:text="bit.Rocket"
         android:textColor="@color/white"
         android:textSize="30sp"
-        android:textStyle="italic"
-        android:layout_marginTop="80dp"
-        android:padding="10dp"
-        style="@style/title"
-        android:layout_centerHorizontal="true"/>
+        android:textStyle="italic" />
 
-    <Button
-        android:id="@+id/play_btn"
-        style="@style/play_btn_txt"
-        android:textAllCaps="false"
+    <ImageView
+        android:id="@+id/home_ship_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/btn_purple_selector"
-        android:text="@string/play"/>
+        android:src="@drawable/default_ship_100" />
 
-    <Button
-        android:id="@+id/store_btn"
-        style="@style/score"
-        android:textAllCaps="false"
-        android:padding="15dp"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/home_btn_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/play_btn"
+        android:layout_below="@id/home_ship_icon"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/btn_purple_selector"
-        android:text="@string/shop"/>
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/leadboard_btn"
-        style="@style/score"
-        android:textAllCaps="false"
-        android:padding="15dp"
-        android:textSize="15sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/store_btn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/btn_purple_selector"
-        android:text="Score Board"/>
+        <ImageButton
+            android:id="@+id/store_btn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
 
-    <Button
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/btn_purple_selector"
+            android:src="@drawable/store_icon_50" />
+
+        <ImageButton
+            android:id="@+id/play_btn"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:background="@drawable/btn_purple_selector"
+            android:src="@drawable/play_icon_64" />
+
+        <ImageButton
+            android:id="@+id/leadboard_btn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:padding="10dp"
+            android:layout_marginStart="40dp"
+            android:background="@drawable/btn_purple_selector"
+            android:src="@drawable/trophy_60" />
+
+    </LinearLayout>
+
+    <ImageButton
         android:id="@+id/rate_btn"
-        style="@style/score"
-        android:padding="15dp"
-        android:textAllCaps="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/leadboard_btn"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/btn_purple_selector"
-        android:text="@string/rate_us"/>
+        android:padding="10dp"
+        android:visibility="gone"
+        android:src="@drawable/star_pixel_icon_48" />
+
+
 </RelativeLayout>
