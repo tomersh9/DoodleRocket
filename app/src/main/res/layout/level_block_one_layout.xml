@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/stars_pxl_png">
 
+
+
     <TextView
         style="@style/high_score"
         android:layout_width="match_parent"

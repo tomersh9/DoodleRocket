@@ -82,6 +82,7 @@ public class GameView extends View {
     private boolean isBossProjectile = true;
 
     private int bossEvent = 0;
+    private int bossHealth;
     private Boss boss;
     private BossFactory bossFactory;
     private List<BossProjectile> bossProjectiles = new ArrayList<>();
@@ -190,6 +191,7 @@ public class GameView extends View {
         bossFactory = new BossFactory(getResources(), 10, 30, canvasW);
 
         boss = bossFactory.generateBoss(currLvl);
+        bossHealth = boss.getHealth(); //to trigger mid fight events
 
         //hearts, score and life
         setUI();
@@ -324,7 +326,7 @@ public class GameView extends View {
         player.updateLocation();
 
         //keep spawning objects until end level then spawn boss
-        if (enemyCounter < 1) {
+        if (enemyCounter < 5+currLvl) {
 
             //spawn meteors
             spawnMeteors();
@@ -362,7 +364,7 @@ public class GameView extends View {
             spawnBossProjectiles();
 
             //rage mode
-            if (boss.getHealth() < 30) {
+            if (boss.getHealth() < bossHealth/2) {
                 boss.setSpeed(25);
             }
 
@@ -842,49 +844,6 @@ public class GameView extends View {
         }
         return true;
     }
-
-    //Thread
-    /*private void startThread(int x, int y, Canvas canvas) {
-        MyThread myThread = new MyThread(x, y, canvas);
-        myThread.start();
-    }
-
-    class MyThread extends Thread {
-
-        int i = 0;
-        int x, y;
-        Canvas canvas;
-        List<Bitmap> deathEffectList = new ArrayList<>();
-
-        //gets values for each animation
-        public MyThread(int x, int y, Canvas canvas) {
-            this.x = x;
-            this.y = y;
-            this.canvas = canvas;
-
-            //death effect - unique to enemy
-            deathEffectList.add(BitmapFactory.decodeResource(getResources(), R.drawable.boom1));
-            deathEffectList.add(BitmapFactory.decodeResource(getResources(), R.drawable.boom2));
-            deathEffectList.add(BitmapFactory.decodeResource(getResources(), R.drawable.boom3));
-            deathEffectList.add(BitmapFactory.decodeResource(getResources(), R.drawable.boom4));
-            deathEffectList.add(BitmapFactory.decodeResource(getResources(), R.drawable.boom5));
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            while (i < 5) {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        canvas.drawBitmap(deathEffectList.get(i / 5), x + 70, y + 70, null);
-                        i++;
-                        i = i % 25;
-                    }
-                }, 20);
-            }
-        }
-    }*/
 
     public void gameOver() {
         //move to game over intent or victory dialog

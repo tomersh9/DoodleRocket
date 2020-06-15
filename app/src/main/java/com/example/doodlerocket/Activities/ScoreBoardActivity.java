@@ -52,9 +52,9 @@ public class ScoreBoardActivity extends AppCompatActivity {
 
         //view animations
         //YoYo.with(Techniques.SlideInLeft).duration(2000).delay(300).playOn(titleTv);
-        YoYo.with(Techniques.StandUp).duration(1200).delay(400).playOn(placeTv);
-        YoYo.with(Techniques.StandUp).duration(1200).delay(400).playOn(scoreTv);
-        YoYo.with(Techniques.StandUp).duration(1200).delay(400).playOn(nameTv);
+        YoYo.with(Techniques.StandUp).duration(1200).playOn(placeTv);
+        YoYo.with(Techniques.StandUp).duration(1200).playOn(scoreTv);
+        YoYo.with(Techniques.StandUp).duration(1200).playOn(nameTv);
 
         Button backHomebtn = findViewById(R.id.back_to_home_board_btn);
         backHomebtn.setOnClickListener(new View.OnClickListener() {

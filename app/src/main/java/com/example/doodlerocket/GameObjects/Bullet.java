@@ -59,7 +59,7 @@ public class Bullet implements IGameObjects {
     @Override
     public void updateLocation() {
         if(!isBoom) {
-            y -= speed;
+            y -= speed*2;
         }
         else {
             y += speed/3;

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private Timer timer; //resume or stop GameView thread
     private final static long refreshRate = 10; //refresh rate
+    private boolean isFirstLoad = true;
 
     //current level
     private int currLvl;
@@ -110,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
     //calling this method to load game when needed
     private void setGameView() {
 
+        //reset load count
+        isFirstLoad  = true;
+
         //game is running on a back thread
         gameView = new GameView(this, width, height, skinID, backgroundID, currLvl, soundManager);
 
@@ -147,17 +151,18 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //kill intent without saving score
+                        gameAlertDialog.dismiss();
                         stopMusic();
                         finish();
-                        gameAlertDialog.dismiss();
+
                     }
                 });
                 Button noBtn = pauseView.findViewById(R.id.alert_no_btn);
                 noBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        resumeGame();
                         gameAlertDialog.dismiss();
+                        resumeGame();
                     }
                 });
 
@@ -188,6 +193,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void endGame(int score, boolean isWon) {
+
+                //only call this event once!
+                if(!isFirstLoad) {
+                    return;
+                }
+                else {
+                    isFirstLoad  = false;
+                }
 
                 //stop invalidate
                 timer.cancel();
@@ -266,10 +279,10 @@ public class MainActivity extends AppCompatActivity {
                     boardBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            gameAlertDialog.dismiss();
                             Intent intent = new Intent(MainActivity.this,ScoreBoardActivity.class);
                             startActivity(intent);
                             finish();
-                            gameAlertDialog.dismiss();
                         }
                     });
 
@@ -277,10 +290,10 @@ public class MainActivity extends AppCompatActivity {
                     menuBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            gameAlertDialog.dismiss();
                             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
-                            gameAlertDialog.dismiss();
                         }
                     });
 
@@ -299,10 +312,11 @@ public class MainActivity extends AppCompatActivity {
 
                     //building the alert dialog each time with different builder
                     gameAlertDialog = builder.setView(usernameView).show();
-                    Toast.makeText(MainActivity.this, "SHOW USERNAME DIALOG", Toast.LENGTH_SHORT).show();
+
                 }
                 //won the level
                 else if (isWon) {
+
                     //victory alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -337,10 +351,10 @@ public class MainActivity extends AppCompatActivity {
                     menuBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            gameAlertDialog.dismiss();
                             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
-                            gameAlertDialog.dismiss();
                         }
                     });
 
@@ -348,10 +362,11 @@ public class MainActivity extends AppCompatActivity {
                     nextLvlBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            gameAlertDialog.dismiss();
                             Intent intent = new Intent(MainActivity.this, LevelBlockOne.class);
                             startActivity(intent);
                             finish();
-                            gameAlertDialog.dismiss();
+
                         }
                     });
 
@@ -476,6 +491,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        //close alert dialogs
+        gameAlertDialog.dismiss();
         try {
             FileOutputStream fos = openFileOutput("users",MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos); //can handle Objects!!
@@ -488,5 +506,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gameAlertDialog.dismiss();
+        //same reason
     }
 }

@@ -30,6 +30,7 @@
         android:layout_height="110dp"
         android:scaleType="fitXY"
         android:layout_centerInParent="true"
+        android:visibility="invisible"
         android:src="@drawable/default_ship_100" />
 
     <ImageButton
@@ -41,7 +42,7 @@
         android:layout_marginHorizontal="130dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/btn_purple_selector"
-        android:src="@drawable/play_icon_64" />
+        android:src="@drawable/play_btn_selector" />
 
     <LinearLayout
         android:id="@+id/home_btn_layout"
@@ -52,6 +53,7 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
+        android:visibility="invisible"
         android:orientation="horizontal">
 
         <ImageButton
@@ -61,7 +63,7 @@
             android:layout_weight="1"
             android:layout_margin="20dp"
             android:background="@drawable/btn_purple_selector"
-            android:src="@drawable/cart_icon" />
+            android:src="@drawable/chest_60" />
 
         <ImageButton
             android:id="@+id/leadboard_btn"
@@ -79,7 +81,7 @@
             android:layout_weight="1"
             android:layout_margin="20dp"
             android:background="@drawable/btn_purple_selector"
-            android:src="@drawable/star_pixel_icon_48" />
+            android:src="@drawable/pixel_start_60" />
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.example.doodlerocket.Activities;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -116,34 +117,50 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });*/
-
     }
 
     private void setAnimations() {
 
-        //layout btn drops down
-        LinearLayout linearLayout = findViewById(R.id.home_btn_layout);
-        ObjectAnimator layoutAnimator = new ObjectAnimator().ofFloat(linearLayout,"translationY",-2000,0).setDuration(1500);
-
-        //play btn drops down
-        ObjectAnimator playAnimator = new ObjectAnimator().ofFloat(playBtn,"translationY",-2000,0).setDuration(1500);
-
-        //set
-        AnimatorSet btnsSet = new AnimatorSet();
-        btnsSet.playTogether(layoutAnimator,playAnimator);
-        btnsSet.start();
+        //buttons enter animation
+        enterLayoutAnimation();
 
         //animate ship
-        ObjectAnimator shipFlyAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",3500,0).setDuration(1600);
-        ObjectAnimator shipBounceAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",-70).setDuration(1400);
+        enterShipAnimation();
+    }
 
-        AnimatorSet shipSet = new AnimatorSet();
-        shipSet.play(shipFlyAnimator).before(shipBounceAnimator);
-        shipSet.start();
+    private void enterLayoutAnimation() {
 
-        //shipBounceAnimator.start();
-        shipBounceAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        shipBounceAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        //layout btn drops down
+        final LinearLayout linearLayout = findViewById(R.id.home_btn_layout);
+        final ObjectAnimator layoutAnimator = new ObjectAnimator().ofFloat(linearLayout,"translationY",-2000,0).setDuration(700);
+
+        //play btn drops down
+        ObjectAnimator playAnimator = new ObjectAnimator().ofFloat(playBtn,"translationY",-2000,0).setDuration(600);
+
+        //animation listener
+        playAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                linearLayout.setVisibility(View.VISIBLE);
+                layoutAnimator.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        playAnimator.start();
     }
 
     /*public void startMusic() {
@@ -181,10 +198,45 @@ public class HomeActivity extends AppCompatActivity {
         stopMusic();
     }*/
 
+    private void enterShipAnimation() {
+        //animate ship
+        ObjectAnimator shipFlyAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",3500,0).setDuration(1000);
+        final ObjectAnimator shipBounceAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",-70).setDuration(1100);
+        shipFlyAnimator.setStartDelay(750);
+
+        shipFlyAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                shipIcon.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                shipBounceAnimator.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        shipFlyAnimator.start();
+
+        shipBounceAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        shipBounceAnimator.setRepeatCount(ValueAnimator.INFINITE);
+    }
+
+
     //put skin on image when back
     @Override
     protected void onResume() {
         super.onResume();
+        //set data
         skinID = sp.getInt("skin_id",R.drawable.default_ship_100);
         shipIcon.setImageResource(skinID);
     }

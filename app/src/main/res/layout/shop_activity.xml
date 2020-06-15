@@ -5,10 +5,10 @@
     android:layout_height="match_parent">
 
     <pl.droidsonroids.gif.GifImageView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/moon_bg" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/moving_bg" />
 
     <TextView
         android:id="@+id/shop_tv"
@@ -63,7 +63,6 @@
         android:id="@+id/shop_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/coins_layout"
-        android:layout_marginTop="10dp" />
+        android:layout_below="@id/coins_layout" />
 
 </RelativeLayout>

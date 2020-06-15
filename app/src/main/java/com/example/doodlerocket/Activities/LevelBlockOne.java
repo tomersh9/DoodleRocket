@@ -3,6 +3,7 @@ package com.example.doodlerocket.Activities;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -34,6 +35,7 @@ public class LevelBlockOne extends AppCompatActivity {
     ObjectAnimator animator1;
     ObjectAnimator animator2;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +63,17 @@ public class LevelBlockOne extends AppCompatActivity {
                 backgroundID = R.drawable.moon_bg_800;
                 currLvl = 1;
 
-                //time entry to lvl
-                Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
-                startActivity(intent);
+                lvl1Btn.animate().scaleX(0.5f).scaleY(0.5f).alpha(0.3f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        //time entry to lvl
+                        Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
+                        startActivity(intent);
+                        //animate back
+                        lvl1Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+                    }
+                }).start();
+
 
             }
         });
