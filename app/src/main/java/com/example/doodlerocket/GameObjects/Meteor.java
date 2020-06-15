@@ -8,16 +8,20 @@ import android.graphics.Rect;
 
 import com.example.doodlerocket.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Meteor implements IGameObjects {
 
     private int meteorX, meteorY, meteorSpeed;
     private Bitmap meteorBitmap;
+    private boolean isBoom = false;
 
     private int bitmapResArr[] = {R.drawable.meteor1,R.drawable.meteor2,R.drawable.meteor3,R.drawable.meteor4,R.drawable.meteor5,
                                     R.drawable.meteor6, R.drawable.meteor7, R.drawable.meteor8, R.drawable.meteor9,R.drawable.meteor10};
 
-    private int boomResArr[] = {R.drawable.explosion_01,R.drawable.explosion_02,R.drawable.explosion_03,
-                                R.drawable.explosion_04,R.drawable.explosion_05};
+    private int i = 0;
+    private List<Bitmap> hitEffectList = new ArrayList<>();
 
 
     public Meteor(int playerMinX, int playerMaxX,int speed, int meteorSkinID,Resources resources) {
@@ -31,16 +35,32 @@ public class Meteor implements IGameObjects {
         float width = meteorBitmap.getWidth()*0.6f;
         float height = meteorBitmap.getHeight()*0.6f;
         meteorBitmap = Bitmap.createScaledBitmap(meteorBitmap,(int)width,(int)height,false);
+
+        //hit effect
+        hitEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom1));
+        hitEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom2));
+        hitEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom3));
+        hitEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom4));
+        hitEffectList.add(BitmapFactory.decodeResource(resources,R.drawable.boom5));
     }
 
     @Override
     public void drawObject(Canvas canvas) {
-        canvas.drawBitmap(meteorBitmap,meteorX,meteorY,null);
+        if(!isBoom) {
+            canvas.drawBitmap(meteorBitmap,meteorX,meteorY,null);
+        }
+        else  { //explode on hit
+            canvas.drawBitmap(hitEffectList.get(i/5),getObjectX(),getObjectY(),null);
+            i++;
+            i=i%25;
+        }
     }
 
     @Override
     public void updateLocation() {
-        meteorY += meteorSpeed;
+        if(!isBoom) {
+            meteorY += meteorSpeed;
+        }
     }
 
     public void setBitmap(Resources res, int i) {
@@ -56,6 +76,14 @@ public class Meteor implements IGameObjects {
     @Override
     public int getObjectY() {
         return meteorY;
+    }
+
+    public boolean isBoom() {
+        return isBoom;
+    }
+
+    public void setBoom(boolean boom) {
+        isBoom = boom;
     }
 
     public void setMeteorX(int meteorX) {

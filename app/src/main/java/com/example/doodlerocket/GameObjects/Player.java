@@ -21,8 +21,6 @@ public class Player implements IGameObjects {
     public Player(int canvasW,int canvasH,Resources resources, int skinID) {
 
         //initial position of player
-        this.x = canvasW/2;
-        this.y = 1500;
         this.health = 3;
 
         //scaled bitmap
@@ -30,6 +28,9 @@ public class Player implements IGameObjects {
         width = (int)(playerBitmap.getWidth()/1.5f);
         height = (int)(playerBitmap.getHeight()/1.5f);
         playerBitmap = Bitmap.createScaledBitmap(playerBitmap,width,height,false);
+
+        this.x = canvasW/2 - playerBitmap.getWidth()/2;
+        this.y = 2000;
 
         //bounds of player in screen
         this.minX = 0;

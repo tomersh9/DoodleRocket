@@ -3,6 +3,7 @@ package com.example.doodlerocket.Activities;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +26,9 @@ public class LevelBlockFour extends AppCompatActivity {
     SharedPreferences sp;
     private int backgroundID;
     private int currLvl;
+    private int globalLvl;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,7 @@ public class LevelBlockFour extends AppCompatActivity {
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
+        globalLvl = sp.getInt("global_lvl",1);
 
 
         TextView lvl7Tv = findViewById(R.id.lvl_7_tv);
@@ -45,6 +50,12 @@ public class LevelBlockFour extends AppCompatActivity {
         lvl7Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //need to unlock level
+                if(7 > globalLvl) {
+                    Toast.makeText(LevelBlockFour.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 //lvl background
                 backgroundID = R.drawable.lava_bg_1;

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,9 +32,25 @@ public class LevelBlockOne extends AppCompatActivity {
     SharedPreferences sp;
     private int backgroundID;
     private int currLvl;
+    private int globalLvl;
 
     ObjectAnimator animator1;
     ObjectAnimator animator2;
+
+    /*@Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            | View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        }
+    }*/
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -46,9 +63,7 @@ public class LevelBlockOne extends AppCompatActivity {
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png); //default bg
-
-        //slide between level blocks
-        //Slidr.attach(this);
+        globalLvl = sp.getInt("global_lvl",1);
 
         TextView lvl1Tv = findViewById(R.id.lvl_1_tv);
         TextView lvl2Tv = findViewById(R.id.lvl_2_tv);
@@ -67,10 +82,11 @@ public class LevelBlockOne extends AppCompatActivity {
                     @Override
                     public void run() {
                         //time entry to lvl
+                        lvl1Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+
                         Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
                         startActivity(intent);
-                        //animate back
-                        lvl1Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+                        finish();
                     }
                 }).start();
 
@@ -84,6 +100,12 @@ public class LevelBlockOne extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //need to unlock level
+                if(2 > globalLvl) {
+                    Toast.makeText(LevelBlockOne.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //set level background
                 backgroundID = R.drawable.city_bg;
                 currLvl = 2;
@@ -91,6 +113,7 @@ public class LevelBlockOne extends AppCompatActivity {
                 //time entry to lvl
                 Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -146,7 +169,14 @@ public class LevelBlockOne extends AppCompatActivity {
             }
         });
 
+        //change layout according to levels unlocked
+        enableLevels();
     }
+
+    private void enableLevels() {
+        //make locked levels grey or something
+    }
+
 
     @Override
     protected void onPause() {

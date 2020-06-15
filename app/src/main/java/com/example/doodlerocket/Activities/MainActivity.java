@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFirstLoad = true;
 
     //current level
+    private int globalLvl;
     private int currLvl;
     private int skinID;
     private int backgroundID;
@@ -71,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        soundManager = new SoundManager(this);
-
         //fixed portrait mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -85,8 +84,12 @@ public class MainActivity extends AppCompatActivity {
         //getting info to send GameView
         sp = getSharedPreferences("storage", MODE_PRIVATE);
         skinID = sp.getInt("skin_id", R.drawable.default_ship_100);
-        backgroundID = sp.getInt("lvl_bg", R.drawable.stars_pxl_png);
+        //backgroundID = sp.getInt("lvl_bg", R.drawable.stars_pxl_png);
         currLvl = sp.getInt("curr_lvl", 1);
+        globalLvl = sp.getInt("global_lvl",1);
+
+        //set GameView background according to level
+        setBackground(currLvl);
 
         //initialize actual game
         setGameView();
@@ -108,8 +111,38 @@ public class MainActivity extends AppCompatActivity {
         }, 0, refreshRate); //delay = 0, each 10mis refresh screen
     }
 
+    private void setBackground(int currLvl) {
+
+        switch (currLvl) {
+            case 1:
+                backgroundID = R.drawable.moon_bg_800;
+                break;
+            case 2:
+                backgroundID = R.drawable.city_bg;
+                break;
+            case 3:
+                backgroundID = R.drawable.desert_backgorund;
+                break;
+            case 4:
+                backgroundID = R.drawable.forest_bg_400;
+                break;
+            case 5:
+                backgroundID = R.drawable.ocean_bg_1;
+                break;
+            case 6:
+                backgroundID = R.drawable.ice_bg_800;
+                break;
+            case 7:
+                backgroundID = R.drawable.lava_bg_1;
+                break;
+        }
+    }
+
     //calling this method to load game when needed
     private void setGameView() {
+
+        //create SFX
+        soundManager = new SoundManager(MainActivity.this);
 
         //reset load count
         isFirstLoad  = true;
@@ -175,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void resumeGame() {
 
+                soundManager.resumeSfx();
                 //need to create new Timer after it has been stopped
                 timer = new Timer();
                 timer.schedule(new TimerTask() {
@@ -204,8 +238,10 @@ public class MainActivity extends AppCompatActivity {
 
                 //stop invalidate
                 timer.cancel();
+
                 //release sounds
                 soundManager.stopSfx();
+
                 //release music
                 stopMusic();
 
@@ -317,6 +353,9 @@ public class MainActivity extends AppCompatActivity {
                 //won the level
                 else if (isWon) {
 
+                    //unlock next level
+                    unlockNextLvl();
+
                     //victory alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -362,10 +401,18 @@ public class MainActivity extends AppCompatActivity {
                     nextLvlBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
+                            //restart gameView
                             gameAlertDialog.dismiss();
+                            setBackground(currLvl);
+                            setGameView();
+                            setContentView(gameView);
+                            resumeGame();
+
+                            /*gameAlertDialog.dismiss();
                             Intent intent = new Intent(MainActivity.this, LevelBlockOne.class);
                             startActivity(intent);
-                            finish();
+                            finish();*/
 
                         }
                     });
@@ -492,8 +539,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        //close alert dialogs
-        gameAlertDialog.dismiss();
+        //save high score user list
+        saveUserList();
+    }
+
+    //calls only if player won the level
+    private void unlockNextLvl() {
+
+        //max levels
+        globalLvl++;
+        if(globalLvl > 7) {
+            globalLvl = 7;
+        }
+        currLvl = globalLvl;
+
+        //saving new global level (unlock if needed)
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("global_lvl",globalLvl);
+        editor.commit();
+    }
+
+    private void saveUserList() {
         try {
             FileOutputStream fos = openFileOutput("users",MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos); //can handle Objects!!

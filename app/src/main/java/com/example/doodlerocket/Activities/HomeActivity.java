@@ -42,6 +42,22 @@ public class HomeActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     private boolean isMute = false;
 
+   /* @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            | View.SYSTEM_UI_FLAG_LOW_PROFILE
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        }
+    }*/
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -132,13 +148,13 @@ public class HomeActivity extends AppCompatActivity {
 
         //layout btn drops down
         final LinearLayout linearLayout = findViewById(R.id.home_btn_layout);
-        final ObjectAnimator layoutAnimator = new ObjectAnimator().ofFloat(linearLayout,"translationY",-2000,0).setDuration(700);
+        final ObjectAnimator layoutAnimator = new ObjectAnimator().ofFloat(linearLayout,"translationY",-2000,0).setDuration(500);
 
         //play btn drops down
-        ObjectAnimator playAnimator = new ObjectAnimator().ofFloat(playBtn,"translationY",-2000,0).setDuration(600);
+        final ObjectAnimator playAnimator = new ObjectAnimator().ofFloat(playBtn,"translationY",-2000,0).setDuration(500);
 
         //animation listener
-        playAnimator.addListener(new Animator.AnimatorListener() {
+        layoutAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -146,8 +162,8 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                linearLayout.setVisibility(View.VISIBLE);
-                layoutAnimator.start();
+                playBtn.setVisibility(View.VISIBLE);
+                playAnimator.start();
             }
 
             @Override
@@ -160,7 +176,40 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        playAnimator.start();
+        layoutAnimator.start();
+    }
+
+    private void enterShipAnimation() {
+        //animate ship
+        ObjectAnimator shipFlyAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",3500,0).setDuration(1000);
+        final ObjectAnimator shipBounceAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",-70).setDuration(700);
+        shipFlyAnimator.setStartDelay(500);
+
+        shipFlyAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                shipIcon.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                shipBounceAnimator.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        shipFlyAnimator.start();
+
+        shipBounceAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        shipBounceAnimator.setRepeatCount(ValueAnimator.INFINITE);
     }
 
     /*public void startMusic() {
@@ -197,40 +246,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onDestroy();
         stopMusic();
     }*/
-
-    private void enterShipAnimation() {
-        //animate ship
-        ObjectAnimator shipFlyAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",3500,0).setDuration(1000);
-        final ObjectAnimator shipBounceAnimator = new ObjectAnimator().ofFloat(shipIcon,"translationY",-70).setDuration(1100);
-        shipFlyAnimator.setStartDelay(750);
-
-        shipFlyAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                shipIcon.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                shipBounceAnimator.start();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        shipFlyAnimator.start();
-
-        shipBounceAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        shipBounceAnimator.setRepeatCount(ValueAnimator.INFINITE);
-    }
-
 
     //put skin on image when back
     @Override

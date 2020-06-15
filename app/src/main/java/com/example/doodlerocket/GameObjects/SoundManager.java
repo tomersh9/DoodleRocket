@@ -31,32 +31,30 @@ public class SoundManager {
     public SoundManager (Context context) {
 
         //new versions
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_GAME)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build();
 
             soundPool = new SoundPool.Builder()
-                            .setMaxStreams(10)
-                            .setAudioAttributes(audioAttributes)
-                            .build();
-        }
-        else { //old versions
-            soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
+                    .setMaxStreams(10)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        } else { //old versions
+            soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         }
 
-
-        playerHitSound = soundPool.load(context, R.raw.hurt1,1);
-        enemyHitSound = soundPool.load(context,R.raw.enemy_hit,1);
-        playerLaserSound = soundPool.load(context, R.raw.laser_shoot_1,1);
-        enemyLaserSound = soundPool.load(context,R.raw.laser_enemy,1);
-        meteorDeathSound = soundPool.load(context,R.raw.meteor_hit,1);
-        enemyDeathSound = soundPool.load(context,R.raw.explosion_enemy,1);
-        playerDeathSound = soundPool.load(context, R.raw.boom1,1);
-        goldCoinSound = soundPool.load(context, R.raw.pick_gold_coin,1);
-        silverCoinSound = soundPool.load(context,R.raw.pick_silver_coin,1);
-        fireBoostSound = soundPool.load(context,R.raw.fire_boost_sfx,1);
+        playerHitSound = soundPool.load(context, R.raw.hurt1, 1);
+        enemyHitSound = soundPool.load(context, R.raw.enemy_hit, 1);
+        playerLaserSound = soundPool.load(context, R.raw.laser_shoot_1, 1);
+        enemyLaserSound = soundPool.load(context, R.raw.laser_enemy, 1);
+        meteorDeathSound = soundPool.load(context, R.raw.meteor_hit, 1);
+        enemyDeathSound = soundPool.load(context, R.raw.explosion_enemy, 1);
+        playerDeathSound = soundPool.load(context, R.raw.boom1, 1);
+        goldCoinSound = soundPool.load(context, R.raw.pick_gold_coin, 1);
+        silverCoinSound = soundPool.load(context, R.raw.pick_silver_coin, 1);
+        fireBoostSound = soundPool.load(context, R.raw.fire_boost_sfx, 1);
     }
 
     public void startPlayerHitSfx() {
@@ -104,11 +102,15 @@ public class SoundManager {
         //soundPool = null;
     }
 
-    public void killSfx(int id) {
-        soundPool.stop(id);
+    public void resumeSfx() {
+        soundPool.autoResume();
     }
 
     public void pauseSfx() {
         soundPool.autoPause();
+    }
+
+    public SoundPool getSoundPool() {
+        return soundPool;
     }
 }

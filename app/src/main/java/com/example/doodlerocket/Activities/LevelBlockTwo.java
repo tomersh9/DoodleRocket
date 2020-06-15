@@ -4,6 +4,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +32,9 @@ public class LevelBlockTwo extends AppCompatActivity {
     SharedPreferences sp;
     private int backgroundID;
     private int currLvl;
+    private int globalLvl;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,7 @@ public class LevelBlockTwo extends AppCompatActivity {
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
+        globalLvl = sp.getInt("global_lvl",1);
 
         //slide between level blocks
         //Slidr.attach(this);
@@ -54,6 +59,12 @@ public class LevelBlockTwo extends AppCompatActivity {
         lvl3Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //need to unlock level
+                if(3 > globalLvl) {
+                    Toast.makeText(LevelBlockTwo.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 //lvl background
                 backgroundID = R.drawable.desert_backgorund;
@@ -71,6 +82,12 @@ public class LevelBlockTwo extends AppCompatActivity {
         lvl4Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //need to unlock level
+                if(4 > globalLvl) {
+                    Toast.makeText(LevelBlockTwo.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 //put level background
                 backgroundID = R.drawable.forest_bg_400;

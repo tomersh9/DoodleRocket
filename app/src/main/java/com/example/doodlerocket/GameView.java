@@ -44,6 +44,8 @@ import java.util.TimerTask;
 
 public class GameView extends View {
 
+    private Context context;
+
     //high score data
     SharedPreferences sp;
     private int money; //green currency
@@ -65,7 +67,7 @@ public class GameView extends View {
 
     //player bullets
     private int extraCounter;
-    private boolean extraBullet = true;
+    private boolean extraBullet = false;
     private boolean isBullet = true;
     private List<Bullet> bullets = new ArrayList<>();
     private List<Bullet> removeBulletsList = new ArrayList<>();
@@ -153,6 +155,7 @@ public class GameView extends View {
     public GameView(Context context, int screenW, int screenH, int skinID, int backgroundID, int currLvl, SoundManager soundManager) { //context when calling it
         super(context);
 
+        this.context = context;
 
         //reading total player money
         sp = getContext().getSharedPreferences("storage", Context.MODE_PRIVATE);
@@ -176,7 +179,7 @@ public class GameView extends View {
         enemyCounter = 0;
 
         //extra bullets
-        //extraCounter = 0;
+        extraCounter = 0;
 
         //current lvl (to delay objects)
         this.currLvl = currLvl;
@@ -223,12 +226,6 @@ public class GameView extends View {
         scorePaint.setTextSize(80);
         scorePaint.setTypeface(fontTypeface);
         scorePaint.setAntiAlias(true);
-
-        //kill paint
-        /*hitPaint.setColor(Color.YELLOW);
-        hitPaint.setTextSize(30);
-        hitPaint.setTypeface(fontTypeface);
-        hitPaint.setAntiAlias(true);*/
 
         //game currency paint
         greenPaint.setColor(Color.GREEN);
@@ -290,7 +287,6 @@ public class GameView extends View {
         //draw boss health
         if (isBoss) {
             canvas.drawRect(50, 175, boss.getHealth() * 30, 210, bossHealthBarPaint);
-            //canvas.drawText("Boss " + boss.getHealth(), (canvasW / 2) + 50, 150, bossHealthPaint);
         }
 
 
@@ -342,7 +338,7 @@ public class GameView extends View {
             spawnSilverCoins();
 
             //boosts
-            //spawnFireBoosts();
+            spawnFireBoosts();
 
         } else { //boss event
 
@@ -385,10 +381,10 @@ public class GameView extends View {
         //spawn currency
         spawnGreenCoins();
 
-        /*//max 3 bullets
-        if(extraCounter>=2) {
+        //max 3 bullets
+        if(extraCounter>2) {
             extraCounter = 2;
-        }*/
+        }
 
         //*******HANDLES EVENTS OF OBJECTS COLLISIONS OR EXITING SCREEN*************//
 
@@ -443,11 +439,14 @@ public class GameView extends View {
         silverCoins.removeAll(removeSilverCoins);
 
         //boosts
-        /*for(FireBoost fireBoost : fireBoostList) {
+        for(FireBoost fireBoost : fireBoostList) {
             fireBoost.updateLocation();
             if(fireBoost.collisionDetection(playerX,playerY,playerBitmap)) {
                 soundManager.startFireBoostSfx();
                 extraCounter++;
+                extraBullet = true;
+                isBullet = false;
+                Toast.makeText(context, extraCounter+"", Toast.LENGTH_SHORT).show();
                 removeFireBoosts.add(fireBoost);
             }
             else if(fireBoost.getObjectY() > canvasH) {
@@ -457,19 +456,26 @@ public class GameView extends View {
                 fireBoost.drawObject(canvas);
             }
         }
-        fireBoostList.removeAll(removeFireBoosts);*/
+        fireBoostList.removeAll(removeFireBoosts);
 
-        for (Meteor meteor : meteors) {
+        for (final Meteor meteor : meteors) {
 
             //moving on screen
             meteor.updateLocation();
 
             //meteor hits player
-            if (meteor.collisionDetection(playerX, playerY, playerBitmap)) {
+            if (!meteor.isBoom() && meteor.collisionDetection(playerX, playerY, playerBitmap)) {
                 soundManager.startMeteorDeathSfx();
                 soundManager.startPlayerHitSfx();
                 health--;
-                removeMeteorsList.add(meteor);
+                meteor.setBoom(true);
+                //hit animation and then remove it
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        removeMeteorsList.add(meteor);
+                    }
+                }, 400);
             }
             //meteor goes off screen
             else if (meteor.getObjectY() > canvasH) {
@@ -506,38 +512,39 @@ public class GameView extends View {
 
             if (bullet.getObjectY() < 0) {
                 removeBulletsList.add(bullet);
-            } else if (Rect.intersects(bullet.getCollisionShape(), boss.getCollisionShape())) {
+            } else if (isBoss && Rect.intersects(bullet.getCollisionShape(), boss.getCollisionShape())) {
                 soundManager.startEnemyHitSfx();
                 bullet.setBoom(true);
                 boss.takeDamage(1);
                 removeBulletsList.add(bullet);
+
             } else {
                 bullet.drawObject(canvas);
             }
 
             //check for collision bullet-meteor
-            for (Meteor meteor : meteors) {
+            for (final Meteor meteor : meteors) {
 
-                if (Rect.intersects(bullet.getCollisionShape(), meteor.getCollisionShape())) {
+                if ( !meteor.isBoom() && Rect.intersects(bullet.getCollisionShape(), meteor.getCollisionShape())) {
 
                     score+=10;
                     soundManager.startMeteorDeathSfx();
-                    bullet.setBoom(true);
+                    meteor.setBoom(true);
                     //hit animation and then remove it
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            removeBulletsList.add(bullet);
+                            removeMeteorsList.add(meteor);
                         }
                     }, 400);
-                    removeMeteorsList.add(meteor);
+                    removeBulletsList.add(bullet);
                 }
             }
 
             //collision bullet - enemy
             for (final Enemy enemy : enemies) {
 
-                if (Rect.intersects(bullet.getCollisionShape(), enemy.getCollisionShape())) {
+                if ( !enemy.isDead() && Rect.intersects(bullet.getCollisionShape(), enemy.getCollisionShape())) {
                     //flash enemy
                     soundManager.startEnemyHitSfx();
                     enemy.takeDamage(1); //dmg taken
@@ -549,11 +556,6 @@ public class GameView extends View {
                         //death animation
                         enemyCounter++; //after number of enemies, release the boss
                         soundManager.startEnemyDeathSfx();
-
-                        //back thread animation
-                        /*int x = enemy.getObjectX();
-                        int y = enemy.getObjectY();
-                        startThread(x,y,canvas);*/
                         enemy.setDead(true);
                         new Timer().schedule(new TimerTask() {
                             @Override
@@ -611,7 +613,7 @@ public class GameView extends View {
 
     //*********SPAWNING OBJECTS TO THE GAME (WITH DELAY ACCORDING TO THE LEVEL)**************//
 
-/*    private void spawnFireBoosts() {
+    private void spawnFireBoosts() {
         if(isTimeToFireBoost) {
             fireBoostList.add(new FireBoost(player.getMinX(),player.getMaxX(),getResources()));
             delayFireBoost();
@@ -625,8 +627,8 @@ public class GameView extends View {
             public void run() {
                 isTimeToFireBoost = true;
             }
-        },20000);
-    }*/
+        },10000);
+    }
 
     private void spawnGreenCoins() {
         if (isTimeToGreenCoin) {
@@ -686,7 +688,7 @@ public class GameView extends View {
 
     private void spawnMeteors() {
         if (isTimeToSpawnMeteor) {
-            meteors.add(meteorFactory.generateMeteor(backgroundID));
+            meteors.add(meteorFactory.generateMeteor(currLvl));
             delayMeteor();
         }
     }
@@ -699,12 +701,13 @@ public class GameView extends View {
     }
 
     private void shoot() {
-        if (isBullet) {
+
+        if (isBullet && !extraBullet && extraCounter == 0) {
             soundManager.startPlayerLaserSfx();
             bullets.add(new Bullet(getResources(), player.getObjectX(), player.getObjectY()));
             delayBullets(); //isFire = false cause delay between creating new bullets and drawing them
         }
-        /*else if(extraBullet && extraCounter > 0) {
+        else if(extraBullet && extraCounter > 0) {
 
             isBullet = false; //stop regular
 
@@ -721,10 +724,10 @@ public class GameView extends View {
                 bullets.add(new Bullet(getResources(), player.getObjectX() + 75, player.getObjectY()));
                 delayExtraBullets(); //isFire = false cause delay between creating new bullets and drawing them
             }
-        }*/
+        }
     }
 
-   /* //timer for multiple bullets
+    //timer for multiple bullets
     private void delayExtraBullets() {
         extraBullet = false;
         new Timer().schedule(new TimerTask() {
@@ -733,7 +736,7 @@ public class GameView extends View {
                 extraBullet = true;
             }
         },300 - (currLvl*20));
-    }*/
+    }
 
     private void delayGreenCoin() {
         isTimeToGreenCoin = false;
@@ -854,7 +857,7 @@ public class GameView extends View {
         editor.putInt("money", total);
         editor.commit();
 
-        //soundManager.stopSfx();
+        soundManager.pauseSfx();
         gameViewListener.endGame(score, isWon);
     }
 }
