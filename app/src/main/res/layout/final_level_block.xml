@@ -26,7 +26,7 @@
         android:layout_marginTop="110dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:src="@drawable/lava_300" />
+        android:src="@drawable/question_icon" />
 
     <TextView
         android:id="@+id/lvl_7_tv"
@@ -38,7 +38,7 @@
         android:textColor="@color/red"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hell" />
+        android:text="@string/locked" />
 
     <ImageButton
         android:id="@+id/prev_btn_block_4"

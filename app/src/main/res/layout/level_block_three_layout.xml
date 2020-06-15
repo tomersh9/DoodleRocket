@@ -31,7 +31,7 @@
             android:focusable="true"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:src="@drawable/ocean_300" />
+            android:src="@drawable/question_icon" />
 
         <TextView
             android:id="@+id/lvl_5_tv"
@@ -41,7 +41,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/ocean" />
+            android:textColor="@color/gray"
+            android:text="@string/locked" />
 
     </LinearLayout>
 
@@ -62,7 +63,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/ice" />
+            android:textColor="@color/gray"
+            android:text="@string/locked" />
 
         <ImageView
             android:id="@+id/lvl_6_btn"
@@ -73,7 +75,7 @@
             android:focusable="true"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:src="@drawable/ice_300" />
+            android:src="@drawable/question_icon" />
     </LinearLayout>
 
 

@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,6 +29,11 @@ public class LevelBlockThree extends AppCompatActivity {
     private int currLvl;
     private int globalLvl;
 
+    private TextView lvl5Tv;
+    private TextView lvl6Tv;
+    private ImageView lvl5Btn;
+    private ImageView lvl6Btn;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,12 +48,13 @@ public class LevelBlockThree extends AppCompatActivity {
         globalLvl = sp.getInt("global_lvl",1);
 
 
-        TextView lvl5Tv = findViewById(R.id.lvl_5_tv);
-        TextView lvl6Tv = findViewById(R.id.lvl_6_tv);
+        lvl5Tv = findViewById(R.id.lvl_5_tv);
+        lvl6Tv = findViewById(R.id.lvl_6_tv);
+        lvl5Btn = findViewById(R.id.lvl_5_btn);
+        lvl6Btn = findViewById(R.id.lvl_6_btn);
 
+        enableLevels();
 
-        //lvl 3
-        final ImageView lvl5Btn = findViewById(R.id.lvl_5_btn);
         lvl5Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,8 +76,6 @@ public class LevelBlockThree extends AppCompatActivity {
             }
         });
 
-        //lvl 4
-        final ImageView lvl6Btn = findViewById(R.id.lvl_6_btn);
         lvl6Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +147,20 @@ public class LevelBlockThree extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
         });
+    }
+
+    private void enableLevels() {
+        if(globalLvl >= 5) {
+            lvl5Tv.setTextColor(Color.WHITE);
+            lvl5Tv.setText(R.string.ocean);
+            lvl5Btn.setImageResource(R.drawable.ocean_300);
+        }
+        if(globalLvl >= 6) {
+            lvl6Tv.setTextColor(Color.WHITE);
+            lvl6Tv.setText(R.string.ice);
+            lvl6Btn.setImageResource(R.drawable.ice_300);
+        }
+
     }
 
     @Override

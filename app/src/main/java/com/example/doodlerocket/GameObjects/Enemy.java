@@ -109,7 +109,7 @@ public class Enemy implements IGameObjects {
 
     public void takeDamage(int dmg) {
         this.health -= dmg;
-        this.y-=90; // bounce - unique to enemy
+        this.y-=20; // bounce on hit
     }
 
     @Override

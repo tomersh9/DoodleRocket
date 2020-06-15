@@ -37,6 +37,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
+    //handling actual game display
     private GameView gameView;
     private Handler handler = new Handler();
     private Timer timer; //resume or stop GameView thread
@@ -62,11 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     private List<User> users = new ArrayList<>();
 
-    //backgrounds ID (fix later to work only with lvl)
-    private int[] bgID = {R.drawable.moon_bg_800,R.drawable.city_bg,R.drawable.desert_backgorund
-                        ,R.drawable.forest_bg_400,R.drawable.ocean_bg_1,R.drawable.ice_bg_800
-                        ,R.drawable.lava_bg_1};
-
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +80,8 @@ public class MainActivity extends AppCompatActivity {
         //getting info to send GameView
         sp = getSharedPreferences("storage", MODE_PRIVATE);
         skinID = sp.getInt("skin_id", R.drawable.default_ship_100);
-        //backgroundID = sp.getInt("lvl_bg", R.drawable.stars_pxl_png);
         currLvl = sp.getInt("curr_lvl", 1);
-        globalLvl = sp.getInt("global_lvl",1);
+        globalLvl = sp.getInt("global_lvl", 1);
 
         //set GameView background according to level
         setBackground(currLvl);
@@ -127,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
                 backgroundID = R.drawable.forest_bg_400;
                 break;
             case 5:
-                backgroundID = R.drawable.ocean_bg_1;
+                backgroundID = R.drawable.beach_gif_bg;
                 break;
             case 6:
-                backgroundID = R.drawable.ice_bg_800;
+                backgroundID = R.drawable.ocean_bg_1;
                 break;
             case 7:
                 backgroundID = R.drawable.lava_bg_1;
@@ -145,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         soundManager = new SoundManager(MainActivity.this);
 
         //reset load count
-        isFirstLoad  = true;
+        isFirstLoad = true;
 
         //game is running on a back thread
         gameView = new GameView(this, width, height, skinID, backgroundID, currLvl, soundManager);
@@ -229,11 +224,10 @@ public class MainActivity extends AppCompatActivity {
             public void endGame(int score, boolean isWon) {
 
                 //only call this event once!
-                if(!isFirstLoad) {
+                if (!isFirstLoad) {
                     return;
-                }
-                else {
-                    isFirstLoad  = false;
+                } else {
+                    isFirstLoad = false;
                 }
 
                 //stop invalidate
@@ -293,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
 
-                            if(nameEt.getText().toString().equals("")) {
+                            if (nameEt.getText().toString().equals("")) {
                                 Toast.makeText(MainActivity.this, R.string.valid_name, Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -307,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
                             submitBtn.setVisibility(View.GONE);
                             boardBtn.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(MainActivity.this, nameEt.getText().toString()+getString(R.string.is_in_top_10), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, nameEt.getText().toString() + getString(R.string.is_in_top_10), Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -316,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             gameAlertDialog.dismiss();
-                            Intent intent = new Intent(MainActivity.this,ScoreBoardActivity.class);
+                            Intent intent = new Intent(MainActivity.this, ScoreBoardActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -408,18 +402,11 @@ public class MainActivity extends AppCompatActivity {
                             setGameView();
                             setContentView(gameView);
                             resumeGame();
-
-                            /*gameAlertDialog.dismiss();
-                            Intent intent = new Intent(MainActivity.this, LevelBlockOne.class);
-                            startActivity(intent);
-                            finish();*/
-
                         }
                     });
 
                     //building the alert dialog each time with different builder
                     gameAlertDialog = builder.setView(victoryView).show();
-                    //being called twice!!!
 
                 } else {
                     //move to game over page
@@ -451,7 +438,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (users == null) {
                 users = new ArrayList<>();
             }
@@ -462,13 +449,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (users.isEmpty()) { //first place
             return true;
-        }
-        else if(users.size() < 10) { //have place in list
+        } else if (users.size() < 10) { //have place in list
             return true;
         }
 
-        for(int i = 0 ; i < 10; i++) { //only top 10 can make it to list
-            if(score >= users.get(i).getScore()) {
+        for (int i = 0; i < 10; i++) { //only top 10 can make it to list
+            if (score >= users.get(i).getScore()) {
                 return true;
             }
         }
@@ -478,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
     @Override //alert dialog when back pressed
     public void onBackPressed() {
 
-       // timer.cancel();
+        // timer.cancel();
 
         soundManager.pauseSfx();
 
@@ -546,22 +532,27 @@ public class MainActivity extends AppCompatActivity {
     //calls only if player won the level
     private void unlockNextLvl() {
 
-        //max levels
-        globalLvl++;
-        if(globalLvl > 7) {
-            globalLvl = 7;
+        if (globalLvl > currLvl + 1) {
+            currLvl++;
+        } else {
+            //max levels
+            globalLvl++;
+            if (globalLvl > 7) {
+                globalLvl = 7;
+            }
+            currLvl = globalLvl;
         }
-        currLvl = globalLvl;
 
         //saving new global level (unlock if needed)
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("global_lvl",globalLvl);
+        editor.putInt("global_lvl", globalLvl);
+        editor.putInt("curr_lvl", currLvl);
         editor.commit();
     }
 
     private void saveUserList() {
         try {
-            FileOutputStream fos = openFileOutput("users",MODE_PRIVATE);
+            FileOutputStream fos = openFileOutput("users", MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos); //can handle Objects!!
             //always write the Root Object
             oos.writeObject(users); //writing object directly (needs to Serialize Person)

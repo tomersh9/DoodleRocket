@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -34,6 +35,11 @@ public class LevelBlockTwo extends AppCompatActivity {
     private int currLvl;
     private int globalLvl;
 
+    private TextView lvl3Tv;
+    private TextView lvl4Tv;
+    private ImageView lvl3Btn;
+    private ImageView lvl4Btn;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,15 +53,14 @@ public class LevelBlockTwo extends AppCompatActivity {
         backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
         globalLvl = sp.getInt("global_lvl",1);
 
-        //slide between level blocks
-        //Slidr.attach(this);
+        lvl3Tv = findViewById(R.id.lvl_3_tv);
+        lvl4Tv = findViewById(R.id.lvl_4_tv);
+        lvl3Btn = findViewById(R.id.lvl_3_btn);
+        lvl4Btn = findViewById(R.id.lvl_4_btn);
 
-        TextView lvl3Tv = findViewById(R.id.lvl_3_tv);
-        TextView lvl4Tv = findViewById(R.id.lvl_4_tv);
+        //change layout according to levels unlocked
+        enableLevels();
 
-
-        //lvl 3
-        final ImageView lvl3Btn = findViewById(R.id.lvl_3_btn);
         lvl3Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,8 +82,6 @@ public class LevelBlockTwo extends AppCompatActivity {
             }
         });
 
-        //lvl 4
-        final ImageView lvl4Btn = findViewById(R.id.lvl_4_btn);
         lvl4Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +153,19 @@ public class LevelBlockTwo extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
         });
+    }
+
+    private void enableLevels() {
+        if(globalLvl >= 3) {
+            lvl3Tv.setTextColor(Color.WHITE);
+            lvl3Tv.setText(R.string.desert);
+            lvl3Btn.setImageResource(R.drawable.desert_300);
+        }
+        if(globalLvl >= 4) {
+            lvl4Tv.setTextColor(Color.WHITE);
+            lvl4Tv.setText(R.string.forest);
+            lvl4Btn.setImageResource(R.drawable.forest_300);
+        }
     }
 
     @Override

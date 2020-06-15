@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,6 +29,9 @@ public class LevelBlockFour extends AppCompatActivity {
     private int currLvl;
     private int globalLvl;
 
+    private TextView lvl7Tv;
+    private ImageView lvl7Btn;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,24 +39,25 @@ public class LevelBlockFour extends AppCompatActivity {
         setContentView(R.layout.final_level_block);
 
         //fixed portrait mode
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        sp = getSharedPreferences("storage",MODE_PRIVATE);
-        backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
-        globalLvl = sp.getInt("global_lvl",1);
-
-
-        TextView lvl7Tv = findViewById(R.id.lvl_7_tv);
+        sp = getSharedPreferences("storage", MODE_PRIVATE);
+        backgroundID = sp.getInt("lvl_bg", R.drawable.stars_pxl_png);
+        globalLvl = sp.getInt("global_lvl", 1);
 
 
-        //final level
-        final ImageView lvl7Btn = findViewById(R.id.lvl_7_btn);
+        lvl7Tv = findViewById(R.id.lvl_7_tv);
+        lvl7Btn = findViewById(R.id.lvl_7_btn);
+
+        //change layout according to levels unlocked
+        enableLevels();
+
         lvl7Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //need to unlock level
-                if(7 > globalLvl) {
+                if (7 > globalLvl) {
                     Toast.makeText(LevelBlockFour.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -62,7 +67,7 @@ public class LevelBlockFour extends AppCompatActivity {
                 currLvl = 7;
 
                 //time entry to lvl
-                Intent intent = new Intent(LevelBlockFour.this,MainActivity.class);
+                Intent intent = new Intent(LevelBlockFour.this, MainActivity.class);
                 startActivity(intent);
 
             }
@@ -73,13 +78,13 @@ public class LevelBlockFour extends AppCompatActivity {
         YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl7Btn);
 
         //bounce infinite text
-        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl7Tv,"translationY",-70).setDuration(1400);
+        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl7Tv, "translationY", -70).setDuration(1400);
 
         bounceTextAnimator1.setRepeatMode(ValueAnimator.REVERSE);
         bounceTextAnimator1.setRepeatCount(ValueAnimator.INFINITE);
 
         //animation planets
-        ObjectAnimator animator1 = new ObjectAnimator().ofFloat(lvl7Btn,"translationY",-70).setDuration(1400);
+        ObjectAnimator animator1 = new ObjectAnimator().ofFloat(lvl7Btn, "translationY", -70).setDuration(1400);
         animator1.setRepeatMode(ValueAnimator.REVERSE);
         animator1.setRepeatCount(ValueAnimator.INFINITE);
 
@@ -93,12 +98,19 @@ public class LevelBlockFour extends AppCompatActivity {
         prevBlockBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockFour.this,LevelBlockThree.class);
+                Intent intent = new Intent(LevelBlockFour.this, LevelBlockThree.class);
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
+    }
+
+    private void enableLevels() {
+        if (globalLvl == 7) {
+            lvl7Tv.setText(R.string.hell);
+            lvl7Btn.setImageResource(R.drawable.lava_300);
+        }
     }
 
     @Override
@@ -106,8 +118,8 @@ public class LevelBlockFour extends AppCompatActivity {
         super.onPause();
         //put level background
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("lvl_bg",backgroundID);
-        editor.putInt("curr_lvl",currLvl);
+        editor.putInt("lvl_bg", backgroundID);
+        editor.putInt("curr_lvl", currLvl);
         editor.commit();
     }
 
@@ -115,6 +127,6 @@ public class LevelBlockFour extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

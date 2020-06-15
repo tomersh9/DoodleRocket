@@ -63,7 +63,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/earth" />
+            android:textColor="@color/gray"
+            android:text="@string/locked" />
 
         <ImageView
             android:id="@+id/lvl_2_btn"
@@ -74,7 +75,7 @@
             android:focusable="true"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:src="@drawable/terran_300" />
+            android:src="@drawable/question_icon" />
     </LinearLayout>
 
 

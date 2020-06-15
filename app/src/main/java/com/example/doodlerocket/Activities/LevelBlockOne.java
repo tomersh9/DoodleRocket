@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -34,6 +35,11 @@ public class LevelBlockOne extends AppCompatActivity {
     private int currLvl;
     private int globalLvl;
 
+    private TextView lvl1Tv;
+    private TextView lvl2Tv;
+    private ImageView lvl1Btn;
+    private ImageView lvl2Btn;
+
     ObjectAnimator animator1;
     ObjectAnimator animator2;
 
@@ -59,17 +65,23 @@ public class LevelBlockOne extends AppCompatActivity {
         setContentView(R.layout.level_block_one_layout);
 
         //fixed portrait mode
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        sp = getSharedPreferences("storage",MODE_PRIVATE);
-        backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png); //default bg
-        globalLvl = sp.getInt("global_lvl",1);
+        //load data
+        sp = getSharedPreferences("storage", MODE_PRIVATE);
+        backgroundID = sp.getInt("lvl_bg", R.drawable.stars_pxl_png); //default bg
+        globalLvl = sp.getInt("global_lvl", 1);
 
-        TextView lvl1Tv = findViewById(R.id.lvl_1_tv);
-        TextView lvl2Tv = findViewById(R.id.lvl_2_tv);
+        //ref views
+        lvl1Tv = findViewById(R.id.lvl_1_tv);
+        lvl2Tv = findViewById(R.id.lvl_2_tv);
+        lvl1Btn = findViewById(R.id.lvl_1_btn);
+        lvl2Btn = findViewById(R.id.lvl_2_btn);
 
-        //lvl 1
-        final ImageView lvl1Btn = findViewById(R.id.lvl_1_btn);
+        //change layout according to levels unlocked
+        enableLevels();
+
+        //buttons events
         lvl1Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +96,7 @@ public class LevelBlockOne extends AppCompatActivity {
                         //time entry to lvl
                         lvl1Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
 
-                        Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
+                        Intent intent = new Intent(LevelBlockOne.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -95,13 +107,13 @@ public class LevelBlockOne extends AppCompatActivity {
         });
 
         //lvl 2
-        final ImageView lvl2Btn = findViewById(R.id.lvl_2_btn);
+
         lvl2Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //need to unlock level
-                if(2 > globalLvl) {
+                if (2 > globalLvl) {
                     Toast.makeText(LevelBlockOne.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -111,7 +123,7 @@ public class LevelBlockOne extends AppCompatActivity {
                 currLvl = 2;
 
                 //time entry to lvl
-                Intent intent = new Intent(LevelBlockOne.this,MainActivity.class);
+                Intent intent = new Intent(LevelBlockOne.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -123,8 +135,8 @@ public class LevelBlockOne extends AppCompatActivity {
         YoYo.with(Techniques.ZoomInRight).duration(1000).playOn(lvl2Btn);
 
         //bounce infinite text
-        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl1Tv,"translationY",-70).setDuration(1400);
-        ObjectAnimator bounceTextAnimator2 = new ObjectAnimator().ofFloat(lvl2Tv,"translationY",-70).setDuration(1400);
+        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl1Tv, "translationY", -70).setDuration(1400);
+        ObjectAnimator bounceTextAnimator2 = new ObjectAnimator().ofFloat(lvl2Tv, "translationY", -70).setDuration(1400);
 
         bounceTextAnimator1.setRepeatMode(ValueAnimator.REVERSE);
         bounceTextAnimator1.setRepeatCount(ValueAnimator.INFINITE);
@@ -132,18 +144,18 @@ public class LevelBlockOne extends AppCompatActivity {
         bounceTextAnimator2.setRepeatCount(ValueAnimator.INFINITE);
 
         //bounce infinite img
-        animator1 = new ObjectAnimator().ofFloat(lvl1Btn,"translationY",-70).setDuration(1400);
+        animator1 = new ObjectAnimator().ofFloat(lvl1Btn, "translationY", -70).setDuration(1400);
         animator1.setRepeatMode(ValueAnimator.REVERSE);
         animator1.setRepeatCount(ValueAnimator.INFINITE);
 
-        animator2 = new ObjectAnimator().ofFloat(lvl2Btn,"translationY",-70).setDuration(1400);
+        animator2 = new ObjectAnimator().ofFloat(lvl2Btn, "translationY", -70).setDuration(1400);
         animator2.setRepeatMode(ValueAnimator.REVERSE);
         animator2.setRepeatCount(ValueAnimator.INFINITE);
 
         //play animations together
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(animator1,animator2);
-        set.playTogether(bounceTextAnimator1,bounceTextAnimator2);
+        set.playTogether(animator1, animator2);
+        set.playTogether(bounceTextAnimator1, bounceTextAnimator2);
         set.start();
 
         //next page
@@ -151,10 +163,10 @@ public class LevelBlockOne extends AppCompatActivity {
         nextBlockBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockOne.this,LevelBlockTwo.class);
+                Intent intent = new Intent(LevelBlockOne.this, LevelBlockTwo.class);
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -162,19 +174,22 @@ public class LevelBlockOne extends AppCompatActivity {
         prevBlockBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockOne.this,HomeActivity.class);
+                Intent intent = new Intent(LevelBlockOne.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
-
-        //change layout according to levels unlocked
-        enableLevels();
     }
 
+    //unlock levels visual feedback
     private void enableLevels() {
-        //make locked levels grey or something
+        if (globalLvl > 2) {
+            lvl2Tv.setTextColor(Color.WHITE);
+            lvl2Tv.setText(R.string.earth);
+            lvl2Btn.setImageResource(R.drawable.terran_300);
+        }
+
     }
 
 
@@ -183,8 +198,8 @@ public class LevelBlockOne extends AppCompatActivity {
         super.onPause();
 
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("lvl_bg",backgroundID);
-        editor.putInt("curr_lvl",currLvl);
+        editor.putInt("lvl_bg", backgroundID);
+        editor.putInt("curr_lvl", currLvl);
         editor.commit();
     }
 
@@ -192,14 +207,14 @@ public class LevelBlockOne extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(LevelBlockOne.this,HomeActivity.class);
+        Intent intent = new Intent(LevelBlockOne.this, HomeActivity.class);
         startActivity(intent);
         finish();
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

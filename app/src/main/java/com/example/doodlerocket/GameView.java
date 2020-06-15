@@ -446,7 +446,6 @@ public class GameView extends View {
                 extraCounter++;
                 extraBullet = true;
                 isBullet = false;
-                Toast.makeText(context, extraCounter+"", Toast.LENGTH_SHORT).show();
                 removeFireBoosts.add(fireBoost);
             }
             else if(fireBoost.getObjectY() > canvasH) {
