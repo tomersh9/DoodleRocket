@@ -31,7 +31,7 @@
             android:focusable="true"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:src="@drawable/question_icon" />
+            android:src="@drawable/desert_300_locked" />
 
         <TextView
             android:id="@+id/lvl_3_tv"
@@ -75,7 +75,7 @@
             android:focusable="true"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:src="@drawable/question_icon" />
+            android:src="@drawable/forest_300_locked" />
     </LinearLayout>
 
 

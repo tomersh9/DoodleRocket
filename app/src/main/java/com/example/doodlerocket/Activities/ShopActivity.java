@@ -36,6 +36,8 @@ public class ShopActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
+
+        //getting static shop list (singleton)
         this.shopItems = SingleShopList.getInstance();
 
         //fixed portrait mode

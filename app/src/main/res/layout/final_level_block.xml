@@ -26,7 +26,7 @@
         android:layout_marginTop="110dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:src="@drawable/question_icon" />
+        android:src="@drawable/lava_300_locked" />
 
     <TextView
         android:id="@+id/lvl_7_tv"

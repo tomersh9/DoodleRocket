@@ -184,7 +184,7 @@ public class LevelBlockOne extends AppCompatActivity {
 
     //unlock levels visual feedback
     private void enableLevels() {
-        if (globalLvl > 2) {
+        if (globalLvl >= 2) {
             lvl2Tv.setTextColor(Color.WHITE);
             lvl2Tv.setText(R.string.earth);
             lvl2Btn.setImageResource(R.drawable.terran_300);

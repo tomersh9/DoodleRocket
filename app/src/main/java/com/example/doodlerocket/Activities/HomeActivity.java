@@ -39,6 +39,8 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView shipIcon;
     private ImageButton playBtn;
 
+    private int globalLvl;
+
     MediaPlayer mediaPlayer;
     private boolean isMute = false;
 
@@ -71,6 +73,11 @@ public class HomeActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         skinID = sp.getInt("skin_id",R.drawable.default_ship_100);
+
+        /*globalLvl = 1;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("global_lvl",1);
+        editor.commit();*/
 
         //start background music
         //startMusic();

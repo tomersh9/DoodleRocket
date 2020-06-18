@@ -31,7 +31,7 @@
             android:focusable="true"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:src="@drawable/question_icon" />
+            android:src="@drawable/ocean_300_locked" />
 
         <TextView
             android:id="@+id/lvl_5_tv"
@@ -75,7 +75,7 @@
             android:focusable="true"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:src="@drawable/question_icon" />
+            android:src="@drawable/ice_300_locked" />
     </LinearLayout>
 
 
