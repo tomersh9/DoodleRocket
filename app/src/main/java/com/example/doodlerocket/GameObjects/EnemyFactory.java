@@ -45,25 +45,25 @@ public class EnemyFactory {
         switch (lvl) {
 
             case 1:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed,health+2,enemySkins[0],canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed,health+1,enemySkins[0],canvasW,(i%2==0),resources);
 
             case 2:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+2,health+3,enemySkins[1],canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+2,health+2,enemySkins[1],canvasW,(i%2==0),resources);
 
             case 3:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+3,health+5,enemySkins[2],canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+3,health+3,enemySkins[2],canvasW,(i%2==0),resources);
 
             case 4:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+4,health+6,enemySkins[3],canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+4,health+4,enemySkins[3],canvasW,(i%2==0),resources);
 
             case 5:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+5,health+7,enemySkins[4],canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+5,health+5,enemySkins[4],canvasW,(i%2==0),resources);
 
             case 6:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+7,health+7,enemySkins[5],canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+7,health+6,enemySkins[5],canvasW,(i%2==0),resources);
 
             case 7:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+9,health+9,R.drawable.hell_mob_85,canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+9,health+8,R.drawable.hell_mob_85,canvasW,(i%2==0),resources);
 
         }
         return null;

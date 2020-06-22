@@ -33,4 +33,7 @@
     <string name="valid_name">הכנס שם תקין</string>
     <string name="is_in_top_10">" נמצא בעשרת הגדולים!"</string>
     <string name="locked">נעול</string>
+    <string name="hey_you_ve_entered_our_top_10">הי! נכנסת לעשרת הגדולים!</string>
+    <string name="gems">יהלומים</string>
+    <string name="total_gems">סך יהלומים</string>
 </resources>

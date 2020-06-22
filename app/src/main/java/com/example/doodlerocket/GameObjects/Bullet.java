@@ -67,6 +67,14 @@ public class Bullet implements IGameObjects {
 
     }
 
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
     @Override
     public int getObjectX() {
         return x;

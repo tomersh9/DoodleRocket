@@ -30,9 +30,11 @@ import com.example.doodlerocket.GameObjects.EnemyProjectile;
 import com.example.doodlerocket.GameObjects.FireBoost;
 import com.example.doodlerocket.GameObjects.GoldCoin;
 import com.example.doodlerocket.GameObjects.GreenCoin;
+import com.example.doodlerocket.GameObjects.LifeBoost;
 import com.example.doodlerocket.GameObjects.Meteor;
 import com.example.doodlerocket.GameObjects.MeteorFactory;
 import com.example.doodlerocket.GameObjects.Player;
+import com.example.doodlerocket.GameObjects.ShieldBoost;
 import com.example.doodlerocket.GameObjects.SilverCoin;
 import com.example.doodlerocket.GameObjects.SoundManager;
 
@@ -41,8 +43,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class GameView extends View {
+
+    private static int MOBS = 6;
 
     private Context context;
 
@@ -53,9 +59,6 @@ public class GameView extends View {
     private int score; //regular coins score
     private int currLvl;
     private boolean isWon;
-
-    //end level timer
-    Timer timer;
 
     //SFX manager
     private SoundManager soundManager;
@@ -85,6 +88,7 @@ public class GameView extends View {
 
     private int bossEvent = 0;
     private int bossHealth;
+    private int bossSpeed;
     private Boss boss;
     private BossFactory bossFactory;
     private List<BossProjectile> bossProjectiles = new ArrayList<>();
@@ -113,10 +117,25 @@ public class GameView extends View {
     private List<GreenCoin> greenCoins = new ArrayList<>();
     private List<GreenCoin> removeGreenCoins = new ArrayList<>();
 
-    //boosts
-    private boolean isTimeToFireBoost = true;
+    //extra bullets boost
+    private boolean isTimeToFireBoost = false;
+    private boolean stopSpawnFireBoost = false;
     private List<FireBoost> fireBoostList = new ArrayList<>();
     private List<FireBoost> removeFireBoosts = new ArrayList<>();
+
+    //extra health boost
+    private boolean isTimeToLifeBoost = false;
+    private boolean stopSpawnLifeBoost = false;
+    private List<LifeBoost> lifeBoostList = new ArrayList<>();
+    private List<LifeBoost> removeLifeBoosts = new ArrayList<>();
+
+    //shield boost
+    private Paint shieldPaint = new Paint();
+    private boolean isTimeToShieldBoost = false;
+    private boolean stopSpawnShieldBoost = false;
+    private boolean shieldTimer = false;
+    private List<ShieldBoost> shieldBoostList = new ArrayList<>();
+    private List<ShieldBoost> removeShieldBoosts = new ArrayList<>();
 
     //canvas properties
     private int canvasW, canvasH;
@@ -139,8 +158,11 @@ public class GameView extends View {
     //interface to communicate with the MainActivity "father" outside
     public interface GameViewListener {
         void pauseGame();
+
         void resumeGame();
+
         void playBossMusic();
+
         void endGame(int score, boolean isWon);
     }
 
@@ -161,9 +183,6 @@ public class GameView extends View {
         sp = getContext().getSharedPreferences("storage", Context.MODE_PRIVATE);
         money = sp.getInt("money", 0);
         isWon = false;
-
-        //end level timer
-        timer = new Timer();
 
         //adjust screen to all sizes
         canvasW = screenW;
@@ -193,8 +212,10 @@ public class GameView extends View {
         enemyFactory = new EnemyFactory(getResources(), player.getMinX(), player.getMaxX(), 10, 3, canvasW);
         bossFactory = new BossFactory(getResources(), 10, 30, canvasW);
 
+        //create boss
         boss = bossFactory.generateBoss(currLvl);
         bossHealth = boss.getHealth(); //to trigger mid fight events
+        bossSpeed = boss.getSpeed(); //same
 
         //hearts, score and life
         setUI();
@@ -238,6 +259,12 @@ public class GameView extends View {
         bossHealthPaint.setTextSize(120);
         bossHealthPaint.setAntiAlias(true);
         bossHealthPaint.setTypeface(fontTypeface);
+
+        //shield paint around player
+        shieldPaint.setAntiAlias(true);
+        shieldPaint.setARGB(100,0,0,255);
+        shieldPaint.setStyle(Paint.Style.STROKE);
+        shieldPaint.setStrokeWidth(30);
 
         //boss healthbar
         bossHealthBarPaint.setColor(Color.RED);
@@ -284,23 +311,13 @@ public class GameView extends View {
         //draw pause button
         canvas.drawBitmap(pauseBtn, canvasW - 250, 100, null);
 
+        if(shieldTimer) {
+            canvas.drawCircle((float)(playerX+playerBitmap.getWidth()/2),(float)(playerY+playerBitmap.getHeight()/2),180,shieldPaint);
+        }
+
         //draw boss health
         if (isBoss) {
             canvas.drawRect(50, 175, boss.getHealth() * 30, 210, bossHealthBarPaint);
-        }
-
-
-        //saving data before death
-        if (health == 0) {
-
-            //failed the stage
-            isWon = false;
-
-            //death sfx
-            soundManager.startPlayerDeathSfx();
-
-            //move intent
-            gameOver();
         }
 
         //update hearts bitmaps
@@ -321,8 +338,17 @@ public class GameView extends View {
         player.drawObject(canvas);
         player.updateLocation();
 
+        //handles player's life events and boosts spawning
+        playerHealthEvents();
+
+        //fire boosts
+        fireBoostEvents();
+        
+        //shield boost
+        shieldBoostEvent();
+
         //keep spawning objects until end level then spawn boss
-        if (enemyCounter < 5+currLvl) {
+        if (enemyCounter < MOBS + currLvl) { //min mobs to kill each lvl
 
             //spawn meteors
             spawnMeteors();
@@ -337,8 +363,14 @@ public class GameView extends View {
             spawnGoldCoins();
             spawnSilverCoins();
 
-            //boosts
-            spawnFireBoosts();
+            //spawn only 3 per lvl
+            if(extraCounter < 2) {
+                spawnFireBoosts();
+            }
+            
+            spawnLifeBoosts();
+            
+            spawnShieldBoost();
 
         } else { //boss event
 
@@ -360,13 +392,15 @@ public class GameView extends View {
             spawnBossProjectiles();
 
             //rage mode
-            if (boss.getHealth() < bossHealth/2) {
-                boss.setSpeed(25);
+            if (boss.getHealth() < bossHealth / 2) {
+                boss.setSpeed(bossSpeed*2);
+            }
+            else if(boss.getHealth() < bossHealth / 3) {
+                boss.setSpeed(bossSpeed*3);
             }
 
             //win the level
             if (boss.getHealth() <= 0) {
-
                 isWon = true;
                 boss.setDead(true);
                 soundManager.startEnemyDeathSfx();
@@ -382,7 +416,7 @@ public class GameView extends View {
         spawnGreenCoins();
 
         //max 3 bullets
-        if(extraCounter>2) {
+        if (extraCounter > 2) {
             extraCounter = 2;
         }
 
@@ -439,23 +473,53 @@ public class GameView extends View {
         silverCoins.removeAll(removeSilverCoins);
 
         //boosts
-        for(FireBoost fireBoost : fireBoostList) {
+        for (FireBoost fireBoost : fireBoostList) {
             fireBoost.updateLocation();
-            if(fireBoost.collisionDetection(playerX,playerY,playerBitmap)) {
+            if (fireBoost.collisionDetection(playerX, playerY, playerBitmap)) {
                 soundManager.startFireBoostSfx();
                 extraCounter++;
                 extraBullet = true;
                 isBullet = false;
                 removeFireBoosts.add(fireBoost);
-            }
-            else if(fireBoost.getObjectY() > canvasH) {
+            } else if (fireBoost.getObjectY() > canvasH) {
                 removeFireBoosts.add(fireBoost);
-            }
-            else {
+            } else {
                 fireBoost.drawObject(canvas);
             }
         }
         fireBoostList.removeAll(removeFireBoosts);
+
+        for(LifeBoost lifeBoost : lifeBoostList) {
+            lifeBoost.updateLocation();
+            if(lifeBoost.collisionDetection(playerX,playerY,playerBitmap)) {
+                soundManager.startFireBoostSfx();
+                health++;
+                removeLifeBoosts.add(lifeBoost);
+            }
+            else if(lifeBoost.getObjectY() > canvasH) {
+                removeLifeBoosts.add(lifeBoost);
+            }
+            else {
+                lifeBoost.drawObject(canvas);
+            }
+        }
+        lifeBoostList.removeAll(removeLifeBoosts);
+
+        for(ShieldBoost shieldBoost : shieldBoostList) {
+            shieldBoost.updateLocation();
+            if(shieldBoost.collisionDetection(playerX,playerY,playerBitmap)) {
+                soundManager.startFireBoostSfx();
+                shieldTimer = true;
+                removeShieldBoosts.add(shieldBoost);
+            }
+            else if(shieldBoost.getObjectY() > canvasH) {
+                removeShieldBoosts.add(shieldBoost);
+            }
+            else {
+                shieldBoost.drawObject(canvas);
+            }
+        }
+        shieldBoostList.removeAll(removeShieldBoosts);
 
         for (final Meteor meteor : meteors) {
 
@@ -463,7 +527,7 @@ public class GameView extends View {
             meteor.updateLocation();
 
             //meteor hits player
-            if (!meteor.isBoom() && meteor.collisionDetection(playerX, playerY, playerBitmap)) {
+            if ( !shieldTimer && !meteor.isBoom() && meteor.collisionDetection(playerX, playerY, playerBitmap)) {
                 soundManager.startMeteorDeathSfx();
                 soundManager.startPlayerHitSfx();
                 health--;
@@ -489,7 +553,7 @@ public class GameView extends View {
 
             enemy.updateLocation();
 
-            if (enemy.collisionDetection(playerX, playerY, playerBitmap)) {
+            if ( !shieldTimer && enemy.collisionDetection(playerX, playerY, playerBitmap)) {
 
                 soundManager.startPlayerHitSfx();
                 soundManager.startEnemyDeathSfx();
@@ -509,24 +573,25 @@ public class GameView extends View {
 
             bullet.updateLocation();
 
-            if (bullet.getObjectY() < 0) {
+            if (bullet.getObjectY() < 0) { //cross the screen
                 removeBulletsList.add(bullet);
-            } else if (isBoss && Rect.intersects(bullet.getCollisionShape(), boss.getCollisionShape())) {
+
+            } else if (isBoss && Rect.intersects(bullet.getCollisionShape(), boss.getCollisionShape())) { //hits boss
                 soundManager.startEnemyHitSfx();
-                bullet.setBoom(true);
+                //bullet.setBoom(true);
                 boss.takeDamage(1);
                 removeBulletsList.add(bullet);
 
-            } else {
+            } else { //moves on screen
                 bullet.drawObject(canvas);
             }
 
             //check for collision bullet-meteor
             for (final Meteor meteor : meteors) {
 
-                if ( !meteor.isBoom() && Rect.intersects(bullet.getCollisionShape(), meteor.getCollisionShape())) {
+                if (!meteor.isBoom() && Rect.intersects(bullet.getCollisionShape(), meteor.getCollisionShape())) {
 
-                    score+=10;
+                    score += 10;
                     soundManager.startMeteorDeathSfx();
                     meteor.setBoom(true);
                     //hit animation and then remove it
@@ -543,7 +608,7 @@ public class GameView extends View {
             //collision bullet - enemy
             for (final Enemy enemy : enemies) {
 
-                if ( !enemy.isDead() && Rect.intersects(bullet.getCollisionShape(), enemy.getCollisionShape())) {
+                if (!enemy.isDead() && Rect.intersects(bullet.getCollisionShape(), enemy.getCollisionShape())) {
                     //flash enemy
                     soundManager.startEnemyHitSfx();
                     enemy.takeDamage(1); //dmg taken
@@ -551,7 +616,7 @@ public class GameView extends View {
                     //enemy death
                     if (enemy.getHealth() == 0) {
 
-                        score+=75;
+                        score += 75;
                         //death animation
                         enemyCounter++; //after number of enemies, release the boss
                         soundManager.startEnemyDeathSfx();
@@ -577,7 +642,7 @@ public class GameView extends View {
 
             if (projectile.getObjectY() > canvasH) {
                 removeProjectilesList.add(projectile);
-            } else if (projectile.collisionDetection(playerX, playerY, playerBitmap)) {
+            } else if ( !shieldTimer && projectile.collisionDetection(playerX, playerY, playerBitmap)) {
                 soundManager.startPlayerHitSfx();
                 health--;
                 removeProjectilesList.add(projectile);
@@ -597,7 +662,7 @@ public class GameView extends View {
 
                 if (bossProjectile.getObjectY() > canvasH) {
                     removeBossProjectilesList.add(bossProjectile);
-                } else if (bossProjectile.collisionDetection(playerX, playerY, playerBitmap)) {
+                } else if ( !shieldTimer && bossProjectile.collisionDetection(playerX, playerY, playerBitmap)) {
                     soundManager.startPlayerHitSfx();
                     health--;
                     removeBossProjectilesList.add(bossProjectile);
@@ -610,23 +675,148 @@ public class GameView extends View {
 
     }
 
-    //*********SPAWNING OBJECTS TO THE GAME (WITH DELAY ACCORDING TO THE LEVEL)**************//
+    //handles player's health
+    private void playerHealthEvents() {
+        if(health < 3 && health > 0) {
+            lifeBoostEvents();
+        }
+        else if (health == 0) {
 
-    private void spawnFireBoosts() {
-        if(isTimeToFireBoost) {
-            fireBoostList.add(new FireBoost(player.getMinX(),player.getMaxX(),getResources()));
-            delayFireBoost();
+            //failed the stage
+            isWon = false;
+
+            //death sfx
+            soundManager.startPlayerDeathSfx();
+
+            //move intent
+            gameOver();
         }
     }
 
-    private void delayFireBoost() {
-        isTimeToFireBoost = false;
+    private void shieldBoostEvent() {
+        if(enemyCounter == 2) {
+            if(stopSpawnShieldBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToShieldBoost = true;
+                stopSpawnShieldBoost = true;
+            }
+        }
+        else if(enemyCounter == 5) {
+            if(stopSpawnShieldBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToShieldBoost = true;
+                stopSpawnShieldBoost = true;
+            }
+        }
+        else {
+            stopSpawnShieldBoost = false;
+        }
+    }
+
+    private void fireBoostEvents() {
+        if(enemyCounter == 3) {
+            if(stopSpawnFireBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToFireBoost = true;
+                stopSpawnFireBoost = true;
+            }
+        }
+        else if (enemyCounter == 6) {
+            if(stopSpawnFireBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToFireBoost = true;
+                stopSpawnFireBoost = true;
+            }
+
+        }
+        else if(enemyCounter == 9) {
+            if(stopSpawnFireBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToFireBoost = true;
+                stopSpawnFireBoost = true;
+            }
+        }
+        else {
+            stopSpawnFireBoost = false;
+        }
+    }
+
+    private void lifeBoostEvents() {
+        //spawn life boosts on certain events
+        if(enemyCounter == 4) {
+            if(stopSpawnLifeBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToLifeBoost = true;
+                stopSpawnLifeBoost = true;
+            }
+        }
+        else if (enemyCounter == 7) {
+            if(stopSpawnLifeBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToLifeBoost = true;
+                stopSpawnLifeBoost = true;
+            }
+
+        }
+        else if(enemyCounter == 10) {
+            if(stopSpawnLifeBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToLifeBoost = true;
+                stopSpawnLifeBoost = true;
+            }
+        }
+        else {
+            stopSpawnLifeBoost = false;
+        }
+    }
+
+    //*********SPAWNING OBJECTS TO THE GAME (WITH DELAY ACCORDING TO THE LEVEL)**************//
+
+    private void spawnFireBoosts() {
+        if (isTimeToFireBoost) {
+            fireBoostList.add(new FireBoost(player.getMinX(), player.getMaxX(), getResources()));
+            isTimeToFireBoost = false;
+        }
+    }
+
+    private void spawnLifeBoosts() {
+        if (isTimeToLifeBoost) {
+            lifeBoostList.add(new LifeBoost(player.getMinX(), player.getMaxX(), getResources()));
+            isTimeToLifeBoost = false;
+        }
+    }
+
+    private void spawnShieldBoost() {
+        if(isTimeToShieldBoost) {
+            shieldBoostList.add(new ShieldBoost(player.getMinX(), player.getMaxX(), getResources()));
+            isTimeToShieldBoost = false;
+            tickShieldTime(); //time shield lasts on player
+        }
+    }
+
+    private void tickShieldTime() {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                isTimeToFireBoost = true;
+                shieldTimer = false;
             }
-        },10000);
+        },4000); //lasts 3 seconds
     }
 
     private void spawnGreenCoins() {
@@ -705,18 +895,16 @@ public class GameView extends View {
             soundManager.startPlayerLaserSfx();
             bullets.add(new Bullet(getResources(), player.getObjectX(), player.getObjectY()));
             delayBullets(); //isFire = false cause delay between creating new bullets and drawing them
-        }
-        else if(extraBullet && extraCounter > 0) {
+        } else if (extraBullet && extraCounter > 0) {
 
             isBullet = false; //stop regular
 
-            if(extraCounter == 1) {
+            if (extraCounter == 1) {
                 soundManager.startPlayerLaserSfx();
                 bullets.add(new Bullet(getResources(), player.getObjectX() - 75, player.getObjectY()));
                 bullets.add(new Bullet(getResources(), player.getObjectX() + 75, player.getObjectY()));
                 delayExtraBullets(); //isFire = false cause delay between creating new bullets and drawing them
-            }
-            else if(extraCounter == 2) {
+            } else if (extraCounter == 2) {
                 soundManager.startPlayerLaserSfx();
                 bullets.add(new Bullet(getResources(), player.getObjectX() - 75, player.getObjectY()));
                 bullets.add(new Bullet(getResources(), player.getObjectX(), player.getObjectY()));
@@ -726,15 +914,31 @@ public class GameView extends View {
         }
     }
 
+    //delay between shots
+    private void delayBullets() {
+        isBullet = false;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isBullet = true;
+            }
+        }, 300 - (currLvl * 20));
+    }
+
     //timer for multiple bullets
     private void delayExtraBullets() {
+        //default delay
+        int delay = 500;
+        if(extraCounter == 2) { //not to OP
+            delay = 650;
+        }
         extraBullet = false;
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 extraBullet = true;
             }
-        },300 - (currLvl*20));
+        }, delay - (currLvl * 20)); //delay = 300
     }
 
     private void delayGreenCoin() {
@@ -766,17 +970,6 @@ public class GameView extends View {
                 isTimeToEnemy = true;
             }
         }, 3500 - (currLvl * 300));
-    }
-
-    //delay between shots
-    private void delayBullets() {
-        isBullet = false;
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                isBullet = true;
-            }
-        }, 300 - (currLvl * 20));
     }
 
     //delay between meteor spawns

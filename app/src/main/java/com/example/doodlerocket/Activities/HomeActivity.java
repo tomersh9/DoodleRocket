@@ -74,6 +74,7 @@ public class HomeActivity extends AppCompatActivity {
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         skinID = sp.getInt("skin_id",R.drawable.default_ship_100);
 
+        //to lock levels if needed
         /*globalLvl = 1;
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("global_lvl",1);
@@ -293,7 +294,6 @@ public class HomeActivity extends AppCompatActivity {
 
         //building the alert dialog each time with different builder
         gameAlertDialog = builder.setView(pauseView).show();
-        gameAlertDialog.setCanceledOnTouchOutside(false);
-        gameAlertDialog.setCancelable(false);
+        gameAlertDialog.setCanceledOnTouchOutside(true);
     }
 }

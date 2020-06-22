@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.doodlerocket.GameObjects.Boss;
 import com.example.doodlerocket.GameObjects.SoundManager;
 import com.example.doodlerocket.GameObjects.User;
 import com.example.doodlerocket.GameView;
@@ -142,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
         //reset load count
         isFirstLoad = true;
 
+        //setting current lvl
+        currLvl = sp.getInt("curr_lvl", 1);
+
         //game is running on a back thread
         gameView = new GameView(this, width, height, skinID, backgroundID, currLvl, soundManager);
 
@@ -239,113 +244,8 @@ public class MainActivity extends AppCompatActivity {
                 //release music
                 stopMusic();
 
-                //load user list
-                loadUserList();
-
-                //values to move on
-                final int currScore = score;
-                boolean isTop10 = getIsTop10(score);
-
-                if (isTop10 && !isWon) {
-
-                    //popping alert dialog
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    View usernameView = getLayoutInflater().inflate(R.layout.username_layout, null);
-
-                    //alert animation
-                    YoYo.with(Techniques.SlideInDown).duration(1000).playOn(usernameView);
-
-                    //money
-                    TextView coinsTv = usernameView.findViewById(R.id.record_victory_coins_tv);
-                    int totalCoins = sp.getInt("money", 0);
-                    String totalCoinsString = getString(R.string.total_coins);
-                    coinsTv.setText(totalCoinsString + " " + totalCoins);
-
-                    //highScore display
-                    TextView highScoreTv = usernameView.findViewById(R.id.record_victory_highscore_tv);
-                    final int highScore = sp.getInt("highscore", 0);
-                    String highscoreString = getString(R.string.high_score);
-                    highScoreTv.setText(highscoreString + " " + highScore);
-
-                    TextView gemsTv = usernameView.findViewById(R.id.record_victory_gems_tv);
-                    int gems = sp.getInt("gems", 0);
-                    String gemsString = getString(R.string.gems_earned);
-                    gemsTv.setText(gemsString + " " + gems);
-
-                    //setting score
-                    TextView scoreTv = usernameView.findViewById(R.id.record_victory_score_tv);
-                    String scoreString = getString(R.string.score);
-                    scoreTv.setText(scoreString + " " + score);
-
-                    //input username
-                    final EditText nameEt = usernameView.findViewById(R.id.name_et);
-
-                    //submit to leadBoard
-                    final Button boardBtn = usernameView.findViewById(R.id.record_board_btn);
-                    final Button submitBtn = usernameView.findViewById(R.id.submit_btn);
-                    submitBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            if (nameEt.getText().toString().equals("")) {
-                                Toast.makeText(MainActivity.this, R.string.valid_name, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            //save user in List
-                            User user = new User(nameEt.getText().toString(), currScore);
-                            users.add(user);
-
-                            //disable edit text and enable access to score board
-                            nameEt.setVisibility(View.GONE);
-                            submitBtn.setVisibility(View.GONE);
-                            boardBtn.setVisibility(View.VISIBLE);
-
-                            Toast.makeText(MainActivity.this, nameEt.getText().toString() + getString(R.string.is_in_top_10), Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-
-                    boardBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            gameAlertDialog.dismiss();
-                            Intent intent = new Intent(MainActivity.this, ScoreBoardActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-
-                    Button menuBtn = usernameView.findViewById(R.id.record_menu_btn);
-                    menuBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            gameAlertDialog.dismiss();
-                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-
-                    Button resetBtn = usernameView.findViewById(R.id.record_next_btn);
-                    resetBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            //restart gameView
-                            gameAlertDialog.dismiss();
-                            setGameView();
-                            setContentView(gameView);
-                            resumeGame();
-                        }
-                    });
-
-                    //building the alert dialog each time with different builder
-                    gameAlertDialog = builder.setView(usernameView).show();
-
-                }
                 //won the level
-                else if (isWon) {
+                if (isWon) {
 
                     //unlock next level
                     unlockNextLvl();
@@ -407,6 +307,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //building the alert dialog each time with different builder
                     gameAlertDialog = builder.setView(victoryView).show();
+                    gameAlertDialog.setCanceledOnTouchOutside(false);
+                    gameAlertDialog.setCancelable(false);
 
                 } else {
                     //move to game over page
@@ -417,86 +319,13 @@ public class MainActivity extends AppCompatActivity {
                     //kill intent
                     finish();
                 }
-
-                gameAlertDialog.setCanceledOnTouchOutside(false);
-                gameAlertDialog.setCancelable(false);
             }
         });
-    }
-
-    private void loadUserList() {
-
-        try {
-            FileInputStream fis = openFileInput("users");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            users = (List<User>) ois.readObject(); //needs "casting"
-            ois.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if (users == null) {
-                users = new ArrayList<>();
-            }
-        }
-    }
-
-    private boolean getIsTop10(int score) {
-
-        if (users.isEmpty()) { //first place
-            return true;
-        } else if (users.size() < 10) { //have place in list
-            return true;
-        }
-
-        for (int i = 0; i < 10; i++) { //only top 10 can make it to list
-            if (score >= users.get(i).getScore()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override //alert dialog when back pressed
     public void onBackPressed() {
-
-        // timer.cancel();
-
-        soundManager.pauseSfx();
-
-        //for each new dialog we create a builder to show this specific dialog
-        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-        //first you inflate the layout and then create the builder to show it
-        View pauseView = getLayoutInflater().inflate(R.layout.alert_dialog_view, null);
-
-        //alert animation
-        YoYo.with(Techniques.BounceInUp).duration(1000).playOn(pauseView);
-
-        Button yesBtn = pauseView.findViewById(R.id.alert_yes_btn);
-        yesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                gameAlertDialog.dismiss();
-            }
-        });
-        Button noBtn = pauseView.findViewById(R.id.alert_no_btn);
-        noBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gameAlertDialog.dismiss();
-            }
-        });
-
-        //building the alert dialog each time with different builder
-        gameAlertDialog = builder.setView(pauseView).show();
-        gameAlertDialog.setCanceledOnTouchOutside(false);
-        gameAlertDialog.setCancelable(false);
+        gameView.gameViewListener.pauseGame();
     }
 
     public void startMusic() {
@@ -524,15 +353,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
-        //save high score user list
-        saveUserList();
     }
 
     //calls only if player won the level
     private void unlockNextLvl() {
 
-        if (globalLvl > currLvl + 1) {
+        //don't unlock new levels if playing previous levels
+        if (globalLvl > currLvl) {
             currLvl++;
         } else {
             //max levels
@@ -550,25 +377,10 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void saveUserList() {
-        try {
-            FileOutputStream fos = openFileOutput("users", MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos); //can handle Objects!!
-            //always write the Root Object
-            oos.writeObject(users); //writing object directly (needs to Serialize Person)
-            oos.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        gameAlertDialog.dismiss();
+        //gameAlertDialog.dismiss();
         //same reason
     }
 }
