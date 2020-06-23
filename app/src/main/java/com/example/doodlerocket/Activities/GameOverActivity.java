@@ -92,6 +92,12 @@ public class GameOverActivity extends AppCompatActivity {
         final LinearLayout submitLayout = findViewById(R.id.submit_layout);
         final EditText nameEt = findViewById(R.id.name_et);
         final Button submitBtn = findViewById(R.id.submit_btn);
+
+        if(!isTop10) {
+            submitLayout.setVisibility(View.GONE);
+            btnLayout.setVisibility(View.VISIBLE);
+        }
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +150,7 @@ public class GameOverActivity extends AppCompatActivity {
                 startActivity(scoreIntent);
             }
         });
+
 
     }
 

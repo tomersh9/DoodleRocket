@@ -255,7 +255,6 @@ public class HomeActivity extends AppCompatActivity {
         stopMusic();
     }*/
 
-
     //put skin on image when back
     @Override
     protected void onResume() {
