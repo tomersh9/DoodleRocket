@@ -60,10 +60,10 @@ public class EnemyFactory {
                 return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+5,health+5,enemySkins[4],canvasW,(i%2==0),resources);
 
             case 6:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+7,health+6,enemySkins[5],canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+6,health+6,enemySkins[5],canvasW,(i%2==0),resources);
 
             case 7:
-                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+9,health+8,R.drawable.hell_mob_85,canvasW,(i%2==0),resources);
+                return new Enemy((int) Math.floor(Math.random() * (playerMaxX)),0,speed+7,health+7,R.drawable.hell_mob_85,canvasW,(i%2==0),resources);
 
         }
         return null;

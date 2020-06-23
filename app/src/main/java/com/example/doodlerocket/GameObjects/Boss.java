@@ -108,6 +108,10 @@ public class Boss implements IGameObjects {
         this.enteringScreen = enteringScreen;
     }
 
+    public Bitmap getBossBitmap() {
+        return this.bossBitmap;
+    }
+
     public void takeDamage(int dmg) {
         this.health -= dmg;
     }

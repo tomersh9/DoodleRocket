@@ -35,4 +35,11 @@
     <string name="total_gems">Total Gems</string>
     <string name="gems">Gems</string>
     <string name="hey_you_ve_entered_our_top_10">Hey! You\'ve entered our Top 10!</string>
+    <string name="def">Default</string>
+    <string name="rare">Rare</string>
+    <string name="legendary">Legendary</string>
+    <string name="common">Common</string>
+    <string name="premium">Premium</string>
+    <string name="equipped">Equipped</string>
+    <string name="owned">Owned</string>
 </resources>

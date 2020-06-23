@@ -1,5 +1,6 @@
 package com.example.doodlerocket.Activities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
 
     private List<ShopItem> shopItems;
     private MyShopItemListener myShopItemListener;
+    private Context context;
 
     interface MyShopItemListener {
         void onItemClicked(int i , View v);
@@ -31,9 +33,10 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
     public void setMyShopItemListener(MyShopItemListener myShopItemListener) {this.myShopItemListener = myShopItemListener;}
 
     //constructor
-    public ShopItemAdapter(List<ShopItem> shopItems)
+    public ShopItemAdapter(List<ShopItem> shopItems, Context context)
     {
         this.shopItems = shopItems;
+        this.context = context;
     }
 
 
@@ -93,16 +96,16 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
         if(item.getPrice() > 1000000) {
             holder.priceTv.setTextSize(10);
         }
-        if(item.getRarity().matches("Common")) {
+        if(item.getRarity().matches(context.getString(R.string.common))) {
             holder.rarityTv.setTextColor(Color.WHITE);
         }
-        if(item.getRarity().matches("Rare")) {
+        if(item.getRarity().matches(context.getString(R.string.rare))) {
             holder.rarityTv.setTextColor(Color.BLUE);
         }
-        if(item.getRarity().matches("Legendary")) {
+        if(item.getRarity().matches(context.getString(R.string.legendary))) {
             holder.rarityTv.setTextColor(Color.YELLOW);
         }
-        if(item.getRarity().matches("Premium")) {
+        if(item.getRarity().matches(context.getString(R.string.premium))) {
             holder.rarityTv.setTextColor(Color.MAGENTA);
         }
         if(item.isBought()) {

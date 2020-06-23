@@ -3,7 +3,6 @@ package com.example.doodlerocket.GameObjects;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
 
@@ -23,6 +22,9 @@ public class SoundManager {
     private static int enemyDeathSound;
     private static int goldCoinSound;
     private static int silverCoinSound;
+    private static int shieldBoostSound;
+    private static int gemSound;
+    private static int lifeBoostSound;
     private static int fireBoostSound;
 
     //fields
@@ -38,11 +40,11 @@ public class SoundManager {
                     .build();
 
             soundPool = new SoundPool.Builder()
-                    .setMaxStreams(10)
+                    .setMaxStreams(13)
                     .setAudioAttributes(audioAttributes)
                     .build();
         } else { //old versions
-            soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+            soundPool = new SoundPool(13, AudioManager.STREAM_MUSIC, 0);
         }
 
         playerHitSound = soundPool.load(context, R.raw.hurt1, 1);
@@ -54,7 +56,20 @@ public class SoundManager {
         playerDeathSound = soundPool.load(context, R.raw.boom1, 1);
         goldCoinSound = soundPool.load(context, R.raw.pick_gold_coin, 1);
         silverCoinSound = soundPool.load(context, R.raw.pick_silver_coin, 1);
-        fireBoostSound = soundPool.load(context, R.raw.fire_boost_sfx, 1);
+        shieldBoostSound = soundPool.load(context, R.raw.shield_boost_sfx, 1);
+        gemSound = soundPool.load(context,R.raw.green_coin_sfx,1);
+        lifeBoostSound = soundPool.load(context,R.raw.lifeboost_sfx,1);
+        fireBoostSound = soundPool.load(context,R.raw.fireboost_sfx,1);
+    }
+
+    public void startGemSfx() {soundPool.play(gemSound,0.8f,0.8f,1,0,1);}
+
+    public void startLifeBoostSfx() {soundPool.play(lifeBoostSound,0.9f,0.9f,1,0,1);}
+
+    public void startFireBoostSfx() {soundPool.play(fireBoostSound,0.9f,0.9f,1,0,1);}
+
+    public void startShieldBoostSfx() {
+        soundPool.play(shieldBoostSound,0.9f,0.9f,1,0,1);
     }
 
     public void startPlayerHitSfx() {
@@ -85,15 +100,11 @@ public class SoundManager {
     }
 
     public void startGoldCoinSfx() {
-        soundPool.play(goldCoinSound,0.2f,0.2f,1,0,1);
+        soundPool.play(goldCoinSound,0.5f,0.5f,1,0,1);
     }
 
     public void startSilverCoinSfx() {
-        soundPool.play(silverCoinSound,0.2f,0.2f,1,0,1);
-    }
-
-    public void startFireBoostSfx() {
-        soundPool.play(fireBoostSound,0.8f,0.8f,1,0,1);
+        soundPool.play(silverCoinSound,0.5f,0.5f,1,0,1);
     }
 
     //release memory

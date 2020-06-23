@@ -36,4 +36,11 @@
     <string name="hey_you_ve_entered_our_top_10">הי! נכנסת לעשרת הגדולים!</string>
     <string name="gems">יהלומים</string>
     <string name="total_gems">סך יהלומים</string>
+    <string name="def">ברירת מחדל</string>
+    <string name="rare">נדיר</string>
+    <string name="legendary">אגדי</string>
+    <string name="common">נפוץ</string>
+    <string name="premium">פרימיום</string>
+    <string name="owned">בבעלות</string>
+    <string name="equipped">מצויד</string>
 </resources>

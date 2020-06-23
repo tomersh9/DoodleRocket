@@ -12,7 +12,7 @@ public class User implements Comparable<User>, Serializable {
 
     public User(String name, int score) {
         this.name = name;
-        this.place = place;
+        //this.place = place;
         this.score = score;
     }
 

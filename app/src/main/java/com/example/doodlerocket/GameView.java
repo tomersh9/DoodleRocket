@@ -1,6 +1,5 @@
 package com.example.doodlerocket;
 
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -16,7 +14,6 @@ import android.graphics.Typeface;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -38,13 +35,10 @@ import com.example.doodlerocket.GameObjects.ShieldBoost;
 import com.example.doodlerocket.GameObjects.SilverCoin;
 import com.example.doodlerocket.GameObjects.SoundManager;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class GameView extends View {
 
@@ -303,10 +297,10 @@ public class GameView extends View {
         }
 
         //score text
-        canvas.drawText("Score:" + score, 60, 150, scorePaint);
+        canvas.drawText(context.getString(R.string.score)+":" + score, 60, 150, scorePaint);
 
         //currency text
-        canvas.drawText("Gems:" + gameCurrency, 60, canvasH - 150, greenPaint);
+        canvas.drawText(context.getString(R.string.gems)+":" + gameCurrency, 60, canvasH - 150, greenPaint);
 
         //draw pause button
         canvas.drawBitmap(pauseBtn, canvasW - 250, 100, null);
@@ -317,7 +311,12 @@ public class GameView extends View {
 
         //draw boss health
         if (isBoss) {
-            canvas.drawRect(50, 175, boss.getHealth() * 30, 210, bossHealthBarPaint);
+            int right = boss.getHealth()*30;
+            int left = 50;
+            if(left + right > canvasW) {
+                right = canvasW - 50;
+            }
+            canvas.drawRect(left, 175, right, 210, bossHealthBarPaint);
         }
 
         //update hearts bitmaps
@@ -408,7 +407,8 @@ public class GameView extends View {
             }
         }
 
-        /*Happens all the time*/
+        //**************HAPPENS ALL THE TIME**************************//
+
         //shoot bullets
         shoot();
 
@@ -428,7 +428,7 @@ public class GameView extends View {
             greenCoin.updateLocation();
 
             if (greenCoin.collisionDetection(playerX, playerY, playerBitmap)) {
-                soundManager.startFireBoostSfx();
+                soundManager.startGemSfx();
                 gameCurrency += 25;
                 removeGreenCoins.add(greenCoin);
             } else if (greenCoin.getObjectY() > canvasH) {
@@ -492,7 +492,7 @@ public class GameView extends View {
         for(LifeBoost lifeBoost : lifeBoostList) {
             lifeBoost.updateLocation();
             if(lifeBoost.collisionDetection(playerX,playerY,playerBitmap)) {
-                soundManager.startFireBoostSfx();
+                soundManager.startLifeBoostSfx();
                 health++;
                 removeLifeBoosts.add(lifeBoost);
             }
@@ -508,7 +508,7 @@ public class GameView extends View {
         for(ShieldBoost shieldBoost : shieldBoostList) {
             shieldBoost.updateLocation();
             if(shieldBoost.collisionDetection(playerX,playerY,playerBitmap)) {
-                soundManager.startFireBoostSfx();
+                soundManager.startShieldBoostSfx();
                 shieldTimer = true;
                 removeShieldBoosts.add(shieldBoost);
             }
@@ -654,6 +654,11 @@ public class GameView extends View {
 
         //handles boss events
         if (isBoss) {
+
+            if(Rect.intersects(player.getCollisionShape(),boss.getCollisionShape())) {
+                health--;
+                soundManager.startPlayerHitSfx();
+            }
 
             //handles boss projectile when hitting player
             for (BossProjectile bossProjectile : bossProjectiles) {
@@ -897,13 +902,14 @@ public class GameView extends View {
             delayBullets(); //isFire = false cause delay between creating new bullets and drawing them
         } else if (extraBullet && extraCounter > 0) {
 
-            isBullet = false; //stop regular
+            //isBullet = false; //stop regular
 
             if (extraCounter == 1) {
                 soundManager.startPlayerLaserSfx();
                 bullets.add(new Bullet(getResources(), player.getObjectX() - 75, player.getObjectY()));
                 bullets.add(new Bullet(getResources(), player.getObjectX() + 75, player.getObjectY()));
                 delayExtraBullets(); //isFire = false cause delay between creating new bullets and drawing them
+
             } else if (extraCounter == 2) {
                 soundManager.startPlayerLaserSfx();
                 bullets.add(new Bullet(getResources(), player.getObjectX() - 75, player.getObjectY()));
@@ -932,6 +938,7 @@ public class GameView extends View {
         if(extraCounter == 2) { //not to OP
             delay = 650;
         }
+
         extraBullet = false;
         new Timer().schedule(new TimerTask() {
             @Override

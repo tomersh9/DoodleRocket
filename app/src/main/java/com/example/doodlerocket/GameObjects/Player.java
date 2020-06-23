@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.example.doodlerocket.R;
 
@@ -95,5 +96,9 @@ public class Player implements IGameObjects {
     @Override
     public boolean collisionDetection(int otherX, int otherY, Bitmap otherBitmap) {
         return false;
+    }
+
+    public Rect getCollisionShape() {
+        return new Rect(x,y,x+playerBitmap.getWidth(),y+playerBitmap.getHeight());
     }
 }
