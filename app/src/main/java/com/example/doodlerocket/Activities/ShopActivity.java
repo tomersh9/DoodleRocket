@@ -41,11 +41,11 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
 
-        //getting static shop list (singleton)
-        this.shopItems = SingleShopList.getInstance(this);
-
         //fixed portrait mode
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //getting static shop list (singleton)
+        this.shopItems = SingleShopList.getInstance(this);
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         coins = sp.getInt("money",0);
@@ -84,7 +84,7 @@ public class ShopActivity extends AppCompatActivity {
                 int price = item.getPrice();
 
                 //can't buy used skins
-                if(coins >= price && !item.isBought()) {
+                if(coins >= price && !item.isBought() && item.getPrice()!=0) {
                     //buy skin and reduce coins
                     coins -= price;
                     coinsTv.setText(coins+"");
@@ -102,6 +102,20 @@ public class ShopActivity extends AppCompatActivity {
                     editor.putInt("money",coins);
                     editor.commit();
 
+                }
+                else if(item.getPrice() == 0) { //default skin
+
+                    item.setEquipped(true);
+                    item.setRarity(getString(R.string.equipped));
+                    shopItemAdapter.notifyDataSetChanged();
+
+                    //save equipped state
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putInt("skin_id",item.getSkinId());
+                    editor.commit();
+
+                    //only current item is equipped
+                    setItemsState(item);
                 }
                 else if(item.isBought()) {
 
@@ -142,7 +156,7 @@ public class ShopActivity extends AppCompatActivity {
         //update current item equipped
         for(ShopItem shopItem : shopItems) {
             if(!shopItem.equals(item)) {
-                if(shopItem.isBought()) {
+                if(shopItem.isBought() || shopItem.getPrice() == 0) {
                     shopItem.setEquipped(false);
                     shopItem.setRarity(getString(R.string.owned));
                 }

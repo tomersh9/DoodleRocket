@@ -98,6 +98,11 @@ public class GameOverActivity extends AppCompatActivity {
             btnLayout.setVisibility(View.VISIBLE);
         }
 
+        //pop out animation
+        TextView madeItTv = findViewById(R.id.broke_record_tv);
+        YoYo.with(Techniques.Tada).duration(1500).playOn(madeItTv);
+
+        //submitting name will change screen
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

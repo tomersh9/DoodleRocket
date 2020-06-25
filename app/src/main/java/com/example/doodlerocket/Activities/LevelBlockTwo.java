@@ -67,7 +67,7 @@ public class LevelBlockTwo extends AppCompatActivity {
 
                 //need to unlock level
                 if(3 > globalLvl) {
-                    Toast.makeText(LevelBlockTwo.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LevelBlockTwo.this, R.string.unlock_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -75,9 +75,21 @@ public class LevelBlockTwo extends AppCompatActivity {
                 backgroundID = R.drawable.desert_backgorund;
                 currLvl = 3;
 
+                lvl3Btn.animate().scaleX(0.5f).scaleY(0.5f).alpha(0.3f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        //time entry to lvl
+                        lvl3Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+
+                        Intent intent = new Intent(LevelBlockTwo.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).start();
+
                 //time entry to lvl
-                Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
+                startActivity(intent);*/
 
             }
         });
@@ -88,7 +100,7 @@ public class LevelBlockTwo extends AppCompatActivity {
 
                 //need to unlock level
                 if(4 > globalLvl) {
-                    Toast.makeText(LevelBlockTwo.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LevelBlockTwo.this, R.string.unlock_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -97,8 +109,17 @@ public class LevelBlockTwo extends AppCompatActivity {
                 currLvl = 4;
 
                 //time entry to lvl
-                Intent intent = new Intent(LevelBlockTwo.this,MainActivity.class);
-                startActivity(intent);
+                lvl4Btn.animate().scaleX(0.5f).scaleY(0.5f).alpha(0.3f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        //time entry to lvl
+                        lvl4Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+
+                        Intent intent = new Intent(LevelBlockTwo.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).start();
             }
         });
 

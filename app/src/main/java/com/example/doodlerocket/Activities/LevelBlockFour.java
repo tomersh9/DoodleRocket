@@ -58,7 +58,7 @@ public class LevelBlockFour extends AppCompatActivity {
 
                 //need to unlock level
                 if (7 > globalLvl) {
-                    Toast.makeText(LevelBlockFour.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LevelBlockFour.this, R.string.unlock_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -66,9 +66,17 @@ public class LevelBlockFour extends AppCompatActivity {
                 backgroundID = R.drawable.lava_bg_1;
                 currLvl = 7;
 
-                //time entry to lvl
-                Intent intent = new Intent(LevelBlockFour.this, MainActivity.class);
-                startActivity(intent);
+                lvl7Btn.animate().scaleX(0.5f).scaleY(0.5f).alpha(0.3f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        //time entry to lvl
+                        lvl7Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+
+                        Intent intent = new Intent(LevelBlockFour.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).start();
 
             }
         });

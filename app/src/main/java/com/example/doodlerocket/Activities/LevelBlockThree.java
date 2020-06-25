@@ -61,7 +61,7 @@ public class LevelBlockThree extends AppCompatActivity {
 
                 //need to unlock level
                 if(5 > globalLvl) {
-                    Toast.makeText(LevelBlockThree.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LevelBlockThree.this, R.string.unlock_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -69,9 +69,17 @@ public class LevelBlockThree extends AppCompatActivity {
                 backgroundID = R.drawable.ocean_bg_1;
                 currLvl = 5;
 
-                //time entry to lvl
-                Intent intent = new Intent(LevelBlockThree.this,MainActivity.class);
-                startActivity(intent);
+                lvl5Btn.animate().scaleX(0.5f).scaleY(0.5f).alpha(0.3f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        //time entry to lvl
+                        lvl5Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+
+                        Intent intent = new Intent(LevelBlockThree.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).start();
 
             }
         });
@@ -82,7 +90,7 @@ public class LevelBlockThree extends AppCompatActivity {
 
                 //need to unlock level
                 if(6 > globalLvl) {
-                    Toast.makeText(LevelBlockThree.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LevelBlockThree.this, R.string.unlock_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -90,9 +98,17 @@ public class LevelBlockThree extends AppCompatActivity {
                 backgroundID = R.drawable.ice_bg_800;
                 currLvl = 6;
 
-                //time entry to lvl
-                Intent intent = new Intent(LevelBlockThree.this,MainActivity.class);
-                startActivity(intent);
+                lvl6Btn.animate().scaleX(0.5f).scaleY(0.5f).alpha(0.3f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        //time entry to lvl
+                        lvl6Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+
+                        Intent intent = new Intent(LevelBlockThree.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).start();
             }
         });
 

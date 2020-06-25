@@ -62,7 +62,7 @@ public class MeteorFactory {
 
             //final lvl
             case 7:
-                return new Meteor(playerMinX,playerMaxX,speed+9,hellSkins[randHell],resources);
+                return new Meteor(playerMinX,playerMaxX,speed+6,hellSkins[randHell],resources);
         }
         return null;
     }

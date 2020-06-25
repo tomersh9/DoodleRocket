@@ -2,6 +2,7 @@ package com.example.doodlerocket.Activities;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -42,6 +43,7 @@ public class SplashScreen extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +73,7 @@ public class SplashScreen extends AppCompatActivity {
         final TextView titleTv = findViewById(R.id.splash_title);
 
         //2 animators combined and operated by animations set
-        ObjectAnimator shipAnimator = new ObjectAnimator().ofFloat(splashSpaceship,"translationY",-height).setDuration(2500);
+        ObjectAnimator shipAnimator = new ObjectAnimator().ofFloat(splashSpaceship,"translationY",-height-500).setDuration(2500);
         ObjectAnimator textAnimator = new ObjectAnimator().ofFloat(titleTv,"alpha",0f,1f).setDuration(1500);
         textAnimator.setStartDelay(1400);
 

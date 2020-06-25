@@ -42,7 +42,7 @@ import java.util.TimerTask;
 
 public class GameView extends View {
 
-    private static int MOBS = 6;
+    private static int MOBS = 7;
 
     private Context context;
 
@@ -168,7 +168,7 @@ public class GameView extends View {
         this.gameViewListener = gameViewListener;
     }
 
-    public GameView(Context context, int screenW, int screenH, int skinID, int backgroundID, int currLvl, SoundManager soundManager) { //context when calling it
+    public GameView(Context context, int screenW, int screenH, int skinID, int backgroundID, int currLvl, int currScore ,SoundManager soundManager) { //context when calling it
         super(context);
 
         this.context = context;
@@ -204,7 +204,7 @@ public class GameView extends View {
         //factories
         meteorFactory = new MeteorFactory(player.getMinX(), player.getMaxX(), 20, getResources());
         enemyFactory = new EnemyFactory(getResources(), player.getMinX(), player.getMaxX(), 10, 3, canvasW);
-        bossFactory = new BossFactory(getResources(), 10, 30, canvasW);
+        bossFactory = new BossFactory(getResources(), 10, 60, canvasW);
 
         //create boss
         boss = bossFactory.generateBoss(currLvl);
@@ -212,7 +212,7 @@ public class GameView extends View {
         bossSpeed = boss.getSpeed(); //same
 
         //hearts, score and life
-        setUI();
+        setUI(currScore);
     }
 
 
@@ -233,7 +233,7 @@ public class GameView extends View {
         }
     }
 
-    private void setUI() {
+    private void setUI(int currScore) {
         //setting score paint properties
         //custom font
         Typeface fontTypeface = ResourcesCompat.getFont(getContext(), R.font.retro);
@@ -271,7 +271,7 @@ public class GameView extends View {
         pauseBtn = BitmapFactory.decodeResource(getResources(), R.drawable.pause_icon_50);
 
         //initialize score & health
-        score = 0;
+        score = currScore;
         gameCurrency = 0;
         health = player.getHealth(); // 3 life points
     }
@@ -311,7 +311,7 @@ public class GameView extends View {
 
         //draw boss health
         if (isBoss) {
-            int right = boss.getHealth()*30;
+            int right = boss.getHealth()*15;
             int left = 50;
             if(left + right > canvasW) {
                 right = canvasW - 50;
@@ -390,12 +390,14 @@ public class GameView extends View {
             boss.updateLocation();
             spawnBossProjectiles();
 
+            int speed = bossSpeed;
+
             //rage mode
-            if (boss.getHealth() < bossHealth / 2) {
-                boss.setSpeed(bossSpeed*2);
+            if (boss.getHealth() < bossHealth / 2 && boss.getHealth() > bossHealth / 3) {
+                boss.setSpeed(speed*2);
             }
             else if(boss.getHealth() < bossHealth / 3) {
-                boss.setSpeed(bossSpeed*3);
+                boss.setSpeed(speed*3);
             }
 
             //win the level
@@ -717,6 +719,15 @@ public class GameView extends View {
                 stopSpawnShieldBoost = true;
             }
         }
+        else if(enemyCounter == 9) {
+            if(stopSpawnShieldBoost) {
+                //do nothing
+            }
+            else {
+                isTimeToShieldBoost = true;
+                stopSpawnShieldBoost = true;
+            }
+        }
         else {
             stopSpawnShieldBoost = false;
         }
@@ -732,7 +743,7 @@ public class GameView extends View {
                 stopSpawnFireBoost = true;
             }
         }
-        else if (enemyCounter == 6) {
+        else if (enemyCounter == 7) {
             if(stopSpawnFireBoost) {
                 //do nothing
             }
@@ -742,7 +753,7 @@ public class GameView extends View {
             }
 
         }
-        else if(enemyCounter == 9) {
+        else if(enemyCounter == 10) {
             if(stopSpawnFireBoost) {
                 //do nothing
             }
@@ -821,7 +832,7 @@ public class GameView extends View {
             public void run() {
                 shieldTimer = false;
             }
-        },4000); //lasts 3 seconds
+        },4500); //lasts 3 seconds
     }
 
     private void spawnGreenCoins() {
@@ -934,9 +945,9 @@ public class GameView extends View {
     //timer for multiple bullets
     private void delayExtraBullets() {
         //default delay
-        int delay = 500;
+        int delay = 450;
         if(extraCounter == 2) { //not to OP
-            delay = 650;
+            delay = 570;
         }
 
         extraBullet = false;
@@ -987,7 +998,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToSpawnMeteor = true;
             }
-        }, 1600 - (currLvl * 200));
+        }, 1600 - (currLvl * 150));
     }
 
     //delay between coins spawns
@@ -998,7 +1009,7 @@ public class GameView extends View {
             public void run() {
                 isTimeToGoldCoin = true;
             }
-        }, 5000 - (currLvl * 50));
+        }, 4000 - (currLvl * 50));
     }
 
     private void delaySilverCoin() {

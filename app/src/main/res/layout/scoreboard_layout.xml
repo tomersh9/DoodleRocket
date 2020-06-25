@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="HIGH SCORES" />
+        android:text="@string/high_scores_tv" />
 
     <LinearLayout
         android:id="@+id/table_layout"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="RANK" />
+            android:text="@string/rank" />
 
         <TextView
             android:id="@+id/score_layout_tv"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="SCORE" />
+            android:text="@string/score_tv" />
 
         <TextView
             android:id="@+id/name_layout_tv"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="NAME" />
+            android:text="@string/name_tv" />
     </LinearLayout>
 
     <ScrollView

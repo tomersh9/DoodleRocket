@@ -31,7 +31,7 @@
     <string name="gems_earned">יהלומים שהרווחת</string>
     <string name="final_galaxy">גלקסיה אחרונה</string>
     <string name="valid_name">הכנס שם תקין</string>
-    <string name="is_in_top_10">" נמצא בעשרת הגדולים!"</string>
+    <string name="is_in_top_10">נכנס לעשרת הגדולים!</string>
     <string name="locked">נעול</string>
     <string name="hey_you_ve_entered_our_top_10">הי! נכנסת לעשרת הגדולים!</string>
     <string name="gems">יהלומים</string>
@@ -43,4 +43,9 @@
     <string name="premium">פרימיום</string>
     <string name="owned">בבעלות</string>
     <string name="equipped">מצויד</string>
+    <string name="unlock_first">עליך לפתוח את השלב קודם</string>
+    <string name="rank">דירוג</string>
+    <string name="score_tv">ניקוד</string>
+    <string name="name_tv">שם</string>
+    <string name="high_scores_tv">טבלת שיאים</string>
 </resources>

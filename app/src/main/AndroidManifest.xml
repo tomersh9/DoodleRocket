@@ -31,9 +31,6 @@
         <activity android:name=".Activities.LevelBlockFour"/>
 
 
-
-        <activity android:name=".Activities.LoginPage"/>
-
     </application>
 
 </manifest>

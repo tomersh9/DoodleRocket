@@ -43,21 +43,6 @@ public class LevelBlockOne extends AppCompatActivity {
     ObjectAnimator animator1;
     ObjectAnimator animator2;
 
-    /*@Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            | View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        }
-    }*/
-
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,7 +99,7 @@ public class LevelBlockOne extends AppCompatActivity {
 
                 //need to unlock level
                 if (2 > globalLvl) {
-                    Toast.makeText(LevelBlockOne.this, "You need to unlock it first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LevelBlockOne.this, R.string.unlock_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -122,10 +107,22 @@ public class LevelBlockOne extends AppCompatActivity {
                 backgroundID = R.drawable.city_bg;
                 currLvl = 2;
 
+                lvl2Btn.animate().scaleX(0.5f).scaleY(0.5f).alpha(0.3f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        //time entry to lvl
+                        lvl2Btn.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500).setStartDelay(250);
+
+                        Intent intent = new Intent(LevelBlockOne.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).start();
+
                 //time entry to lvl
-                Intent intent = new Intent(LevelBlockOne.this, MainActivity.class);
+                /*Intent intent = new Intent(LevelBlockOne.this, MainActivity.class);
                 startActivity(intent);
-                finish();
+                finish();*/
             }
         });
 

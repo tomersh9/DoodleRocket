@@ -15,8 +15,8 @@ public class SingleShopList {
         //create list only once
         if (shopItems == null) {
             shopItems = new ArrayList<>();
-            createShopList(shopItems,context);
         }
+        createShopList(shopItems,context); //to change between heb and eng
         return shopItems;
     }
 

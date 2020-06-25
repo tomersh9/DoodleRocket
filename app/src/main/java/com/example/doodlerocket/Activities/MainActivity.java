@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private int currLvl;
     private int skinID;
     private int backgroundID;
+    private int currScore;
 
     //screen size
     int width, height;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         skinID = sp.getInt("skin_id", R.drawable.default_ship_100);
         currLvl = sp.getInt("curr_lvl", 1);
         globalLvl = sp.getInt("global_lvl", 1);
+        currScore = 0;
 
         //set GameView background according to level
         setBackground(currLvl);
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         currLvl = sp.getInt("curr_lvl", 1);
 
         //game is running on a back thread
-        gameView = new GameView(this, width, height, skinID, backgroundID, currLvl, soundManager);
+        gameView = new GameView(this, width, height, skinID, backgroundID, currLvl, currScore,soundManager);
 
         //listens to events in GameView
         gameView.setGameViewListener(new GameView.GameViewListener() {
@@ -226,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void endGame(int score, boolean isWon) {
+            public void endGame(final int score, boolean isWon) {
 
                 //only call this event once!
                 if (!isFirstLoad) {
@@ -297,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View v) {
 
                             //restart gameView
+                            currScore = score;
                             gameAlertDialog.dismiss();
                             setBackground(currLvl);
                             setGameView();
@@ -311,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
                     gameAlertDialog.setCancelable(false);
 
                 } else {
+                    currScore = 0;
                     //move to game over page
                     Intent gameOverIntent = new Intent(MainActivity.this, GameOverActivity.class);
                     gameOverIntent.putExtra("score", score);
