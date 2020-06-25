@@ -25,6 +25,7 @@
         <activity android:name=".Activities.GameOverActivity"/>
         <activity android:name=".Activities.ScoreBoardActivity"/>
         <activity android:name=".Activities.ShopActivity"/>
+        <activity android:name=".Activities.RatingActivity"/>
         <activity android:name=".Activities.LevelBlockOne"/>
         <activity android:name=".Activities.LevelBlockTwo"/>
         <activity android:name=".Activities.LevelBlockThree"/>

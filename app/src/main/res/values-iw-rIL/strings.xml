@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <bool name="is_rtl">true</bool>
     <string name="app_name">bit.Rocket</string>
     <string name="yes">כן</string>
     <string name="no">לא</string>
@@ -48,4 +49,6 @@
     <string name="score_tv">ניקוד</string>
     <string name="name_tv">שם</string>
     <string name="high_scores_tv">טבלת שיאים</string>
+    <string name="enter_name">הכנס שם</string>
+    <string name="sumbit">בצע</string>
 </resources>

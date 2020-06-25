@@ -83,7 +83,7 @@
             android:textColor="@color/pink"
             android:padding="20dp"
             android:layout_gravity="center"
-            android:textSize="19sp" />
+            android:textSize="25sp" />
 
         <EditText
             android:id="@+id/name_et"
@@ -94,7 +94,7 @@
             android:background="@drawable/edittext_shape"
             android:clickable="false"
             android:gravity="center"
-            android:hint="Enter name"
+            android:hint="@string/enter_name"
             android:padding="10dp"
             android:textColorHint="@color/hint"
             android:textSize="20sp" />
@@ -107,7 +107,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:background="@drawable/btn_yellow_selector"
-            android:text="Sumbit"
+            android:text="@string/sumbit"
             android:textAllCaps="false" />
 
     </LinearLayout>

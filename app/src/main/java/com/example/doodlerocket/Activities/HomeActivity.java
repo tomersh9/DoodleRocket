@@ -106,6 +106,16 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton rateBtn = findViewById(R.id.rate_btn);
+        rateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this,RatingActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+            }
+        });
+
         //set buttons animations
         setAnimations();
 

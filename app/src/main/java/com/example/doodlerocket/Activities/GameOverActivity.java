@@ -120,7 +120,7 @@ public class GameOverActivity extends AppCompatActivity {
                 submitLayout.setVisibility(View.GONE);
                 btnLayout.setVisibility(View.VISIBLE);
 
-                Toast.makeText(GameOverActivity.this, nameEt.getText().toString() + getString(R.string.is_in_top_10), Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameOverActivity.this, nameEt.getText().toString() + " " + getString(R.string.is_in_top_10), Toast.LENGTH_SHORT).show();
 
             }
         });

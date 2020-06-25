@@ -43,6 +43,8 @@ public class LevelBlockOne extends AppCompatActivity {
     ObjectAnimator animator1;
     ObjectAnimator animator2;
 
+    private boolean isRtl;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class LevelBlockOne extends AppCompatActivity {
 
         //fixed portrait mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //to flip arrows on RTL
+        isRtl = getResources().getBoolean(R.bool.is_rtl);
 
         //load data
         sp = getSharedPreferences("storage", MODE_PRIVATE);
@@ -118,11 +123,6 @@ public class LevelBlockOne extends AppCompatActivity {
                         finish();
                     }
                 }).start();
-
-                //time entry to lvl
-                /*Intent intent = new Intent(LevelBlockOne.this, MainActivity.class);
-                startActivity(intent);
-                finish();*/
             }
         });
 
@@ -179,6 +179,7 @@ public class LevelBlockOne extends AppCompatActivity {
         });
     }
 
+
     //unlock levels visual feedback
     private void enableLevels() {
         if (globalLvl >= 2) {
@@ -186,7 +187,6 @@ public class LevelBlockOne extends AppCompatActivity {
             lvl2Tv.setText(R.string.earth);
             lvl2Btn.setImageResource(R.drawable.terran_300);
         }
-
     }
 
 
