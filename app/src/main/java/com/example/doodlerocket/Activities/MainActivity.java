@@ -64,7 +64,21 @@ public class MainActivity extends AppCompatActivity {
     //only need 1 instance of AlertDialog and then inflate it with other layouts
     private AlertDialog gameAlertDialog;
 
-    private List<User> users = new ArrayList<>();
+    //hide navigation bar in game
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        View decorView = getWindow().getDecorView();
+        if (hasFocus) {
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -315,6 +329,9 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     currScore = 0;
+
+                    stopMusic();
+
                     //move to game over page
                     Intent gameOverIntent = new Intent(MainActivity.this, GameOverActivity.class);
                     gameOverIntent.putExtra("score", score);
@@ -334,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startMusic() {
         if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.theme_compressed);
+            mediaPlayer = MediaPlayer.create(this, R.raw.boss_music_cut);
             mediaPlayer.setVolume(1, 1);
             mediaPlayer.setLooping(false);
         }
@@ -357,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
     }
 
     //calls only if player won the level

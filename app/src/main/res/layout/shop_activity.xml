@@ -2,13 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/shop_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <pl.droidsonroids.gif.GifImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/vortex_pink_bg" />
+    android:layout_height="match_parent"
+    android:background="@drawable/stars_pxl_png">
 
     <TextView
         android:id="@+id/shop_tv"
@@ -60,10 +55,17 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/coins_layout">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shop_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/coins_layout" />
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </RelativeLayout>

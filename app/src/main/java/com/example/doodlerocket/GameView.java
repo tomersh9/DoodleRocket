@@ -429,7 +429,7 @@ public class GameView extends View {
 
             greenCoin.updateLocation();
 
-            if (greenCoin.collisionDetection(playerX, playerY, playerBitmap)) {
+            if (Rect.intersects(greenCoin.getCollisionShape(),player.getCollisionShape())) {
                 soundManager.startGemSfx();
                 gameCurrency += 25;
                 removeGreenCoins.add(greenCoin);
@@ -477,7 +477,7 @@ public class GameView extends View {
         //boosts
         for (FireBoost fireBoost : fireBoostList) {
             fireBoost.updateLocation();
-            if (fireBoost.collisionDetection(playerX, playerY, playerBitmap)) {
+            if (Rect.intersects(fireBoost.getCollisionShape(),player.getCollisionShape())) {
                 soundManager.startFireBoostSfx();
                 extraCounter++;
                 extraBullet = true;
@@ -493,7 +493,7 @@ public class GameView extends View {
 
         for(LifeBoost lifeBoost : lifeBoostList) {
             lifeBoost.updateLocation();
-            if(lifeBoost.collisionDetection(playerX,playerY,playerBitmap)) {
+            if(Rect.intersects(lifeBoost.getCollisionShape(),player.getCollisionShape())) {
                 soundManager.startLifeBoostSfx();
                 health++;
                 removeLifeBoosts.add(lifeBoost);
@@ -509,7 +509,7 @@ public class GameView extends View {
 
         for(ShieldBoost shieldBoost : shieldBoostList) {
             shieldBoost.updateLocation();
-            if(shieldBoost.collisionDetection(playerX,playerY,playerBitmap)) {
+            if(Rect.intersects(shieldBoost.getCollisionShape(),player.getCollisionShape())) {
                 soundManager.startShieldBoostSfx();
                 shieldTimer = true;
                 removeShieldBoosts.add(shieldBoost);

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,6 +36,8 @@ public class ShopActivity extends AppCompatActivity {
     private int coins;
     private List<ShopItem> shopItems;
 
+    private boolean isRTL;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,37 +45,32 @@ public class ShopActivity extends AppCompatActivity {
         setContentView(R.layout.shop_activity);
 
         //fixed portrait mode
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //change list language
+        isRTL = getResources().getBoolean(R.bool.is_rtl);
 
         //getting static shop list (singleton)
         this.shopItems = SingleShopList.getInstance(this);
 
-        sp = getSharedPreferences("storage",MODE_PRIVATE);
-        coins = sp.getInt("money",0);
+        sp = getSharedPreferences("storage", MODE_PRIVATE);
+        coins = sp.getInt("money", 0);
 
         //load history of shop
         loadData();
 
-        //sort shop list by price with Comparator
-        Collections.sort(shopItems, new Comparator<ShopItem>() {
-            @Override
-            public int compare(ShopItem s1, ShopItem s2) {
-                return s1.getPrice() - s2.getPrice();
-            }
-        });
-
         final TextView coinsTv = findViewById(R.id.shop_coins_amount);
-        coinsTv.setText(coins+"");
+        coinsTv.setText(coins + "");
 
         //ref our RecycleView in activity_main
         RecyclerView recyclerView = findViewById(R.id.shop_list);
         recyclerView.setHasFixedSize(true); // const size
 
         //defines the layout (Vertical, Horizontal, Grid..)
-        recyclerView.setLayoutManager(new GridLayoutManager(this,2)); //number of col in a row
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); //number of col in a row
 
         //create instance of adapter that has ViewHolder inside (to inflate our cells)
-        final ShopItemAdapter shopItemAdapter = new ShopItemAdapter(shopItems,this);
+        final ShopItemAdapter shopItemAdapter = new ShopItemAdapter(shopItems, this);
 
         //setListener is our own public method
         shopItemAdapter.setMyShopItemListener(new ShopItemAdapter.MyShopItemListener() {
@@ -84,10 +82,10 @@ public class ShopActivity extends AppCompatActivity {
                 int price = item.getPrice();
 
                 //can't buy used skins
-                if(coins >= price && !item.isBought() && item.getPrice()!=0) {
+                if (coins >= price && !item.isBought() && item.getPrice() != 0) {
                     //buy skin and reduce coins
                     coins -= price;
-                    coinsTv.setText(coins+"");
+                    coinsTv.setText(coins + "");
 
                     //change item to bought and equip
                     item.setBought(true);
@@ -99,11 +97,10 @@ public class ShopActivity extends AppCompatActivity {
                     //reduce total money
                     //send bitmap to player
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putInt("money",coins);
+                    editor.putInt("money", coins);
                     editor.commit();
 
-                }
-                else if(item.getPrice() == 0) { //default skin
+                } else if (item.getPrice() == 0) { //default skin
 
                     item.setEquipped(true);
                     item.setRarity(getString(R.string.equipped));
@@ -111,29 +108,27 @@ public class ShopActivity extends AppCompatActivity {
 
                     //save equipped state
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putInt("skin_id",item.getSkinId());
+                    editor.putInt("skin_id", item.getSkinId());
                     editor.commit();
 
                     //only current item is equipped
                     setItemsState(item);
-                }
-                else if(item.isBought()) {
+                } else if (item.isBought()) {
 
-                        //notify change
-                        item.setEquipped(true);
-                        item.setRarity(getString(R.string.equipped));
-                        shopItemAdapter.notifyDataSetChanged();
+                    //notify change
+                    item.setEquipped(true);
+                    item.setRarity(getString(R.string.equipped));
+                    shopItemAdapter.notifyDataSetChanged();
 
-                        //save equipped state
-                        SharedPreferences.Editor editor = sp.edit();
-                        editor.putInt("skin_id",item.getSkinId());
-                        editor.commit();
+                    //save equipped state
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putInt("skin_id", item.getSkinId());
+                    editor.commit();
 
-                        //only current item is equipped
-                        setItemsState(item);
+                    //only current item is equipped
+                    setItemsState(item);
 
-                    }
-                else { //can't afford buying
+                } else { //can't afford buying
                     YoYo.with(Techniques.Shake).duration(700).playOn(v);
                 }
             }
@@ -147,16 +142,16 @@ public class ShopActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish(); //kills this activity
-                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
     }
 
     private void setItemsState(ShopItem item) {
         //update current item equipped
-        for(ShopItem shopItem : shopItems) {
-            if(!shopItem.equals(item)) {
-                if(shopItem.isBought() || shopItem.getPrice() == 0) {
+        for (ShopItem shopItem : shopItems) {
+            if (!shopItem.equals(item)) {
+                if (shopItem.isBought() || shopItem.getPrice() == 0) {
                     shopItem.setEquipped(false);
                     shopItem.setRarity(getString(R.string.owned));
                 }
@@ -168,27 +163,24 @@ public class ShopActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         Gson gson = new Gson();
         String json = gson.toJson(shopItems);
-        editor.putString("items",json);
+        editor.putString("items", json);
         editor.commit();
-
     }
 
     private void loadData() {
-
         Gson gson = new Gson();
-        String json = sp.getString("items",null);
-        Type type = new TypeToken<List<ShopItem>>() {}.getType();
-        if(gson.fromJson(json,type) !=null){
-            shopItems = gson.fromJson(json,type);
+        String json = sp.getString("items", null);
+        Type type = new TypeToken<List<ShopItem>>() {
+        }.getType();
+        if (gson.fromJson(json, type) != null) {
+            shopItems = gson.fromJson(json, type);
         }
-
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override

@@ -53,22 +53,19 @@
             android:text="@string/name_tv" />
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/table_layout"
-        android:layout_centerHorizontal="true">
-
     <LinearLayout
+        android:id="@+id/score_list_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_below="@id/table_layout">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/score_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="420dp"
         android:layout_margin="5dp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/back_to_home_board_btn"
@@ -77,11 +74,11 @@
         style="@style/btn_txt"
         android:background="@drawable/btn_purple_selector"
         android:text="@string/main_menu"
+        android:layout_below="@id/score_list_layout"
+        android:layout_centerHorizontal="true"
         android:textSize="12sp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"/>
-    </LinearLayout>
-    </ScrollView>
 
 </RelativeLayout>

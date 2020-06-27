@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.doodlerocket.MusicService;
 import com.example.doodlerocket.R;
 import com.r0adkll.slidr.Slidr;
 
@@ -193,25 +194,26 @@ public class LevelBlockOne extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("lvl_bg", backgroundID);
         editor.putInt("curr_lvl", currLvl);
         editor.commit();
     }
 
-    //on back pressed
+    //called before onDestroy
     @Override
     public void finish() {
         super.finish();
+        stopService(new Intent(LevelBlockOne.this, MusicService.class));
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
+
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(LevelBlockOne.this, HomeActivity.class);
         startActivity(intent);
         finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        //overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

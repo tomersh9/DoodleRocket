@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.doodlerocket.MusicService;
 import com.example.doodlerocket.R;
 
 public class LevelBlockFour extends AppCompatActivity {
@@ -135,6 +136,15 @@ public class LevelBlockFour extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
+        stopService(new Intent(LevelBlockFour.this, MusicService.class));
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(LevelBlockFour.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+        //overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

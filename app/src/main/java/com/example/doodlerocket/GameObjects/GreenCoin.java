@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.example.doodlerocket.R;
 
@@ -15,6 +16,7 @@ public class GreenCoin implements IGameObjects {
     private int coinX, coinY, coinSpeed;
 
     private List<Bitmap> greenCoinList = new ArrayList<>();
+    private Bitmap coinBitmap;
     private int pos = 0;
 
     public GreenCoin(int playerMinX, int playerMaxX, Resources resources) {
@@ -24,6 +26,8 @@ public class GreenCoin implements IGameObjects {
         greenCoinList.add(BitmapFactory.decodeResource(resources,R.drawable.green_money_30_03));
         greenCoinList.add(BitmapFactory.decodeResource(resources,R.drawable.green_money_30_04));
         greenCoinList.add(BitmapFactory.decodeResource(resources,R.drawable.green_money_30_04));
+
+        coinBitmap = greenCoinList.get(0);
 
         coinX = (int) Math.floor(Math.random() * ((playerMaxX - playerMinX) + playerMinX));
         coinY = 0;
@@ -68,5 +72,9 @@ public class GreenCoin implements IGameObjects {
             return true;
         }
         return false;
+    }
+
+    public Rect getCollisionShape() {
+        return new Rect(coinX,coinY,coinX+coinBitmap.getWidth(),coinY+coinBitmap.getHeight());
     }
 }

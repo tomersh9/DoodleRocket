@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -43,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
     private boolean isMute = false;
+    private boolean isExitApp = true;
 
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -66,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         editor.commit();*/
 
         //start background music
-        //startMusic();
+        startMusic();
 
         //title animation
         TextView titleTv = findViewById(R.id.home_title_tv);
@@ -82,6 +84,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent startGameIntent = new Intent(HomeActivity.this,LevelBlockOne.class);
                 startActivity(startGameIntent);
+                stopMusic();
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
@@ -92,6 +95,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this,ShopActivity.class);
                 startActivity(intent);
+                isExitApp = false;
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
@@ -102,6 +106,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this,ScoreBoardActivity.class);
                 startActivity(intent);
+                isExitApp = false;
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
@@ -112,6 +117,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this,RatingActivity.class);
                 startActivity(intent);
+                isExitApp = false;
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
@@ -119,23 +125,23 @@ public class HomeActivity extends AppCompatActivity {
         //set buttons animations
         setAnimations();
 
-       /* //mute music btn
+        //mute music btn
         final ImageButton volumeBtn = findViewById(R.id.vol_btn);
         volumeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!isMute) {
-                    volumeBtn.setImageResource(R.drawable.mute_yellow_50);
+                    volumeBtn.setImageResource(R.drawable.volume_disable);
                     pauseMusic();
                     isMute = true;
                 }
                 else {
-                    volumeBtn.setImageResource(R.drawable.vol_yellow_50);
+                    volumeBtn.setImageResource(R.drawable.volume_enable);
                     startMusic();
                     isMute = false;
                 }
             }
-        });*/
+        });
     }
 
     private void setAnimations() {
@@ -215,13 +221,13 @@ public class HomeActivity extends AppCompatActivity {
         shipBounceAnimator.setRepeatCount(ValueAnimator.INFINITE);
     }
 
-    /*public void startMusic() {
+    public void startMusic() {
         if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.theme_compressed);
+            mediaPlayer = MediaPlayer.create(this, R.raw.theme_comp);
             mediaPlayer.setVolume(0.75f,0.75f);
             mediaPlayer.setLooping(true);
         }
-        mediaPlayer.start();
+        mediaPlayer.start(); //start or resume
     }
 
     public void pauseMusic() {
@@ -238,30 +244,36 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        isMute = false;
-        startMusic();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         stopMusic();
-    }*/
+    }
 
-    /*@Override
+
+    @Override
     protected void onPause() {
         super.onPause();
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("money",0);
+        editor.putInt("money", 0);
         editor.commit();
-    }*/
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(isExitApp) {
+            stopMusic(); //stop music when exit app
+        }
+    }
 
     //put skin on image when back
     @Override
     protected void onResume() {
         super.onResume();
+        if(!isMute) {
+            startMusic();
+        }
+        isExitApp = true;
         //set data
         skinID = sp.getInt("skin_id",R.drawable.default_ship_100);
         shipIcon.setImageResource(skinID);

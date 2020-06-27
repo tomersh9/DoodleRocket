@@ -93,9 +93,6 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
         holder.priceTv.setText(item.getPrice()+"");
         holder.rarityTv.setText(item.getRarity());
 
-        if(item.getPrice() > 1000000) {
-            holder.priceTv.setTextSize(10);
-        }
         if(item.getRarity().matches(context.getString(R.string.common))) {
             holder.rarityTv.setTextColor(Color.WHITE);
         }

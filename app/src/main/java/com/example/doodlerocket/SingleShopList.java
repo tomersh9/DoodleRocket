@@ -3,6 +3,8 @@ package com.example.doodlerocket;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SingleShopList {
@@ -15,8 +17,8 @@ public class SingleShopList {
         //create list only once
         if (shopItems == null) {
             shopItems = new ArrayList<>();
+            createShopList(shopItems,context);
         }
-        createShopList(shopItems,context); //to change between heb and eng
         return shopItems;
     }
 
@@ -41,5 +43,13 @@ public class SingleShopList {
         shopItems.add(new ShopItem(R.drawable.blueship_prem_100, 2500, context.getString(R.string.legendary)));
         shopItems.add(new ShopItem(R.drawable.blueship_reg_100, 10000, context.getString(R.string.premium)));
         shopItems.add(new ShopItem(R.drawable.blueship_tiny_100, 10000, context.getString(R.string.premium)));
+
+        //sort shop list by price with Comparator
+        Collections.sort(shopItems, new Comparator<ShopItem>() {
+            @Override
+            public int compare(ShopItem s1, ShopItem s2) {
+                return s1.getPrice() - s2.getPrice();
+            }
+        });
     }
 }

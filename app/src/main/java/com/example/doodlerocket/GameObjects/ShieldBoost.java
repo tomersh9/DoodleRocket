@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.example.doodlerocket.R;
 
@@ -56,5 +57,9 @@ public class ShieldBoost implements IGameObjects {
             return true;
         }
         return false;
+    }
+
+    public Rect getCollisionShape() {
+        return new Rect(boostX,boostY,boostX+boostBitmap.getWidth(),boostY+boostBitmap.getHeight());
     }
 }
