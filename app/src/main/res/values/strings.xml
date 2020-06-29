@@ -20,7 +20,6 @@
     <string name="galaxy_2">Galaxy 2</string>
     <string name="desert">Desert</string>
     <string name="forest">Forest</string>
-    <string name="cosmetic_shop">Cosmetic Shop</string>
     <string name="back">Back</string>
     <string name="quit_game">Quit Game?</string>
     <string name="total_coins">Total Coins</string>
@@ -31,7 +30,7 @@
     <string name="hell">Hell</string>
     <string name="final_galaxy">Final Galaxy</string>
     <string name="valid_name">Enter valid name</string>
-    <string name="is_in_top_10">\" is in Top 10!\"</string>
+    <string name="is_in_top_10">is in Top 10!</string>
     <string name="locked">Locked</string>
     <string name="total_gems">Total Gems</string>
     <string name="gems">Gems</string>
@@ -43,11 +42,12 @@
     <string name="premium">Premium</string>
     <string name="equipped">Equipped</string>
     <string name="owned">Owned</string>
-    <string name="unlock_first">You need to unlock it first</string>
+    <string name="unlock_first">You need to unlock this level</string>
     <string name="rank">RANK</string>
     <string name="score_tv">SCORE</string>
     <string name="name_tv">NAME</string>
     <string name="high_scores_tv">HIGH SCORES</string>
     <string name="sumbit">Sumbit</string>
     <string name="enter_name">Enter name</string>
+    <string name="cosmetic_shop">Skin Shop</string>
 </resources>

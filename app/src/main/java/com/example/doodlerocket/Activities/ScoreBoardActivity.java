@@ -33,7 +33,6 @@ import java.util.List;
 public class ScoreBoardActivity extends AppCompatActivity {
 
     private List<User> users = null;
-   // private User currUser;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -43,7 +42,6 @@ public class ScoreBoardActivity extends AppCompatActivity {
 
         //fixed portrait mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
         TextView titleTv = findViewById(R.id.highscore_title);
         TextView nameTv = findViewById(R.id.name_layout_tv);

@@ -92,7 +92,7 @@ public class SoundManager {
         soundPool.play(meteorDeathSound,0.9f,0.9f,1,0,1);
     }
 
-    public void startPlayerLaserSfx() {soundPool.play(playerLaserSound,0.15f,0.15f,1,0,1);
+    public void startPlayerLaserSfx() {soundPool.play(playerLaserSound,0.25f,0.25f,1,0,1);
     }
 
     public void startEnemyLaserSfx() {
@@ -119,9 +119,5 @@ public class SoundManager {
 
     public void pauseSfx() {
         soundPool.autoPause();
-    }
-
-    public SoundPool getSoundPool() {
-        return soundPool;
     }
 }

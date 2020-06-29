@@ -133,6 +133,7 @@ public class GameOverActivity extends AppCompatActivity {
                 Intent backToGameIntent = new Intent(GameOverActivity.this,MainActivity.class);
                 startActivity(backToGameIntent);
                 finish();
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
@@ -143,6 +144,7 @@ public class GameOverActivity extends AppCompatActivity {
                 Intent menuIntent = new Intent(GameOverActivity.this,HomeActivity.class);
                 startActivity(menuIntent);
                 finish();
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
@@ -153,6 +155,7 @@ public class GameOverActivity extends AppCompatActivity {
                 Intent scoreIntent = new Intent(GameOverActivity.this,ScoreBoardActivity.class);
                 scoreIntent.putExtra("high_score",highScore);
                 startActivity(scoreIntent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
@@ -223,5 +226,6 @@ public class GameOverActivity extends AppCompatActivity {
         Intent intent = new Intent(GameOverActivity.this,HomeActivity.class);
         startActivity(intent);
         finish();
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 }

@@ -107,9 +107,11 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ShopIt
         }
         if(item.isBought()) {
             holder.rarityTv.setTextColor(Color.WHITE);
+            holder.rarityTv.setText(R.string.owned);
         }
         if(item.isEquipped()) {
             holder.rarityTv.setTextColor(Color.GREEN);
+            holder.rarityTv.setText(R.string.equipped);
         }
     }
 

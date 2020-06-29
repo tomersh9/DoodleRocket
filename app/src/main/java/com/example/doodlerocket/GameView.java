@@ -856,7 +856,7 @@ public class GameView extends View {
             public void run() {
                 isBossProjectile = true;
             }
-        }, 600 - (currLvl * 50));
+        }, 600 - (currLvl * 42));
     }
 
 
@@ -1061,7 +1061,6 @@ public class GameView extends View {
     public void gameOver() {
         //move to game over intent or victory dialog
         SharedPreferences.Editor editor = sp.edit();
-
         editor.putInt("gems", gameCurrency);
         int total = money + gameCurrency; //actual money to buy things
         editor.putInt("money", total);

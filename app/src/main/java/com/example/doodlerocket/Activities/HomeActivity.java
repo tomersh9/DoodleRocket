@@ -44,7 +44,7 @@ public class HomeActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
     private boolean isMute = false;
-    private boolean isExitApp = true;
+    private boolean isExitApp;
 
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -60,11 +60,13 @@ public class HomeActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("storage",MODE_PRIVATE);
         skinID = sp.getInt("skin_id",R.drawable.default_ship_100);
+        isExitApp = sp.getBoolean("exit_app",true);
 
-        /*//to lock levels if needed
-        globalLvl = 1;
+        //to lock levels if needed
+        /*globalLvl = 1;
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("global_lvl",1);
+        editor.putInt("money",0);
         editor.commit();*/
 
         //start background music
@@ -254,14 +256,16 @@ public class HomeActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("money", 0);
+        //editor.putInt("money", 500000);
+        editor.putBoolean("is_exit",isExitApp);
         editor.commit();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(isExitApp) {
+        boolean exit = sp.getBoolean("is_exit",true);
+        if(exit) {
             stopMusic(); //stop music when exit app
         }
     }

@@ -29,20 +29,20 @@ public class SingleShopList {
         shopItems.add(new ShopItem(R.drawable.ship_grey_red_100, 250, context.getString(R.string.common)));
         shopItems.add(new ShopItem(R.drawable.ship_polls_100, 500, context.getString(R.string.rare)));
         shopItems.add(new ShopItem(R.drawable.ship_purple_black_100, 2500, context.getString(R.string.legendary)));
-        shopItems.add(new ShopItem(R.drawable.ship_red_long_100, 10000, context.getString(R.string.premium)));
+        shopItems.add(new ShopItem(R.drawable.ship_red_long_100, 5000, context.getString(R.string.premium)));
         shopItems.add(new ShopItem(R.drawable.ship_red_reg_100, 2500, context.getString(R.string.legendary)));
         shopItems.add(new ShopItem(R.drawable.ship_white_polls_100, 500, context.getString(R.string.rare)));
         shopItems.add(new ShopItem(R.drawable.blast_ship_100, 250, context.getString(R.string.common)));
         shopItems.add(new ShopItem(R.drawable.blue_red_rare_ship_100, 500, context.getString(R.string.rare)));
         shopItems.add(new ShopItem(R.drawable.green_gold_ship_100, 2500, context.getString(R.string.legendary)));
-        shopItems.add(new ShopItem(R.drawable.green_red_ship_100, 10000, context.getString(R.string.premium)));
+        shopItems.add(new ShopItem(R.drawable.green_red_ship_100, 5000, context.getString(R.string.premium)));
         shopItems.add(new ShopItem(R.drawable.guitar_pick_ship_100, 500, context.getString(R.string.rare)));
         shopItems.add(new ShopItem(R.drawable.red_polls_ship_100, 2500, context.getString(R.string.legendary)));
         shopItems.add(new ShopItem(R.drawable.blackship_prem_100, 250, context.getString(R.string.common)));
         shopItems.add(new ShopItem(R.drawable.blueship_detailed_prem_100, 500, context.getString(R.string.rare)));
         shopItems.add(new ShopItem(R.drawable.blueship_prem_100, 2500, context.getString(R.string.legendary)));
-        shopItems.add(new ShopItem(R.drawable.blueship_reg_100, 10000, context.getString(R.string.premium)));
-        shopItems.add(new ShopItem(R.drawable.blueship_tiny_100, 10000, context.getString(R.string.premium)));
+        shopItems.add(new ShopItem(R.drawable.blueship_reg_100, 5000, context.getString(R.string.premium)));
+        shopItems.add(new ShopItem(R.drawable.blueship_tiny_100, 5000, context.getString(R.string.premium)));
 
         //sort shop list by price with Comparator
         Collections.sort(shopItems, new Comparator<ShopItem>() {

@@ -22,7 +22,7 @@
     <string name="galaxy_2">גלקסיה 2</string>
     <string name="desert">מדבר</string>
     <string name="forest">יער</string>
-    <string name="cosmetic_shop">חנות סקינים</string>
+    <string name="cosmetic_shop">חנות דמויות</string>
     <string name="back">חזור</string>
     <string name="quit_game">לצאת מהמשחק?</string>
     <string name="total_coins">סך מטבעות</string>
@@ -44,11 +44,11 @@
     <string name="premium">פרימיום</string>
     <string name="owned">בבעלות</string>
     <string name="equipped">מצויד</string>
-    <string name="unlock_first">עליך לפתוח את השלב קודם</string>
     <string name="rank">דירוג</string>
     <string name="score_tv">ניקוד</string>
     <string name="name_tv">שם</string>
     <string name="high_scores_tv">טבלת שיאים</string>
     <string name="enter_name">הכנס שם</string>
     <string name="sumbit">בצע</string>
+    <string name="unlock_first">עליך לסיים את השלב הקודם</string>
 </resources>

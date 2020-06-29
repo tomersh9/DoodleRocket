@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class ShopActivity extends AppCompatActivity {
 
     private int coins;
     private List<ShopItem> shopItems;
+    private List<ShopItem> stateList;
 
     private boolean isRTL;
 
@@ -52,12 +54,16 @@ public class ShopActivity extends AppCompatActivity {
 
         //getting static shop list (singleton)
         this.shopItems = SingleShopList.getInstance(this);
+        this.stateList = shopItems;
 
         sp = getSharedPreferences("storage", MODE_PRIVATE);
         coins = sp.getInt("money", 0);
 
         //load history of shop
         loadData();
+
+        //load list of states regardless of language
+        loadItemsState();
 
         final TextView coinsTv = findViewById(R.id.shop_coins_amount);
         coinsTv.setText(coins + "");
@@ -89,13 +95,12 @@ public class ShopActivity extends AppCompatActivity {
 
                     //change item to bought and equip
                     item.setBought(true);
-                    item.setRarity(getString(R.string.owned));
+                    //item.setRarity(getString(R.string.owned));
 
                     //real-time change
                     shopItemAdapter.notifyDataSetChanged();
 
                     //reduce total money
-                    //send bitmap to player
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putInt("money", coins);
                     editor.commit();
@@ -103,7 +108,7 @@ public class ShopActivity extends AppCompatActivity {
                 } else if (item.getPrice() == 0) { //default skin
 
                     item.setEquipped(true);
-                    item.setRarity(getString(R.string.equipped));
+                    //item.setRarity(getString(R.string.equipped));
                     shopItemAdapter.notifyDataSetChanged();
 
                     //save equipped state
@@ -113,11 +118,12 @@ public class ShopActivity extends AppCompatActivity {
 
                     //only current item is equipped
                     setItemsState(item);
+
                 } else if (item.isBought()) {
 
                     //notify change
                     item.setEquipped(true);
-                    item.setRarity(getString(R.string.equipped));
+                    //item.setRarity(getString(R.string.equipped));
                     shopItemAdapter.notifyDataSetChanged();
 
                     //save equipped state
@@ -147,33 +153,80 @@ public class ShopActivity extends AppCompatActivity {
         });
     }
 
+    private void loadItemsState() {
+        for(int i = 0 ; i <shopItems.size()-1 ; i++) {
+            this.stateList.get(i).setBought(this.shopItems.get(i).isBought());
+            this.stateList.get(i).setEquipped(this.shopItems.get(i).isEquipped());
+        }
+    }
+
     private void setItemsState(ShopItem item) {
         //update current item equipped
         for (ShopItem shopItem : shopItems) {
             if (!shopItem.equals(item)) {
                 if (shopItem.isBought() || shopItem.getPrice() == 0) {
                     shopItem.setEquipped(false);
-                    shopItem.setRarity(getString(R.string.owned));
+                    //shopItem.setRarity(getString(R.string.owned));
                 }
             }
         }
     }
 
     private void saveData() {
+        if (isRTL) {
+            SharedPreferences.Editor editor = sp.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(shopItems);
+            editor.putString("items_heb", json);
+            editor.commit();
+        }
+        else {
+            SharedPreferences.Editor editor = sp.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(shopItems);
+            editor.putString("items_eng", json);
+            editor.commit();
+        }
+
+        //save state list
         SharedPreferences.Editor editor = sp.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(shopItems);
-        editor.putString("items", json);
+        Gson gson2 = new Gson();
+        String json2 = gson2.toJson(stateList);
+        editor.putString("items_state", json2);
         editor.commit();
     }
 
     private void loadData() {
-        Gson gson = new Gson();
-        String json = sp.getString("items", null);
+        if(isRTL) {
+            Gson gson = new Gson();
+            String json = sp.getString("items_heb", null);
+            Type type = new TypeToken<List<ShopItem>>() {
+            }.getType();
+            if (gson.fromJson(json, type) != null) {
+                shopItems = gson.fromJson(json, type);
+            }
+        }
+        else {
+            Gson gson = new Gson();
+            String json = sp.getString("items_eng", null);
+            Type type = new TypeToken<List<ShopItem>>() {
+            }.getType();
+            if (gson.fromJson(json, type) != null) {
+                shopItems = gson.fromJson(json, type);
+            }
+        }
+
+        //load list state
+        Gson gson2 = new Gson();
+        String json2 = sp.getString("items_state", null);
         Type type = new TypeToken<List<ShopItem>>() {
         }.getType();
-        if (gson.fromJson(json, type) != null) {
-            shopItems = gson.fromJson(json, type);
+        if (gson2.fromJson(json2, type) != null) {
+            stateList = gson2.fromJson(json2, type);
+        }
+        else {
+            stateList = new ArrayList<>();
+            stateList = this.shopItems;
         }
     }
 
@@ -186,7 +239,7 @@ public class ShopActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //save changes in memory
+        this.stateList = shopItems; //save list of states
         saveData();
     }
 }

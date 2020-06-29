@@ -48,11 +48,11 @@ public class LevelBlockTwo extends AppCompatActivity {
         setContentView(R.layout.level_block_two_layout);
 
         //fixed portrait mode
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        sp = getSharedPreferences("storage",MODE_PRIVATE);
-        backgroundID = sp.getInt("lvl_bg",R.drawable.stars_pxl_png);
-        globalLvl = sp.getInt("global_lvl",1);
+        sp = getSharedPreferences("storage", MODE_PRIVATE);
+        backgroundID = sp.getInt("lvl_bg", R.drawable.stars_pxl_png);
+        globalLvl = sp.getInt("global_lvl", 1);
 
         lvl3Tv = findViewById(R.id.lvl_3_tv);
         lvl4Tv = findViewById(R.id.lvl_4_tv);
@@ -67,7 +67,7 @@ public class LevelBlockTwo extends AppCompatActivity {
             public void onClick(View v) {
 
                 //need to unlock level
-                if(3 > globalLvl) {
+                if (3 > globalLvl) {
                     Toast.makeText(LevelBlockTwo.this, R.string.unlock_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -100,7 +100,7 @@ public class LevelBlockTwo extends AppCompatActivity {
             public void onClick(View v) {
 
                 //need to unlock level
-                if(4 > globalLvl) {
+                if (4 > globalLvl) {
                     Toast.makeText(LevelBlockTwo.this, R.string.unlock_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -129,8 +129,8 @@ public class LevelBlockTwo extends AppCompatActivity {
         YoYo.with(Techniques.ZoomInLeft).duration(1000).playOn(lvl4Btn);
 
         //bounce infinite text
-        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl3Tv,"translationY",-70).setDuration(1400);
-        ObjectAnimator bounceTextAnimator2 = new ObjectAnimator().ofFloat(lvl4Tv,"translationY",-70).setDuration(1400);
+        ObjectAnimator bounceTextAnimator1 = new ObjectAnimator().ofFloat(lvl3Tv, "translationY", -70).setDuration(1400);
+        ObjectAnimator bounceTextAnimator2 = new ObjectAnimator().ofFloat(lvl4Tv, "translationY", -70).setDuration(1400);
 
         bounceTextAnimator1.setRepeatMode(ValueAnimator.REVERSE);
         bounceTextAnimator1.setRepeatCount(ValueAnimator.INFINITE);
@@ -138,17 +138,17 @@ public class LevelBlockTwo extends AppCompatActivity {
         bounceTextAnimator2.setRepeatCount(ValueAnimator.INFINITE);
 
         //animation planets
-        ObjectAnimator animator1 = new ObjectAnimator().ofFloat(lvl3Btn,"translationY",-70).setDuration(1400);
+        ObjectAnimator animator1 = new ObjectAnimator().ofFloat(lvl3Btn, "translationY", -70).setDuration(1400);
         animator1.setRepeatMode(ValueAnimator.REVERSE);
         animator1.setRepeatCount(ValueAnimator.INFINITE);
 
-        ObjectAnimator animator2 = new ObjectAnimator().ofFloat(lvl4Btn,"translationY",-70).setDuration(1400);
+        ObjectAnimator animator2 = new ObjectAnimator().ofFloat(lvl4Btn, "translationY", -70).setDuration(1400);
         animator2.setRepeatMode(ValueAnimator.REVERSE);
         animator2.setRepeatCount(ValueAnimator.INFINITE);
 
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(animator1,animator2);
-        set.playTogether(bounceTextAnimator1,bounceTextAnimator2);
+        set.playTogether(animator1, animator2);
+        set.playTogether(bounceTextAnimator1, bounceTextAnimator2);
         set.start();
 
 
@@ -157,10 +157,10 @@ public class LevelBlockTwo extends AppCompatActivity {
         nextBlockBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockTwo.this,LevelBlockThree.class);
+                Intent intent = new Intent(LevelBlockTwo.this, LevelBlockThree.class);
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -169,21 +169,21 @@ public class LevelBlockTwo extends AppCompatActivity {
         prevBlockBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LevelBlockTwo.this,LevelBlockOne.class);
+                Intent intent = new Intent(LevelBlockTwo.this, LevelBlockOne.class);
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
     }
 
     private void enableLevels() {
-        if(globalLvl >= 3) {
+        if (globalLvl >= 3) {
             lvl3Tv.setTextColor(Color.WHITE);
             lvl3Tv.setText(R.string.desert);
             lvl3Btn.setImageResource(R.drawable.desert_300);
         }
-        if(globalLvl >= 4) {
+        if (globalLvl >= 4) {
             lvl4Tv.setTextColor(Color.WHITE);
             lvl4Tv.setText(R.string.forest);
             lvl4Btn.setImageResource(R.drawable.forest_300);
@@ -195,8 +195,8 @@ public class LevelBlockTwo extends AppCompatActivity {
         super.onPause();
         //put level background
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("lvl_bg",backgroundID);
-        editor.putInt("curr_lvl",currLvl);
+        editor.putInt("lvl_bg", backgroundID);
+        editor.putInt("curr_lvl", currLvl);
         editor.commit();
     }
 
@@ -205,7 +205,7 @@ public class LevelBlockTwo extends AppCompatActivity {
     public void finish() {
         super.finish();
         stopService(new Intent(LevelBlockTwo.this, MusicService.class));
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
 
@@ -214,6 +214,6 @@ public class LevelBlockTwo extends AppCompatActivity {
         Intent intent = new Intent(LevelBlockTwo.this, HomeActivity.class);
         startActivity(intent);
         finish();
-       // overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        // overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

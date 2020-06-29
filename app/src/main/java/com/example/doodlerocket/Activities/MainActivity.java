@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         //initialize actual game
         setGameView();
-        setContentView(gameView);
+        setContentView(gameView); //show canvas
 
         //refresh canvas
         timer = new Timer();
@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-
                         gameView.invalidate(); //refresh screen (repaint canvas)
                     }
                 });
@@ -203,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
                         gameAlertDialog.dismiss();
                         stopMusic();
                         finish();
-
                     }
                 });
                 Button noBtn = pauseView.findViewById(R.id.alert_no_btn);
@@ -277,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
                     //money
                     TextView coinsTv = victoryView.findViewById(R.id.victory_coins_tv);
                     int totalCoins = sp.getInt("money", 0);
-                    String totalCoinsString = getString(R.string.total_coins);
+                    String totalCoinsString = getString(R.string.total_gems);
                     coinsTv.setText(totalCoinsString + " " + totalCoins);
 
                     //highScore display
@@ -328,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
                     gameAlertDialog.setCancelable(false);
 
                 } else {
+
                     currScore = 0;
 
                     stopMusic();

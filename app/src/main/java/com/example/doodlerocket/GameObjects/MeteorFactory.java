@@ -42,23 +42,23 @@ public class MeteorFactory {
 
             //lvl 2
             case 2:
-                return new Meteor(playerMinX,playerMaxX,speed+3,earthSkins[randRes],resources);
+                return new Meteor(playerMinX,playerMaxX,speed+4,earthSkins[randRes],resources);
 
             //lvl 3
             case 3:
-                return new Meteor(playerMinX,playerMaxX,speed+5,desertSkins[randRes],resources);
+                return new Meteor(playerMinX,playerMaxX,speed+6,desertSkins[randRes],resources);
 
             //lvl 4
             case 4:
-                return new Meteor(playerMinX,playerMaxX,speed+7,forestSkins[randRes],resources);
+                return new Meteor(playerMinX,playerMaxX,speed+9,forestSkins[randRes],resources);
 
             //lvl 5
             case 5:
-                return new Meteor(playerMinX,playerMaxX,speed+8,waterSkins[randRes],resources);
+                return new Meteor(playerMinX,playerMaxX,speed+10,waterSkins[randRes],resources);
 
             //lvl 6
             case 6:
-                return new Meteor(playerMinX,playerMaxX,speed+10,iceSkins[randRes],resources);
+                return new Meteor(playerMinX,playerMaxX,speed+9,iceSkins[randRes],resources);
 
             //final lvl
             case 7:
